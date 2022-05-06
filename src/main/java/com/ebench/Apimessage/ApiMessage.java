@@ -14,7 +14,7 @@ public class ApiMessage {
     public static final  String Not_Found = "Not Found Try Again";
     public static final String You_Have_Not_Authority = "You have not authority to access";
     public static final String INVALID_EMAIL_AND_PASSWORD = "Email and password is invalid";
-
-
     public static final String EMAIL_ALREADY_USED ="This Email is already used" ;
+    public static final String PROPER_DETAILS = "Something is missing, please fill proper details";
+
 }
