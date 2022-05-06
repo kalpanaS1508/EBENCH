@@ -119,7 +119,7 @@ public class Candidate {
     public String roleInHiring;
 
     @Column(name = "joiningDateInCompany")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     public Date joiningDateInCompany;
 
     @Column(name = "user_type")
@@ -127,12 +127,14 @@ public class Candidate {
     public UserType userType;
 
     @CreatedDate
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "created_at")
-    public LocalDateTime createdAt;
+    public Date createdAt= new Date();
 
     @LastModifiedDate
     @Column(name = "updated_at")
-    public LocalDateTime updatedAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public Date updatedAt;
     @Column(name="specialization")
     public String specialization;
     @Column(name="yearOfPassing")
@@ -147,18 +149,19 @@ public class Candidate {
     public String schoolName;
 
 
-    @PrePersist
+    /*@PrePersist
     protected void prePerist() {
-        if (this.createdAt == null) createdAt = LocalDateTime.now();
+        if (this.createdAt == null) createdAt = ;//iss code kya kya use h?
+
         if (this.updatedAt == null) updatedAt = LocalDateTime.now();
-    }
+    }*/
 
     public Candidate(Long id, String firstName, String lastName, String keyExperience, String skills, String address, String skypeId,
                      String whatsapp, String country, String state, String city, String hobbies, String email, String interest,
                      String mobile, boolean availableForWork, String password, String profileImageUrl, String twitterId,
                      String linkedIn, String pincode, boolean activeStatus, Time lastSeen, String currentDesignation,
                      String jobProfile, String overview, String currentlyWorkingCompanyName, String roleInHiring,
-                     Date joiningDateInCompany, UserType userType, LocalDateTime createdAt, LocalDateTime updatedAt,
+                     Date joiningDateInCompany, UserType userType, Date createdAt, Date updatedAt,
                      String specialization, String yearOfPassing, BigDecimal percentage, String collegeName, String universityName, String schoolName) {
         this.id = id;
         this.firstName = firstName;
