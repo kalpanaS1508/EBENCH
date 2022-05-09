@@ -37,7 +37,7 @@ public class Candidate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    public Long id;gitt
+    public Long id;
 
     @Column(name = "first_name")
     public String firstName;
