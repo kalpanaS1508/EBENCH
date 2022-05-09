@@ -15,7 +15,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping(value = "/vendor")
-@CrossOrigin("*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class VendorController {
 
     @Autowired
@@ -30,6 +30,12 @@ public class VendorController {
         Vendor vendor1= new ObjectMapper().readValue(vendor,Vendor.class);
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.Register(vendor1,file), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
+    }
+
+
+    @PostMapping(value = "/sample")
+    public String TestApi(@RequestParam("name") String name){
+        return String.format("%s", name);
     }
 }
 

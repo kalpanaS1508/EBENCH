@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 @Service
@@ -107,5 +108,15 @@ public class VendorService {
         }
         return vendor1;
     }
+
+    public Vendor updateVendor(Long vendorId){
+        Optional<Vendor> id = vendorRepository.findById(vendorId);
+        if(id.isPresent()){
+            Vendor vendor = id.get();
+
+        }
+
+    }
+
 
 }

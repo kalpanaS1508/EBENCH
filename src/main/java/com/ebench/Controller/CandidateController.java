@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CandidateController {
 
     @Autowired
@@ -31,7 +31,7 @@ public class CandidateController {
     @PostMapping(value = "/registercandidate")
     public ResponseEntity register( String candidateReqDto)
             throws IOException {
-        CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
+       CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.register(candidateReqDto1), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
