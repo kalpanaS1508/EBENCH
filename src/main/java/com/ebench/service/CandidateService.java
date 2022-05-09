@@ -9,6 +9,7 @@ import com.ebench.repository.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -21,6 +22,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 @Service
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CandidateService {
 
     @Autowired
@@ -32,7 +34,6 @@ public class CandidateService {
 //    private String UPLOAD_DIR = "D://EBENCH MAY//EBENCH//target//classes//Static//image";
 
     public CandidateReqDto register(CandidateReqDto candidateReqDto) {
-
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
         boolean emailValidation = Pattern.compile(regexPattern)
@@ -49,8 +50,6 @@ public class CandidateService {
             System.out.println("User Already Exist");
             throw new BadReqException(ApiMessage.EMAIL_ALREADY_USED);
         }
-
-
         try {
 //            StringBuilder fileName = new StringBuilder();
 //            Path fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + file.getOriginalFilename());
@@ -251,7 +250,7 @@ public class CandidateService {
         return candidateReqDto;
     }
  //_______________________________Delete api for candidate______________________________________
- public CandidateReqDto deletecandidate(long id) {
+   public CandidateReqDto deletecandidate(long id) {
         Candidate candidate = new Candidate();
      try {
          Optional<Candidate> candidate1 = candidateRepository.findById(id);

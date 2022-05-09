@@ -6,9 +6,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -23,10 +26,12 @@ import java.util.Set;
 @Entity
 @Data
 @Valid
+
+//@SQLDelete(sql = "UPDATE candidate SET active=true WHERE id=?")
+//@Where(clause="activeStatus=false")
 @Table(name = "Candidate", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@SecondaryTable(name = "education", pkJoinColumns = @PrimaryKeyJoinColumn(name = "education_id", referencedColumnName = "id"))
 public class Candidate {
 
     @Id

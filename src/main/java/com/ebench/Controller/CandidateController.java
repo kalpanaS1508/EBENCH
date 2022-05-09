@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CandidateController {
 
     @Autowired
@@ -29,10 +29,10 @@ public class CandidateController {
 
 
     @PostMapping(value = "/registercandidate")
-    public ResponseEntity register( String candidateReqDto)
+    public ResponseEntity register(@RequestBody CandidateReqDto candidateReqDto )
             throws IOException {
-        CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.register(candidateReqDto1), ApiMessage.Api_Message);
+//        CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.register(candidateReqDto), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 //___________________________________Get Api for candidate_______________________________________________________________________________
@@ -55,7 +55,7 @@ public class CandidateController {
     }
     // __________________________Delete api for candidate______________________________________________________________
     @RequestMapping(value = "/deletecandidate" , method=RequestMethod.DELETE)
-    public ResponseEntity deleteContactInfo(@RequestParam("id") Long id) throws JsonProcessingException {
+    public ResponseEntity deletecandidate(@RequestParam("id") Long id) throws JsonProcessingException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.deletecandidate(id), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
