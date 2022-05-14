@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.format.annotation.DateTimeFormat;
 
 
@@ -17,6 +19,8 @@ import java.util.Date;
 
 @Data
 @Valid
+@SQLDelete(sql = "UPDATE Candidate SET deleted = true WHERE id=?")
+@Where(clause = "deleted=false")
 @Table(uniqueConstraints =@UniqueConstraint(columnNames = {"email"}))
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties
@@ -39,6 +43,7 @@ public class CandidateReqDto {
     private String email;
     public String interest;
     public String mobile;
+    public boolean deleted;
     public boolean availableForWork;
     public String password;
     public String profileImageUrl;
@@ -66,7 +71,11 @@ public class CandidateReqDto {
     public String schoolName;
 
     public CandidateReqDto(Long id, String firstName, String lastName, String keyExperience, String skills, String address, String skypeId, String whatsapp, String country, String state, String city,
-                           String hobbies, String email, String interest, String mobile, boolean availableForWork, String password, String profileImageUrl, String twitterId, String linkedIn, String pincode, boolean activeStatus, Time lastSeen, String currentDesignation, String jobProfile, String overview, String currentlyWorkingCompanyName, String roleInHiring, Date joiningDateInCompany, UserType userType, String specialization, String yearOfPassing, BigDecimal percentage, String collegeName, String universityName, String schoolName) {
+                           String hobbies, String email, String interest, String mobile,
+                           boolean deleted, boolean availableForWork, String password, String profileImageUrl, String twitterId, String linkedIn, String pincode, boolean activeStatus, Time lastSeen,
+                           String currentDesignation,
+                           String jobProfile, String overview, String currentlyWorkingCompanyName, String roleInHiring, Date joiningDateInCompany, UserType userType, String specialization,
+                           String yearOfPassing, BigDecimal percentage, String collegeName, String universityName, String schoolName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -82,6 +91,7 @@ public class CandidateReqDto {
         this.email = email;
         this.interest = interest;
         this.mobile = mobile;
+        this.deleted = deleted;
         this.availableForWork = availableForWork;
         this.password = password;
         this.profileImageUrl = profileImageUrl;

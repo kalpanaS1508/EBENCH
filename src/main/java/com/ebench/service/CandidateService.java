@@ -3,9 +3,11 @@ package com.ebench.service;
 import com.ebench.Apimessage.ApiMessage;
 import com.ebench.dto.CandidateReqDto;
 import com.ebench.entity.Candidate;
+import com.ebench.entity.UserType;
 import com.ebench.exception.BadReqException;
 import com.ebench.exception.UserNotFoundException;
 import com.ebench.repository.CandidateRepository;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -85,13 +87,14 @@ public class CandidateService {
                 candidate.setMobile(candidateReqDto.getMobile());
             }
             candidate.setAvailableForWork(candidateReqDto.isAvailableForWork());
-            if (pattern != false) {
+            if (pattern != true) {
                 throw new BadReqException(ApiMessage.Password_Not_Proper_Format);
             } else {
                 candidate.setPassword(candidateReqDto.getPassword());
             }
-           // candidate.setProfileImageUrl(fileNameAndPath.toString());
+            // candidate.setProfileImageUrl(fileNameAndPath.toString());
             candidate.setUserType(candidateReqDto.getUserType());
+            candidate.setDeleted(candidateReqDto.isDeleted());
             candidate.setTwitterId(candidateReqDto.getTwitterId());
             candidate.setLinkedIn(candidateReqDto.getLinkedIn());
             candidate.setPincode(candidateReqDto.getPincode());
@@ -138,24 +141,21 @@ public class CandidateService {
             if (user.isPresent()) {
 
                 candidate1 = user.get();
-
             } else {
                 throw new UserNotFoundException(ApiMessage.User_Not_Present);
             }
         } catch (UserNotFoundException e) {
             throw new UserNotFoundException(e.getMessage());
         }
-            return candidate1;
+        return candidate1;
     }
-
-
 
 
     // _____________________________________Update Api for candidate Registration ________________________________________//
 
-    public CandidateReqDto updateCandidate(CandidateReqDto candidateReqDto,MultipartFile file) {
+    public CandidateReqDto updateCandidate(CandidateReqDto candidateReqDto) {
         Optional<Candidate> candidate = candidateRepository.findById(candidateReqDto.getId());
-        Candidate candidate1 = new Candidate();
+        Candidate candidate1 = null;
         candidate1 = candidate.get();
         try {
             if (candidate.isPresent()) {
@@ -177,7 +177,6 @@ public class CandidateService {
                 }
 
 
-
                 try {
 //                    StringBuilder fileName = new StringBuilder();
 //                    Path fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + file.getOriginalFilename());
@@ -187,7 +186,7 @@ public class CandidateService {
 //
 //                    String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
 
-                   // System.out.println("file uploaded successfully  " + fileNameAndPath);
+                    // System.out.println("file uploaded successfully  " + fileNameAndPath);
                     System.out.println(candidateReqDto);
                     candidate1.setFirstName(candidateReqDto.getFirstName());
                     candidate1.setLastName(candidateReqDto.getLastName());
@@ -217,7 +216,7 @@ public class CandidateService {
                     } else {
                         candidate1.setPassword(candidateReqDto.getPassword());
                     }
-                   // candidate1.setProfileImageUrl(fileNameAndPath.toString());
+                    // candidate1.setProfileImageUrl(fileNameAndPath.toString());
                     candidate1.setUserType(candidateReqDto.getUserType());
                     candidate1.setTwitterId(candidateReqDto.getTwitterId());
                     candidate1.setLinkedIn(candidateReqDto.getLinkedIn());
@@ -237,8 +236,7 @@ public class CandidateService {
                     candidate1.setUniversityName(candidateReqDto.getUniversityName());
                     candidate1.setSchoolName(candidateReqDto.getSchoolName());
                     candidateRepository.save(candidate1);
-                }
-                catch (BadReqException e) {
+                } catch (BadReqException e) {
                     throw new BadReqException(e.getMessage());
                 }
 
@@ -249,19 +247,47 @@ public class CandidateService {
         }
         return candidateReqDto;
     }
- //_______________________________Delete api for candidate______________________________________
-   public CandidateReqDto deletecandidate(long id) {
+
+    //_______________________________Delete api for candidate______________________________________
+    public Candidate deletecandidate(Long id) {
+        Optional<Candidate> candidate1 = candidateRepository.findById(id);
         Candidate candidate = new Candidate();
-     try {
-         Optional<Candidate> candidate1 = candidateRepository.findById(id);
-         if (candidate1 != null) {
-             candidateRepository.deleteById(id);
-         } else {
-             throw new RuntimeException(ApiMessage.Api_Message);
-         }
-     } catch (Exception e) {
-         throw new RuntimeException(ApiMessage.Not_Found);
-     }
-        return null;
- }
+        if (candidate1.isPresent()) {
+            candidate = candidate1.get();
+        } else {
+            throw new UserNotFoundException("Candidate Not Found");
+        }
+        candidate.setDeleted(false);
+        candidateRepository.save(candidate);
+        return candidate;
+    }
+
+    public Candidate login(String email, String password, boolean isCandidate) {
+
+        if (!isCandidate){
+            System.out.println("The user is candidate");
+            String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+                    + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+            boolean emailValidation = Pattern.compile(regexPattern)
+                    .matcher(email)
+                    .matches();
+            Candidate candidate1 = candidateRepository.findByEmailAndPassword(email, password);
+            try {
+                if (email.isEmpty() || !emailValidation) {
+                    throw new BadReqException(ApiMessage.ENTER_EMAIL);
+                }
+                if (password.isEmpty() || password.length() < 4) {
+                    throw new BadReqException(ApiMessage.ENTER_PASSWORD);
+                } else if (candidate1 == null) {
+                    throw new BadReqException(ApiMessage.INVALID_credential);
+                }
+            } catch (Exception e) {
+                throw new BadReqException(e.getMessage());
+            }
+            return candidate1;
+           } else {
+            System.out.println("this is vendor");
+        }
+            return null;
+    }
 }

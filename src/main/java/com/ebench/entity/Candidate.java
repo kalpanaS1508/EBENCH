@@ -10,6 +10,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,10 +27,9 @@ import java.util.Set;
 @Entity
 @Data
 @Valid
-
-//@SQLDelete(sql = "UPDATE candidate SET active=true WHERE id=?")
-//@Where(clause="activeStatus=false")
 @Table(name = "Candidate", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
+//@SQLDelete(sql = "UPDATE Candidate SET deleted = true WHERE id=?")
+//@Where(clause = "deleted=false")
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Candidate {
@@ -53,6 +53,9 @@ public class Candidate {
 
     @Column(name = "address")
     public String address;
+
+    @Column(name="deleted")
+    public boolean deleted;
 
     @Column(name ="skype_id")
     public String skypeId;
@@ -127,6 +130,9 @@ public class Candidate {
     @JsonFormat(pattern = "yyyy-MM-dd")
     public Date joiningDateInCompany;
 
+    @Column(name="isCandidate",nullable = false)
+    public Boolean isCandidate;
+
     @Column(name = "user_type")
     @Enumerated(EnumType.STRING)
     public UserType userType;
@@ -135,7 +141,6 @@ public class Candidate {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "created_at")
     public Date createdAt= new Date();
-
     @LastModifiedDate
     @Column(name = "updated_at")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -161,12 +166,11 @@ public class Candidate {
         if (this.updatedAt == null) updatedAt = LocalDateTime.now();
     }*/
 
-    public Candidate(Long id, String firstName, String lastName, String keyExperience, String skills, String address, String skypeId,
-                     String whatsapp, String country, String state, String city, String hobbies, String email, String interest,
-                     String mobile, boolean availableForWork, String password, String profileImageUrl, String twitterId,
-                     String linkedIn, String pincode, boolean activeStatus, Time lastSeen, String currentDesignation,
-                     String jobProfile, String overview, String currentlyWorkingCompanyName, String roleInHiring,
-                     Date joiningDateInCompany, UserType userType, Date createdAt, Date updatedAt,
+    public Candidate(Long id, String firstName, String lastName, String keyExperience, String skills, String address, boolean deleted, String skypeId,
+                     String whatsapp, String country, String state, String city, String hobbies, String email, String interest, String mobile, boolean availableForWork,
+                     String password, String profileImageUrl, String twitterId, String linkedIn, String pincode, boolean activeStatus, Time lastSeen, String currentDesignation,
+                     String jobProfile, String overview, String currentlyWorkingCompanyName, String roleInHiring, Date joiningDateInCompany, boolean isCandidate,
+                     UserType userType, Date createdAt, Date updatedAt,
                      String specialization, String yearOfPassing, BigDecimal percentage, String collegeName, String universityName, String schoolName) {
         this.id = id;
         this.firstName = firstName;
@@ -174,6 +178,7 @@ public class Candidate {
         this.keyExperience = keyExperience;
         this.skills = skills;
         this.address = address;
+        this.deleted = deleted;
         this.skypeId = skypeId;
         this.whatsapp = whatsapp;
         this.country = country;
@@ -197,6 +202,7 @@ public class Candidate {
         CurrentlyWorkingCompanyName = currentlyWorkingCompanyName;
         this.roleInHiring = roleInHiring;
         this.joiningDateInCompany = joiningDateInCompany;
+        this.isCandidate = isCandidate;
         this.userType = userType;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
