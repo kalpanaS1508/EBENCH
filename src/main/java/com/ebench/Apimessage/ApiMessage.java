@@ -16,4 +16,5 @@ public class ApiMessage {
     public static final String INVALID_EMAIL_AND_PASSWORD = "Email and password is invalid";
 
 
+    public static final String EMAIL_ALREADY_USED ="This Email is already used" ;
 }

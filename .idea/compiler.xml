@@ -9,12 +9,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="E-benchs" />
         <module name="ebench" />
+        <module name="EBENCH" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="E-benchs" options="-parameters" />
+      <module name="EBENCH" options="-parameters" />
       <module name="ebench" options="-parameters" />
     </option>
   </component>
