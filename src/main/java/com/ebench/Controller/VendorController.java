@@ -57,7 +57,6 @@ public class VendorController {
             throws IOException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.updateVendor(vendor), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
-
     }
 
 //    --------------------------VENDOR DELETE API----------------------------------------------------------
