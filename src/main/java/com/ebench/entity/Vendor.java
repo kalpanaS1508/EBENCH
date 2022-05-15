@@ -4,10 +4,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -15,6 +18,7 @@ import java.util.Date;
 @Table(name = "vendor", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
+
 public class Vendor {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -44,7 +48,7 @@ public class Vendor {
     public String country;
 
     @Column(name = "status")
-    public String status;
+    public boolean status ;
 
     @Column(name = "last_seen")
     @JsonFormat(pattern = "HH:mm:ss")
@@ -82,7 +86,7 @@ public class Vendor {
     }
 
     public Vendor(Long vendorId, String name, String address, String email, String password, String designation, String city, String country,
-                  String status, String lastSeen, String contactNo, String recentActivities, Date recentDateActivities, String dailyActivities,
+                  boolean status, String lastSeen, String contactNo, String recentActivities, Date recentDateActivities, String dailyActivities,
                   Integer skypeId,  Integer twitterId, String vendorProfileImageUrl, String availability, String experience) {
         this.vendorId = vendorId;
         this.name = name;

@@ -7,6 +7,7 @@ public class ApiMessage {
     public static final String Email_Already_Present = "Email already used please enter another email";
     public static final String Password_Length_Invalid = "Your Password Too small please enter Minimum 6 character password";
     public static final String Email_Not_Present = "Email Not Present";
+    public static final String EMAIL_IS_PRESENT = "Email is already present";
     public static final String User_Not_Present = "User is not present";
     public static final  String User_Offline = "User is Offline";
     public static final String Password_Not_Proper_Format = "Your Password Not Proper Length should be at least 8 " +
@@ -16,5 +17,6 @@ public class ApiMessage {
     public static final String INVALID_EMAIL_AND_PASSWORD = "Email and password is invalid";
     public static final String EMAIL_ALREADY_USED ="This Email is already used" ;
     public static final String PROPER_DETAILS = "Something is missing, please fill proper details";
+    public static final String VENDOR_NOT_PRESENT = "Vendor is not present by this Id !!";
 
 }
