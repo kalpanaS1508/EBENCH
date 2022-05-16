@@ -1,7 +1,6 @@
 package com.ebench.service;
 
 import com.ebench.Apimessage.ApiMessage;
-import com.ebench.entity.Candidate;
 import com.ebench.entity.ChangeTaskStatus;
 import com.ebench.entity.Taskmanagement;
 import com.ebench.exception.BadReqException;
@@ -90,4 +89,21 @@ public class Taskservice {
         }
             return taskmanagement;
 }
-}
+
+    public String deleteTask(Long taskManagementId) {
+        try {
+            Optional<Taskmanagement> task = taskRepository.findById(taskManagementId);
+          Taskmanagement taskmanagement = task.get();
+            if (taskmanagement != null) {
+                taskRepository.deleteById(taskManagementId);
+            } else {
+                throw new BadReqException(ApiMessage.TASK_DELETED_SUCESSFULLY);
+            }
+        } catch (Exception e) {
+            throw new BadReqException(ApiMessage.TASK_NOT_FOUND);
+        }
+        return ApiMessage.Api_Message;
+    }
+       }
+
+
