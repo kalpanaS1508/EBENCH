@@ -1,17 +1,13 @@
 package com.ebench.entity;
 
-import com.ebench.Constants.AvailabilityType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
-
 import javax.persistence.*;
 import javax.validation.Valid;
 import java.util.Date;
-import java.util.List;
+
 
 @Entity
 @Data
