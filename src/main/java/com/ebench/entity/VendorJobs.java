@@ -18,7 +18,7 @@ import java.util.Date;
 
 public class VendorJobs {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "job_id")
     public Long jobId;
 

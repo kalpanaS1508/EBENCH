@@ -80,18 +80,16 @@ public class VendorJobService {
   }
 
 //-------------------------------VENDOR DELETE API------------------------------------------------
+
      public VendorJobs deleteVendorJob(Long jobId) {
-
      Optional<VendorJobs> id = vendorJobsRepository.findById(jobId);
-
-     if(!id.isPresent()){
-
-      throw new RuntimeException(ApiMessage.VENDOR_JOB_NOT_PRESENT);
+       if(!id.isPresent()){
+      throw new BadReqException(ApiMessage.VENDOR_JOB_NOT_PRESENT);
      }
      else{
-      id.isPresent();
-     VendorJobs vendorJobs = id.get();
-     vendorJobsRepository.deleteById(vendorJobs.getVendorId());
+       id.isPresent();
+       VendorJobs vendorJobs = id.get();
+       vendorJobsRepository.deleteById(vendorJobs.getJobId());
     }
        return null;
      }

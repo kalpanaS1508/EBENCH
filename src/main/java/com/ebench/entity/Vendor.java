@@ -1,5 +1,6 @@
 package com.ebench.entity;
 
+import com.ebench.Constants.AvailabilityType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -77,7 +78,8 @@ public class Vendor {
     public String vendorProfileImageUrl;
 
     @Column(name = "availability")
-    public String availability;
+    @Enumerated(EnumType.STRING)
+    public AvailabilityType availability;
 
     @Column(name = "experience")
     public String experience;
@@ -85,9 +87,10 @@ public class Vendor {
     public Vendor() {
     }
 
-    public Vendor(Long vendorId, String name, String address, String email, String password, String designation, String city, String country,
-                  boolean status, String lastSeen, String contactNo, String recentActivities, Date recentDateActivities, String dailyActivities,
-                  Integer skypeId,  Integer twitterId, String vendorProfileImageUrl, String availability, String experience) {
+    public Vendor(Long vendorId, String name, String address, String email, String password, String designation, String city,
+                  String country, boolean status, String lastSeen, String contactNo, String recentActivities,
+                  Date recentDateActivities, String dailyActivities, Integer skypeId, Integer twitterId, String vendorProfileImageUrl,
+                  AvailabilityType availability, String experience) {
         this.vendorId = vendorId;
         this.name = name;
         this.address = address;
