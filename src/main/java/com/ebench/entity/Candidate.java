@@ -42,25 +42,25 @@ public class Candidate {
     @Column(name = "first_name")
     public String firstName;
 
-    @Column(name="last_name")
+    @Column(name = "last_name")
     public String lastName;
 
-    @Column(name="key_experience")
+    @Column(name = "key_experience")
     public String keyExperience;
 
-    @Column(name="skills")
+    @Column(name = "skills")
     public String skills;
 
     @Column(name = "address")
     public String address;
 
-    @Column(name="deleted")
+    @Column(name = "deleted")
     public boolean deleted;
 
-    @Column(name ="skype_id")
+    @Column(name = "skype_id")
     public String skypeId;
 
-    @Column(name ="whatsapp")
+    @Column(name = "whatsapp")
     public String whatsapp;
 
     @Column(name = "country")
@@ -69,20 +69,20 @@ public class Candidate {
     @Column(name = "state")
     public String state;
 
-    @Column(name ="city")
+    @Column(name = "city")
     public String city;
 
-    @Column(name ="hobbies")
+    @Column(name = "hobbies")
     public String hobbies;
 
-    @Column(name = "email",unique = true)
+    @Column(name = "email", unique = true)
     @Valid
     private String email;
 
     @Column(name = "interest")
     public String interest;
 
-    @Column(name="mobile")
+    @Column(name = "mobile")
     public String mobile;
 
     @Column(name = "available_for_work")
@@ -91,46 +91,46 @@ public class Candidate {
     @Column(name = "password")
     public String password;
 
-    @Column(name = " profile_image_url" )
+    @Column(name = " profile_image_url")
     public String profileImageUrl;
 
-    @Column(name="twitterId")
+    @Column(name = "twitterId")
     public String twitterId;
 
-    @Column(name="linkedIn")
+    @Column(name = "linkedIn")
     public String linkedIn;
 
-    @Column(name="pincode")
+    @Column(name = "pincode")
     public String pincode;
 
-    @Column(name ="activeStatus")
+    @Column(name = "activeStatus")
     public boolean activeStatus;
 
     @JsonFormat(pattern = "HH:mm:ss")
-    @Column(name="lastSeen")
+    @Column(name = "lastSeen")
     public Time lastSeen;
 
-    @Column(name="currentDesignation")
+    @Column(name = "currentDesignation")
     public String currentDesignation;
 
-    @Column(name="jobProfile")
-    public  String jobProfile;
+    @Column(name = "jobProfile")
+    public String jobProfile;
 
     @Lob
     @Column(name = "overview")
     public String overview;
 
-    @Column(name="currentlyWorkingCompanyName")
+    @Column(name = "currentlyWorkingCompanyName")
     public String CurrentlyWorkingCompanyName;
 
-    @Column(name="roleInHiring")
+    @Column(name = "roleInHiring")
     public String roleInHiring;
 
     @Column(name = "joiningDateInCompany")
     @JsonFormat(pattern = "yyyy-MM-dd")
     public Date joiningDateInCompany;
 
-    @Column(name="isCandidate",nullable = false)
+    @Column(name = "isCandidate", nullable = false)
     public Boolean isCandidate;
 
     @Column(name = "user_type")
@@ -140,38 +140,45 @@ public class Candidate {
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "created_at")
-    public Date createdAt= new Date();
+    public Date createdAt = new Date();
     @LastModifiedDate
     @Column(name = "updated_at")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public Date updatedAt;
-    @Column(name="specialization")
+    @Column(name = "specialization")
     public String specialization;
-    @Column(name="yearOfPassing")
+    @Column(name = "yearOfPassing")
     public String yearOfPassing;
-    @Column(name="percentage")
+    @Column(name = "percentage")
     public BigDecimal percentage;
-    @Column(name="collegeName")
+    @Column(name = "collegeName")
     public String collegeName;
-    @Column(name="universityName")
+    @Column(name = "universityName")
     public String universityName;
-    @Column(name="schoolName")
+    @Column(name = "schoolName")
     public String schoolName;
 
+    public Candidate(Long id, String firstName, String lastName, String keyExperience,
+                     String skills, String address, String whatsapp, String city, String email) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.keyExperience = keyExperience;
+        this.skills = skills;
+        this.address = address;
+        this.whatsapp = whatsapp;
+        this.city = city;
+        this.email = email;
+    }
 
-    /*@PrePersist
-    protected void prePerist() {
-        if (this.createdAt == null) createdAt = ;//iss code kya kya use h?
+    public Candidate() {
+        }
 
-        if (this.updatedAt == null) updatedAt = LocalDateTime.now();
-    }*/
 
-    public Candidate(Long id, String firstName, String lastName, String keyExperience, String skills, String address, boolean deleted, String skypeId,
-                     String whatsapp, String country, String state, String city, String hobbies, String email, String interest, String mobile, boolean availableForWork,
-                     String password, String profileImageUrl, String twitterId, String linkedIn, String pincode, boolean activeStatus, Time lastSeen, String currentDesignation,
-                     String jobProfile, String overview, String currentlyWorkingCompanyName, String roleInHiring, Date joiningDateInCompany, boolean isCandidate,
-                     UserType userType, Date createdAt, Date updatedAt,
-                     String specialization, String yearOfPassing, BigDecimal percentage, String collegeName, String universityName, String schoolName) {
+    public Candidate(Long id, String firstName, String lastName, String keyExperience, String skills, String address, boolean deleted,
+                     String skypeId, String whatsapp, String country, String state, String city, String hobbies, String email, String interest,
+                     String mobile, boolean availableForWork, String password, String profileImageUrl, String twitterId, String linkedIn, String pincode, boolean activeStatus, Time lastSeen, String currentDesignation, String jobProfile, String overview, String currentlyWorkingCompanyName, String roleInHiring, Date joiningDateInCompany, Boolean isCandidate, UserType userType, Date createdAt, Date updatedAt, String specialization,
+                     String yearOfPassing, BigDecimal percentage, String collegeName, String universityName, String schoolName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -212,8 +219,5 @@ public class Candidate {
         this.collegeName = collegeName;
         this.universityName = universityName;
         this.schoolName = schoolName;
-    }
-
-    public Candidate() {
     }
 }

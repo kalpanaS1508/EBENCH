@@ -1,4 +1,4 @@
-package com.ebench.response;
+package com.ebench.repository.response;
 
 import lombok.Data;
 

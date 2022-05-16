@@ -4,22 +4,21 @@ import com.ebench.Apimessage.ApiMessage;
 import com.ebench.dto.CandidateReqDto;
 import com.ebench.entity.Candidate;
 import com.ebench.entity.UserType;
+import com.ebench.entity.Vendor;
 import com.ebench.exception.BadReqException;
 import com.ebench.exception.UserNotFoundException;
 import com.ebench.repository.CandidateRepository;
+import com.ebench.repository.VendorRepository;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
+
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -29,6 +28,8 @@ public class CandidateService {
 
     @Autowired
     CandidateRepository candidateRepository;
+    @Autowired
+    VendorRepository vendorRepository;
 
 
     // __________________________________ Register Api for Candidate__________________________________________//
@@ -260,10 +261,8 @@ public class CandidateService {
         candidateRepository.save(candidate);
         return candidate;
     }
-
+//___________________________________Login for user_________________________________________________________________
     public Candidate login(String email, String password, boolean isCandidate) {
-
-        if (!isCandidate){
             System.out.println("The user is candidate");
             String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                     + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
@@ -284,9 +283,29 @@ public class CandidateService {
                 throw new BadReqException(e.getMessage());
             }
             return candidate1;
-           } else {
-            System.out.println("this is vendor");
+           }
+
+// ------------------------------- GET CANDIDATE------------------------------
+
+    public List<Candidate> getCandidate(String keyExperience, String skills, String city ,String mobile) {
+
+        if(keyExperience.isEmpty()){
+            keyExperience=null;
         }
-            return null;
+         if(skills.isEmpty()){
+            skills=null;
+        }
+         if(city.isEmpty()){
+            city=null;
+        }
+         if(mobile.isEmpty()){
+            mobile=null;
+        }
+
+        List<Candidate> bySkillAndExperience = candidateRepository.findBySkillAndExperience(keyExperience, skills, city, mobile);
+
+        System.out.println(bySkillAndExperience);
+        return bySkillAndExperience;
     }
+
 }

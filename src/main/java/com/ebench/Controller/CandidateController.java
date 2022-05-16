@@ -43,18 +43,20 @@ public class CandidateController {
         return apiResponse.getResponse(apiResponse);
     }
 
-// __________________________________________Update api for Candidate __________________________________________________________________
+// __________________________________________Update api for Candidate __________________________________________________
 
     @PutMapping(value = "/updatecandidate")
-    public ResponseEntity updatecandidate( @RequestBody CandidateReqDto candidateReqDto)
+    public ResponseEntity updatecandidate(@RequestBody CandidateReqDto candidateReqDto)
             throws IOException {
-      //  CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
+       // CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.updateCandidate(candidateReqDto), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
-
     // __________________________Delete api for candidate______________________________________________________________
-    @RequestMapping(value = "/deletecandidate" , method=RequestMethod.PUT)
+
+
+
+    @RequestMapping(value = "/deletecandidate" , method=RequestMethod.DELETE)
     public ResponseEntity deletecandidate(@RequestParam("id") Long id) throws JsonProcessingException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.deletecandidate(id),
                 ApiMessage.Api_Message);
@@ -62,5 +64,12 @@ public class CandidateController {
     }
 
 
+    // __________________________GET api for candidate__________________________________________________________________
+
+    @RequestMapping(value = "/get_candidate", method = RequestMethod.GET)
+    public ResponseEntity getCandidate(@RequestParam("experience") String keyExperience , @RequestParam("skills") String skills , @RequestParam("city") String city ,@RequestParam("mobile") String mobile) throws JsonProcessingException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.getCandidate(keyExperience, skills, city ,mobile), ApiMessage.Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
 
 }
