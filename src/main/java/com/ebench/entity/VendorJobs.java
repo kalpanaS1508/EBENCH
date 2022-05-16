@@ -1,5 +1,6 @@
 package com.ebench.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
@@ -58,6 +59,7 @@ public class VendorJobs {
     public Integer noOfPosition;
 
     @Column(name = "posted_date")
+    @JsonFormat(pattern="yyyy-MM-dd")
     public Date postedDate;
 
     @Column(name = "resume_received")
@@ -65,6 +67,9 @@ public class VendorJobs {
 
     @Column(name = "interview_mode")
     public boolean interviewMode;
+
+    public VendorJobs() {
+    }
 
     public VendorJobs(Long jobId, Long candidateId, Long vendorId, Long companyId, String jobTitle, String clientName,
                       String clientLocation, String jobLocation, boolean jobStatus, String companyName, Integer totalJobs,
