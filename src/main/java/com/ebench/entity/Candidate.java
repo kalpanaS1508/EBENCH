@@ -161,6 +161,19 @@ public class Candidate {
         if (this.updatedAt == null) updatedAt = LocalDateTime.now();
     }*/
 
+    public Candidate(Long id, String firstName, String lastName, String keyExperience,
+                     String skills, String address, String whatsapp, String city, String email) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.keyExperience = keyExperience;
+        this.skills = skills;
+        this.address = address;
+        this.whatsapp = whatsapp;
+        this.city = city;
+        this.email = email;
+    }
+
     public Candidate(Long id, String firstName, String lastName, String keyExperience, String skills, String address, String skypeId,
                      String whatsapp, String country, String state, String city, String hobbies, String email, String interest,
                      String mobile, boolean availableForWork, String password, String profileImageUrl, String twitterId,
