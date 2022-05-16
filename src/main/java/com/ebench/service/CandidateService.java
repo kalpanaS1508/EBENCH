@@ -119,10 +119,8 @@ public class CandidateService {
         return candidateReqDto;
     }
 
-    public Boolean emailAlreadyExist(String email) {
-
+        public Boolean emailAlreadyExist(String email) {
         System.out.println("In Email Exist Checking Method");
-
         Optional<Candidate> user = candidateRepository.findUserByEmail(email);
         if (user.isPresent()) {
             System.out.println("True");
@@ -158,6 +156,7 @@ public class CandidateService {
         Candidate candidate1 = null;
         candidate1 = candidate.get();
         try {
+
             if (candidate.isPresent()) {
                 String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                         + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";

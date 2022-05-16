@@ -1,11 +1,9 @@
 package com.ebench.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
@@ -18,7 +16,7 @@ public class Taskmanagement {
     @Column(name="taskManagementId")
     public Long taskManagementId;
     @Column(name="candidateId")
-    public Long id;
+    public Long candidateId;
     @Column(name = "vendorId")
     public Long vendorId;
     @Column(name="clientId")
@@ -31,14 +29,17 @@ public class Taskmanagement {
     public Integer noOfProjects;
     @Column(name="taskName")
     public String taskName;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name="taskStartDate")
     public Date taskStartDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name="taskDueDate")
     public Date taskDueDate;
     @Column(name="taskStatus")
     public boolean taskStatus;
     @Column(name="changeTaskStatus")
-    public changeTaskStatus changeTaskStatus;
+    @Enumerated(EnumType.STRING)
+    public ChangeTaskStatus changeTaskStatus;
     @Column(name="noOfDelayedDate")
     public Long noOfDelayedDate;
     @Size(max=300)
@@ -49,12 +50,12 @@ public class Taskmanagement {
     @Column(name="addCommentsFromCandidate")
     public String addCommentsFromCandidate;
 
-    public Taskmanagement(Long taskManagementId, Long id, Long vendorId, Long clientId, String candidateName,
-                          String projectName, Integer noOfProjects, String taskName, Date taskStartDate, Date taskDueDate,
-                          boolean taskStatus, com.ebench.entity.changeTaskStatus changeTaskStatus,
+
+    public Taskmanagement(Long taskManagementId, Long candidateId, Long vendorId, Long clientId, String candidateName, String projectName,
+                          Integer noOfProjects, String taskName, Date taskStartDate, Date taskDueDate, boolean taskStatus, ChangeTaskStatus changeTaskStatus,
                           Long noOfDelayedDate, String taskDescription, String addCommentsFromClient, String addCommentsFromCandidate) {
         this.taskManagementId = taskManagementId;
-        this.id = id;
+        this.candidateId = candidateId;
         this.vendorId = vendorId;
         this.clientId = clientId;
         this.candidateName = candidateName;
@@ -69,5 +70,8 @@ public class Taskmanagement {
         this.taskDescription = taskDescription;
         this.addCommentsFromClient = addCommentsFromClient;
         this.addCommentsFromCandidate = addCommentsFromCandidate;
+    }
+
+    public Taskmanagement() {
     }
 }

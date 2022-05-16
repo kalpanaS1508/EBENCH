@@ -51,8 +51,8 @@ public class CandidateController {
       //  CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.updateCandidate(candidateReqDto), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
-
     }
+
     // __________________________Delete api for candidate______________________________________________________________
     @RequestMapping(value = "/deletecandidate" , method=RequestMethod.PUT)
     public ResponseEntity deletecandidate(@RequestParam("id") Long id) throws JsonProcessingException {
