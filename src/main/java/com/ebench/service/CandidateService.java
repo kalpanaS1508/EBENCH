@@ -8,16 +8,13 @@ import com.ebench.exception.UserNotFoundException;
 import com.ebench.repository.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
+
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -153,7 +150,7 @@ public class CandidateService {
 
     // _____________________________________Update Api for candidate Registration ________________________________________//
 
-    public CandidateReqDto updateCandidate(CandidateReqDto candidateReqDto,MultipartFile file) {
+    public CandidateReqDto updateCandidate(CandidateReqDto candidateReqDto) {
         Optional<Candidate> candidate = candidateRepository.findById(candidateReqDto.getId());
         Candidate candidate1 = new Candidate();
         candidate1 = candidate.get();
@@ -264,4 +261,29 @@ public class CandidateService {
      }
         return null;
  }
+
+
+// ------------------------------- GET CANDIDATE------------------------------
+
+    public List<Candidate> getCandidate(String keyExperience, String skills, String city ,String mobile) {
+
+        if(keyExperience.isEmpty()){
+            keyExperience=null;
+        }
+         if(skills.isEmpty()){
+            skills=null;
+        }
+         if(city.isEmpty()){
+            city=null;
+        }
+         if(mobile.isEmpty()){
+            mobile=null;
+        }
+
+        List<Candidate> bySkillAndExperience = candidateRepository.findBySkillAndExperience(keyExperience, skills, city, mobile);
+
+        System.out.println(bySkillAndExperience);
+        return bySkillAndExperience;
+    }
+
 }
