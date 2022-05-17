@@ -10,16 +10,13 @@ import com.ebench.repository.CandidateRepository;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
+
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -87,7 +84,7 @@ public class CandidateService {
                 candidate.setMobile(candidateReqDto.getMobile());
             }
             candidate.setAvailableForWork(candidateReqDto.isAvailableForWork());
-            if (pattern != true) {
+            if (pattern != false) {
                 throw new BadReqException(ApiMessage.Password_Not_Proper_Format);
             } else {
                 candidate.setPassword(candidateReqDto.getPassword());
@@ -248,6 +245,7 @@ public class CandidateService {
     }
 
     //_______________________________Delete api for candidate______________________________________
+
     public Candidate deletecandidate(Long id) {
         Optional<Candidate> candidate1 = candidateRepository.findById(id);
         Candidate candidate = new Candidate();
@@ -260,6 +258,30 @@ public class CandidateService {
         candidateRepository.save(candidate);
         return candidate;
     }
+
+// ------------------------------- GET CANDIDATE------------------------------
+
+    public List<Candidate> getCandidate(String keyExperience, String skills, String city ,String mobile) {
+
+        if(keyExperience.isEmpty()){
+            keyExperience=null;
+        }
+         if(skills.isEmpty()){
+            skills=null;
+        }
+         if(city.isEmpty()){
+            city=null;
+        }
+         if(mobile.isEmpty()){
+            mobile=null;
+        }
+
+        List<Candidate> bySkillAndExperience = candidateRepository.findBySkillAndExperience(keyExperience, skills, city, mobile);
+
+        System.out.println(bySkillAndExperience);
+        return bySkillAndExperience;
+    }
+
 
     public Candidate login(String email, String password, boolean isCandidate) {
 
@@ -287,6 +309,9 @@ public class CandidateService {
            } else {
             System.out.println("this is vendor");
         }
-            return null;
+        return null;
     }
+
+
+
 }
