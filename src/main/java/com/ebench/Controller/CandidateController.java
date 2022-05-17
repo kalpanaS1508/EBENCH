@@ -34,6 +34,7 @@ public class CandidateController {
 //        CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.register(candidateReqDto), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
+
     }
 //___________________________________Get Api for candidate_______________________________________________________________________________
 

@@ -49,11 +49,13 @@ public class Taskmanagement {
     public String addCommentsFromClient;
     @Column(name="addCommentsFromCandidate")
     public String addCommentsFromCandidate;
+    @Column(name="isDeleted")
+    public boolean isDeleted;
 
-
-    public Taskmanagement(Long taskManagementId, Long candidateId, Long vendorId, Long clientId, String candidateName, String projectName,
-                          Integer noOfProjects, String taskName, Date taskStartDate, Date taskDueDate, boolean taskStatus, ChangeTaskStatus changeTaskStatus,
-                          Long noOfDelayedDate, String taskDescription, String addCommentsFromClient, String addCommentsFromCandidate) {
+    public Taskmanagement(Long taskManagementId, Long candidateId, Long vendorId, Long clientId, String candidateName,
+                          String projectName, Integer noOfProjects, String taskName, Date taskStartDate, Date taskDueDate,
+                          boolean taskStatus, ChangeTaskStatus changeTaskStatus, Long noOfDelayedDate,
+                          String taskDescription, String addCommentsFromClient, String addCommentsFromCandidate, boolean isDeleted) {
         this.taskManagementId = taskManagementId;
         this.candidateId = candidateId;
         this.vendorId = vendorId;
@@ -70,6 +72,7 @@ public class Taskmanagement {
         this.taskDescription = taskDescription;
         this.addCommentsFromClient = addCommentsFromClient;
         this.addCommentsFromCandidate = addCommentsFromCandidate;
+        this.isDeleted = isDeleted;
     }
 
     public Taskmanagement() {

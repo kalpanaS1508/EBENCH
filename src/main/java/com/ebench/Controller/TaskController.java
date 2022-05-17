@@ -47,10 +47,10 @@ public class TaskController {
         return apiResponse.getResponse(apiResponse);
     }
 
-    @RequestMapping(value = "/deleteTask" , method=RequestMethod.DELETE)
-        public ResponseEntity deleteTask(@RequestParam("id") Long taskManagementId) throws JsonProcessingException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,taskservice.deleteTask(taskManagementId), ApiMessage.Api_Message);
-        return apiResponse.getResponse(apiResponse);
-    }
+//    @RequestMapping(value = "/deleteTask" , method=RequestMethod.DELETE)
+//        public ResponseEntity deleteTask(@RequestParam("id") Long taskManagementId) throws JsonProcessingException {
+//        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,taskservice.deleteTask(taskManagementId), ApiMessage.Api_Message);
+//        return apiResponse.getResponse(apiResponse);
+//    }
 
 }

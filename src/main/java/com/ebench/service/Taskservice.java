@@ -3,7 +3,9 @@ package com.ebench.service;
 import com.ebench.Apimessage.ApiMessage;
 import com.ebench.entity.ChangeTaskStatus;
 import com.ebench.entity.Taskmanagement;
+import com.ebench.entity.Vendor;
 import com.ebench.exception.BadReqException;
+import com.ebench.exception.UserNotFoundException;
 import com.ebench.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,7 @@ public class Taskservice {
 
     @Autowired
     TaskRepository taskRepository;
-
+//______________________________________________________________________________________________________________
     public Set<String> getProjectList(Long candidateId) {
         Set<String> projectList = taskRepository.findByCandidateId(candidateId);
         if (projectList.size() < 1) {
@@ -25,7 +27,7 @@ public class Taskservice {
         }
         return projectList;
     }
-
+//______________________________________________________________________________________________________________________________________
     public List<Taskmanagement> getTask(Long id, String projectName, ChangeTaskStatus changeTaskStatus) {
 
         List<Taskmanagement> tasks = taskRepository.findAllTasks(id, projectName, changeTaskStatus);
@@ -90,20 +92,25 @@ public class Taskservice {
             return taskmanagement;
 }
 
-    public String deleteTask(Long taskManagementId) {
-        try {
-            Optional<Taskmanagement> task = taskRepository.findById(taskManagementId);
-          Taskmanagement taskmanagement = task.get();
-            if (taskmanagement != null) {
-                taskRepository.deleteById(taskManagementId);
-            } else {
-                throw new BadReqException(ApiMessage.TASK_DELETED_SUCESSFULLY);
-            }
-        } catch (Exception e) {
-            throw new BadReqException(ApiMessage.TASK_NOT_FOUND);
-        }
-        return ApiMessage.Api_Message;
-    }
+//___________________________________________delete task___________________________________________________________________________
+//
+//    public Taskmanagement deleteTask(Long taskmanagementId) {
+//        Optional<Taskmanagement> task1 = taskRepository.findById(taskmanagementId);
+//       Taskmanagement taskmanagement = null;
+//        if(task1.isPresent())
+//        {
+//            taskmanagement = task1.get();
+//        }
+//        else
+//        {
+//            throw new UserNotFoundException(ApiMessage.VENDOR_NOT_PRESENT);
+//        }
+//       taskmanagement.setDeleted(false);
+//
+//        taskRepository.save(taskmanagement);
+//
+//        return taskmanagement ;
+//    }
        }
 
 
