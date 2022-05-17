@@ -21,6 +21,7 @@ public class ApiMessage {
     public static final String ENTER_PASSWORD = "Please Enter the password ";
     public static final String TASK_SUCESSFULLY_CREATED = "Task successfully created" ;
     public static final String TASK_UPDATED_SUCESSFULLY = "Your task updated sucessfully";
+    public static final String TASK_DELETED_SUCESSFULLY = "task deleted sucessfully";
     public static String INVALID_credential="Please give the correct email and password here";
     public static String Task_Not_Found="No any task assigned to this candidate";
 

@@ -1,10 +1,9 @@
 package com.ebench.service;
 
 import com.ebench.Apimessage.ApiMessage;
-import com.ebench.entity.Candidate;
-import com.ebench.entity.ChangeTaskStatus;
-import com.ebench.entity.Taskmanagement;
+import com.ebench.entity.*;
 import com.ebench.exception.BadReqException;
+import com.ebench.exception.UserNotFoundException;
 import com.ebench.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,18 +26,18 @@ public class Taskservice {
         return projectList;
     }
 
-    public List<Taskmanagement> getTask(Long id, String projectName, ChangeTaskStatus changeTaskStatus) {
+    public List<Task> getTask(Long id, String projectName, ChangeTaskStatus changeTaskStatus) {
 
-        List<Taskmanagement> tasks = taskRepository.findAllTasks(id, projectName, changeTaskStatus);
+        List<Task> tasks = taskRepository.findAllTasks(id, projectName, changeTaskStatus);
         if (tasks.size() < 1) {
             throw new BadReqException(ApiMessage.Task_Not_Found);
         }
         return tasks;
     }
 
-    public Taskmanagement createTask(Taskmanagement taskmanagement) {
+    public Task createTask(Task taskmanagement) {
         try {
-            Taskmanagement taskmanagement1 = new Taskmanagement();
+            Task taskmanagement1 = new Task();
             taskmanagement1.setCandidateId(taskmanagement.getCandidateId());
             taskmanagement1.setVendorId(taskmanagement.getVendorId());
             taskmanagement1.setClientId(taskmanagement.getClientId());
@@ -63,9 +62,9 @@ public class Taskservice {
 
 
     //_______________________________Update Task____________________________________________
-    public Taskmanagement updateTask(Taskmanagement taskmanagement,Long taskManagementId) {
+    public Task updateTask(Task taskmanagement,Long taskManagementId) {
 
-        Taskmanagement taskmanagement1 = taskRepository.findById(taskManagementId).get();
+        Task taskmanagement1 = taskRepository.findById(taskManagementId).get();
         System.out.println(taskmanagement1);
         try {
             taskmanagement1.setCandidateId(taskmanagement.getCandidateId());
@@ -90,4 +89,25 @@ public class Taskservice {
         }
             return taskmanagement;
 }
+
+
+
+    public Task deleteTask(Long taskManagementId) {
+        Optional<Task> task1 = taskRepository.findById(taskManagementId);
+        Task taskmanagement=null;
+        if(task1.isPresent())
+        {
+         taskmanagement = task1.get();
+        }
+        else
+        {
+            throw new UserNotFoundException(ApiMessage.TASK_DELETED_SUCESSFULLY);
+        }
+       // taskmanagement.setChangeTaskStatus(ChangeTaskStatus.PENDING);
+        taskmanagement.setTaskStatus(false);
+
+        taskRepository.save(taskmanagement);
+
+        return taskmanagement ;
+    }
 }

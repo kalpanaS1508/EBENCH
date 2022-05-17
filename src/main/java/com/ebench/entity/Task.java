@@ -10,7 +10,8 @@ import java.util.Date;
 @Entity
 @Data
 @Table(name = "taskmanagement")
-public class Taskmanagement {
+public class Task {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="taskManagementId")
@@ -51,7 +52,7 @@ public class Taskmanagement {
     public String addCommentsFromCandidate;
 
 
-    public Taskmanagement(Long taskManagementId, Long candidateId, Long vendorId, Long clientId, String candidateName, String projectName,
+    public Task(Long taskManagementId, Long candidateId, Long vendorId, Long clientId, String candidateName, String projectName,
                           Integer noOfProjects, String taskName, Date taskStartDate, Date taskDueDate, boolean taskStatus, ChangeTaskStatus changeTaskStatus,
                           Long noOfDelayedDate, String taskDescription, String addCommentsFromClient, String addCommentsFromCandidate) {
         this.taskManagementId = taskManagementId;
@@ -72,6 +73,7 @@ public class Taskmanagement {
         this.addCommentsFromCandidate = addCommentsFromCandidate;
     }
 
-    public Taskmanagement() {
+    public Task() {
     }
+
 }
