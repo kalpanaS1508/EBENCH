@@ -18,5 +18,6 @@ public class ApiMessage {
     public static final String EMAIL_ALREADY_USED ="This Email is already used" ;
     public static final String PROPER_DETAILS = "Something is missing, please fill proper details";
     public static final String VENDOR_NOT_PRESENT = "Vendor is not present by this Id !!";
-    public static final String VENDOR_JOB_NOT_PRESENT = "Jobs are not present by this Id !!";
+    public static final String JOB_NOT_PRESENT = "Jobs are not present by this Id !!";
+    public static final String CANDIDATE_NOT_PRESENT = "Candidates are not present by this Id !!";
 }
