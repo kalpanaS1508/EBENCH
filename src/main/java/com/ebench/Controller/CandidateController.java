@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.DataInput;
 import java.io.IOException;
 
 @RestController
@@ -29,10 +30,10 @@ public class CandidateController {
 
 
     @PostMapping(value = "/register_Candidate")
-    public ResponseEntity register(@RequestBody CandidateReqDto candidateReqDto )
+    public ResponseEntity register(@RequestBody CandidateReqDto candidateReqDto,@RequestParam  MultipartFile file )
             throws IOException {
-//        CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.register(candidateReqDto), ApiMessage.Api_Message);
+   CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue((DataInput) candidateReqDto, CandidateReqDto.class);
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.register(candidateReqDto1,file), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 //___________________________________Get Api for candidate_______________________________________________________________________________

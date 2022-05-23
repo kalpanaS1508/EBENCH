@@ -18,6 +18,12 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -36,7 +42,7 @@ public class CandidateService {
 
    private String UPLOAD_DIR = "D://EBENCH MAY//EBENCH//target//classes//Static//image";
 
-    public CandidateReqDto register(CandidateReqDto candidateReqDto) {
+    public CandidateReqDto register(CandidateReqDto candidateReqDto,MultipartFile file) {
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
         boolean emailValidation = Pattern.compile(regexPattern)
@@ -54,15 +60,15 @@ public class CandidateService {
             throw new BadReqException(ApiMessage.EMAIL_ALREADY_USED);
         }
         try {
-//            StringBuilder fileName = new StringBuilder();
-//            Path fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + file.getOriginalFilename());
-//            fileName.append(file.getOriginalFilename());
-//            Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
-//
-//            String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
-//
-//            System.out.println("file uploaded successfully  " + fileNameAndPath);
-//            System.out.println(candidateReqDto);
+            StringBuilder fileName = new StringBuilder();
+            Path fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + file.getOriginalFilename());
+            fileName.append(file.getOriginalFilename());
+            Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
+
+            String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
+
+            System.out.println("file uploaded successfully  " + fileNameAndPath);
+            System.out.println(candidateReqDto);
 
             Candidate candidate = new Candidate();
             candidate.setFirstName(candidateReqDto.getFirstName());
@@ -93,7 +99,7 @@ public class CandidateService {
             } else {
                 candidate.setPassword(candidateReqDto.getPassword());
             }
-            // candidate.setProfileImageUrl(fileNameAndPath.toString());
+             candidate.setProfileImageUrl(fileNameAndPath.toString());
             candidate.setUserType(candidateReqDto.getUserType());
             candidate.setDeleted(candidateReqDto.isDeleted());
             candidate.setTwitterId(candidateReqDto.getTwitterId());
@@ -116,6 +122,8 @@ public class CandidateService {
             candidateRepository.save(candidate);
         } catch (BadReqException e) {
             throw new BadReqException(e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return candidateReqDto;
     }
