@@ -1,6 +1,7 @@
 package com.ebench.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,12 +10,13 @@ import java.util.Date;
 
 @Entity
 @Data
+@AllArgsConstructor
 @Table(name = "taskmanagement")
 public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="taskManagementId")
+    @Column(name="taskmanagementId")
     public Long taskManagementId;
     @Column(name="candidateId")
     public Long candidateId;
@@ -22,10 +24,14 @@ public class Task {
     public Long vendorId;
     @Column(name="clientId")
     public Long clientId;
+    @Column(name="projectId")
+    public String projectId;
     @Column(name="candidateName")
     public String candidateName;
     @Column(name="projectName")
     public String projectName;
+    @Column(name = "clientName")
+    public String clientName;
     @Column(name ="noofProjects")
     public Integer noOfProjects;
     @Column(name="taskName")
@@ -50,30 +56,21 @@ public class Task {
     public String addCommentsFromClient;
     @Column(name="addCommentsFromCandidate")
     public String addCommentsFromCandidate;
+    @Column(name="waitingResponseFrom")
+    public String waitingResponseFrom;
+    @Column(name="anyDependency")
+    public String anyDependency;
 
 
-    public Task(Long taskManagementId, Long candidateId, Long vendorId, Long clientId, String candidateName, String projectName,
-                          Integer noOfProjects, String taskName, Date taskStartDate, Date taskDueDate, boolean taskStatus, ChangeTaskStatus changeTaskStatus,
-                          Long noOfDelayedDate, String taskDescription, String addCommentsFromClient, String addCommentsFromCandidate) {
-        this.taskManagementId = taskManagementId;
-        this.candidateId = candidateId;
-        this.vendorId = vendorId;
-        this.clientId = clientId;
-        this.candidateName = candidateName;
-        this.projectName = projectName;
-        this.noOfProjects = noOfProjects;
-        this.taskName = taskName;
-        this.taskStartDate = taskStartDate;
-        this.taskDueDate = taskDueDate;
-        this.taskStatus = taskStatus;
-        this.changeTaskStatus = changeTaskStatus;
-        this.noOfDelayedDate = noOfDelayedDate;
-        this.taskDescription = taskDescription;
-        this.addCommentsFromClient = addCommentsFromClient;
-        this.addCommentsFromCandidate = addCommentsFromCandidate;
-    }
+
 
     public Task() {
     }
 
+    public Task(String projectName, String taskName, Date taskDueDate, ChangeTaskStatus changeTaskStatus) {
+        this.projectName = projectName;
+        this.taskName = taskName;
+        this.taskDueDate = taskDueDate;
+        this.changeTaskStatus = changeTaskStatus;
+    }
 }

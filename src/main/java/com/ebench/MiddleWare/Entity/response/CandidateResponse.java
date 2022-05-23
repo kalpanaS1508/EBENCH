@@ -1,4 +1,4 @@
-package com.ebench.repository.response;
+package com.ebench.MiddleWare.Entity.response;
 
 import lombok.Data;
 

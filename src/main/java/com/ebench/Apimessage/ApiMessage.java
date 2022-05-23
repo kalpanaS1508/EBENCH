@@ -20,12 +20,19 @@ public class ApiMessage {
     public static final String ENTER_EMAIL = "Please Enter the email in valid format";
     public static final String ENTER_PASSWORD = "Please Enter the password ";
     public static final String TASK_SUCESSFULLY_CREATED = "Task successfully created" ;
-    public static final String TASK_UPDATED_SUCESSFULLY = "Your task updated sucessfully";
-    public static final String TASK_DELETED_SUCESSFULLY = "task deleted sucessfully";
+
+    public static final String TASK_DELETED_SUCESSFULLY = "task  not deleted sucessfully";
+    public static final String PROJECT_NOT_CREATED ="project not created sucessfully" ;
+    public static final String TASK_NOT_UPDATED_SUCESSFULLY ="Task not updated sucessfully" ;
+    public static final String PROJECT_NOT_FOUND ="Project not found" ;
+    public static final String PROJECT_NOT_UPDATE_SUCESSFULLY ="Project not updated" ;
+    public static final String TASK_SUCESSFULLY_NOT_CREATED ="Task sucessfully not created" ;
+    public static final String TASK_NOT_DELETED_SUCESSFULLY = "Task not deleted sucessfully";
+    public static final String NO_PENDING_TASK ="There is no any pending task remain" ;
     public static String INVALID_credential="Please give the correct email and password here";
     public static String Task_Not_Found="No any task assigned to this candidate";
 
-    public static final String PROPER_DETAILS = "Something is missing, please fill proper details";
+
     public static final String VENDOR_NOT_PRESENT = "Vendor is not present by this Id !!";
 
 

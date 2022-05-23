@@ -28,7 +28,7 @@ public class CandidateController {
 //_____________________________________Register api for candidate__________________________________________________________________________
 
 
-    @PostMapping(value = "/registercandidate")
+    @PostMapping(value = "/register_Candidate")
     public ResponseEntity register(@RequestBody CandidateReqDto candidateReqDto )
             throws IOException {
 //        CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
@@ -37,7 +37,7 @@ public class CandidateController {
     }
 //___________________________________Get Api for candidate_______________________________________________________________________________
 
-    @RequestMapping(value = "/getCandidate", method = RequestMethod.GET)
+    @RequestMapping(value = "/get_Candidate", method = RequestMethod.GET)
     public ResponseEntity getCandidate(@RequestParam("id") Long id) throws JsonProcessingException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.getCandidate(id), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
@@ -45,7 +45,7 @@ public class CandidateController {
 
 // __________________________________________Update api for Candidate __________________________________________________
 
-    @PutMapping(value = "/updatecandidate")
+    @PutMapping(value = "/update_Candidate")
     public ResponseEntity updatecandidate(@RequestBody CandidateReqDto candidateReqDto)
             throws IOException {
        // CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
@@ -56,7 +56,7 @@ public class CandidateController {
 
 
 
-    @RequestMapping(value = "/deletecandidate" , method=RequestMethod.DELETE)
+    @RequestMapping(value = "/delete_Candidate" , method=RequestMethod.DELETE)
     public ResponseEntity deletecandidate(@RequestParam("id") Long id) throws JsonProcessingException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.deletecandidate(id),
                 ApiMessage.Api_Message);
@@ -66,7 +66,7 @@ public class CandidateController {
 
     // __________________________GET api for candidate__________________________________________________________________
 
-    @RequestMapping(value = "/get_candidate", method = RequestMethod.GET)
+    @RequestMapping(value = "/get_CandidateByVendor", method = RequestMethod.GET)
     public ResponseEntity getCandidate(@RequestParam("experience") String keyExperience , @RequestParam("skills") String skills , @RequestParam("city") String city ,@RequestParam("mobile") String mobile) throws JsonProcessingException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.getCandidate(keyExperience, skills, city ,mobile), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);

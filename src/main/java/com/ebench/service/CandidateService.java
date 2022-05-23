@@ -34,7 +34,7 @@ public class CandidateService {
 
     // __________________________________ Register Api for Candidate__________________________________________//
 
-//    private String UPLOAD_DIR = "D://EBENCH MAY//EBENCH//target//classes//Static//image";
+   private String UPLOAD_DIR = "D://EBENCH MAY//EBENCH//target//classes//Static//image";
 
     public CandidateReqDto register(CandidateReqDto candidateReqDto) {
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
