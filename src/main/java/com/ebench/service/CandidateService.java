@@ -8,8 +8,15 @@ import com.ebench.exception.UserNotFoundException;
 import com.ebench.repository.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -23,7 +30,8 @@ public class CandidateService {
 
     // __________________________________ Register Api for Candidate__________________________________________//
 
-//    private String UPLOAD_DIR = "D://EBENCH MAY//EBENCH//target//classes//Static//image";
+    private String UPLOAD_DIR = "D://EBENCH MAY//EBENCH//target//classes//Static//image";
+
 
     public CandidateReqDto register(CandidateReqDto candidateReqDto) {
 
@@ -44,8 +52,8 @@ public class CandidateService {
             throw new BadReqException(ApiMessage.EMAIL_ALREADY_USED);
         }
 
-
         try {
+
 //            StringBuilder fileName = new StringBuilder();
 //            Path fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + file.getOriginalFilename());
 //            fileName.append(file.getOriginalFilename());
@@ -85,7 +93,7 @@ public class CandidateService {
             } else {
                 candidate.setPassword(candidateReqDto.getPassword());
             }
-           // candidate.setProfileImageUrl(fileNameAndPath.toString());
+//            candidate.setProfileImageUrl(fileNameAndPath.toString());
             candidate.setUserType(candidateReqDto.getUserType());
             candidate.setTwitterId(candidateReqDto.getTwitterId());
             candidate.setLinkedIn(candidateReqDto.getLinkedIn());
@@ -104,10 +112,11 @@ public class CandidateService {
             candidate.setCollegeName(candidateReqDto.getCollegeName());
             candidate.setUniversityName(candidateReqDto.getUniversityName());
             candidate.setSchoolName(candidateReqDto.getSchoolName());
+//            candidate.setResumeUrl(fileNameAndPath.toString());
             candidateRepository.save(candidate);
-        } catch (BadReqException e) {
-            throw new BadReqException(e.getMessage());
         }
+        catch (BadReqException e) {
+       }
         return candidateReqDto;
     }
 

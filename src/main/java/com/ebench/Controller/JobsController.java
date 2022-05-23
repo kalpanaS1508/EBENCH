@@ -42,7 +42,7 @@ public class JobsController {
 
     @GetMapping(value = "/get_status")
     public ResponseEntity getJobs(@RequestParam("id") Long vendorId)
-            throws IOException {
+             throws IOException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.getJobStatus(vendorId), Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
