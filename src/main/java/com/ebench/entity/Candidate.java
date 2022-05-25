@@ -158,6 +158,7 @@ public class Candidate {
     @Column(name = "schoolName")
     public String schoolName;
 
+
     public Candidate(Long id, String firstName, String lastName, String keyExperience,
                      String skills, String address, String whatsapp, String city, String email) {
         this.id = id;

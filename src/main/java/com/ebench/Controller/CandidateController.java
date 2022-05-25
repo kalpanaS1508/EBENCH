@@ -35,6 +35,16 @@ public class CandidateController {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.register(candidateReqDto), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
+
+    @PostMapping(value = "/register_Candidate1")
+    public ResponseEntity registerCandidate(@RequestPart CandidateReqDto candidateReqDto,@RequestPart MultipartFile file )
+            throws IOException {
+//        CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.registerCandidate(candidateReqDto,file), ApiMessage.Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+
+
 //___________________________________Get Api for candidate_______________________________________________________________________________
 
     @RequestMapping(value = "/get_Candidate", method = RequestMethod.GET)
