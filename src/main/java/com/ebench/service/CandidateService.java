@@ -3,38 +3,47 @@ package com.ebench.service;
 import com.ebench.Apimessage.ApiMessage;
 import com.ebench.dto.CandidateReqDto;
 import com.ebench.entity.Candidate;
-import com.ebench.entity.UserType;
-import com.ebench.entity.Vendor;
 import com.ebench.exception.BadReqException;
+import com.ebench.exception.ResourceNotFoundException;
 import com.ebench.exception.UserNotFoundException;
 import com.ebench.repository.CandidateRepository;
 import com.ebench.repository.VendorRepository;
-import org.apache.catalina.User;
+import com.ebench.utils.Common;
+import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import javax.mail.Authenticator;
+import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.regex.Pattern;
 
 @Service
-//@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CandidateService {
+
+    @Value("${spring.mail.username}")
+    private String email;
+
+    @Value("${spring.mail.password}")
+    private String password;
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     @Autowired
     CandidateRepository candidateRepository;
@@ -45,91 +54,8 @@ public class CandidateService {
     // __________________________________ Register Api for Candidate__________________________________________//
 
 
-   private String UPLOAD_DIR="D://EBENCH MAY//EBENCH//target//classes//Static//image";
 
-    public CandidateReqDto register(CandidateReqDto candidateReqDto) {
-        String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
-                + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-        boolean emailValidation = Pattern.compile(regexPattern)
-                .matcher(candidateReqDto.getEmail())
-                .matches();
-        System.out.println((emailValidation));
-        String PASSWORD_PATTERN = "^(?=(?:[a-zA-Z0-9]*[a-zA-Z]){2})(?=(?:[a-zA-Z0-9]*\\d){2})[a-zA-Z0-9]{8,}$";
-        boolean pattern = Pattern.compile(PASSWORD_PATTERN)
-                .matcher(candidateReqDto.getPassword())
-                .matches();
-        System.out.println((pattern));
-
-        if (emailAlreadyExist(candidateReqDto.getEmail())) {
-            System.out.println("User Already Exist");
-            throw new BadReqException(ApiMessage.EMAIL_ALREADY_USED);
-        }
-        try {
-//            StringBuilder fileName = new StringBuilder();
-//            Path fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + file.getOriginalFilename());
-//            fileName.append(file.getOriginalFilename());
-//            Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
-//
-//            String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
-//
-//            System.out.println("file uploaded successfully  " + fileNameAndPath);
-//            System.out.println(candidateReqDto);
-
-            Candidate candidate = new Candidate();
-            candidate.setFirstName(candidateReqDto.getFirstName());
-            candidate.setLastName(candidateReqDto.getLastName());
-            candidate.setKeyExperience(candidateReqDto.getKeyExperience());
-            candidate.setSkills(candidateReqDto.getSkills());
-            candidate.setAddress(candidateReqDto.getAddress());
-            candidate.setSkypeId(candidateReqDto.getSkypeId());
-            candidate.setWhatsapp(candidateReqDto.getWhatsapp());
-            candidate.setCountry(candidateReqDto.getCountry());
-            candidate.setState(candidateReqDto.getState());
-            candidate.setCity(candidateReqDto.getCity());
-            candidate.setHobbies(candidateReqDto.getHobbies());
-            if (!emailValidation) {
-                throw new BadReqException(ApiMessage.Email_Not_In_Proper_Format);
-            } else {
-                candidate.setEmail(candidateReqDto.getEmail());
-            }
-            candidate.setInterest(candidateReqDto.getInterest());
-            if (candidateReqDto.getMobile().isEmpty() || candidateReqDto.getMobile().length() != 10) {
-                throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
-            } else {
-                candidate.setMobile(candidateReqDto.getMobile());
-            }
-            candidate.setAvailableForWork(candidateReqDto.isAvailableForWork());
-            if (pattern != true) {
-                throw new BadReqException(ApiMessage.Password_Not_Proper_Format);
-            } else {
-                candidate.setPassword(candidateReqDto.getPassword());
-            }
-            // candidate.setProfileImageUrl(fileNameAndPath.toString());
-            candidate.setUserType(candidateReqDto.getUserType());
-            candidate.setDeleted(candidateReqDto.isDeleted());
-            candidate.setTwitterId(candidateReqDto.getTwitterId());
-            candidate.setLinkedIn(candidateReqDto.getLinkedIn());
-            candidate.setPincode(candidateReqDto.getPincode());
-            candidate.setActiveStatus(candidateReqDto.isActiveStatus());
-            candidate.setLastSeen(candidateReqDto.getLastSeen());
-            candidate.setCurrentDesignation(candidateReqDto.getCurrentDesignation());
-            candidate.setJobProfile(candidateReqDto.getJobProfile());
-            candidate.setOverview(candidateReqDto.getOverview());
-            candidate.setCurrentlyWorkingCompanyName(candidateReqDto.getCurrentlyWorkingCompanyName());
-            candidate.setRoleInHiring(candidateReqDto.getRoleInHiring());
-            candidate.setJoiningDateInCompany(candidateReqDto.getJoiningDateInCompany());
-            candidate.setSpecialization(candidateReqDto.getSpecialization());
-            candidate.setYearOfPassing(candidateReqDto.getYearOfPassing());
-            candidate.setPercentage(candidateReqDto.getPercentage());
-            candidate.setCollegeName(candidateReqDto.getCollegeName());
-            candidate.setUniversityName(candidateReqDto.getUniversityName());
-            candidate.setSchoolName(candidateReqDto.getSchoolName());
-            candidateRepository.save(candidate);
-        } catch (BadReqException e) {
-            throw new BadReqException(e.getMessage());
-        }
-        return candidateReqDto;
-    }
+    private String UPLOAD_DIR="D://EBENCH MAY//EBENCH//target//classes//Static//image";
 
         public Boolean emailAlreadyExist(String email) {
         System.out.println("In Email Exist Checking Method");
@@ -318,8 +244,8 @@ public class CandidateService {
         System.out.println(bySkillAndExperience);
         return bySkillAndExperience;
     }
-
-    public CandidateReqDto registerCandidate(CandidateReqDto candidateReqDto, MultipartFile file) {
+// ___________________________________Register api for candidate_________________________________________________________
+    public CandidateReqDto registerCandidate(CandidateReqDto candidateReqDto, MultipartFile file,String siteURL) {
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
         boolean emailValidation = Pattern.compile(regexPattern)
@@ -380,11 +306,12 @@ public class CandidateService {
                 candidate.setMobile(candidateReqDto.getMobile());
             }
             candidate.setAvailableForWork(candidateReqDto.isAvailableForWork());
-            if (pattern != true) {
-                throw new BadReqException(ApiMessage.Password_Not_Proper_Format);
-            } else {
-                candidate.setPassword(candidateReqDto.getPassword());
-            }
+//            if (pattern != true) {
+//                throw new BadReqException(ApiMessage.Password_Not_Proper_Format);
+//            } else {
+//                candidate.setPassword(candidateReqDto.getPassword());
+//            }
+            candidate.setPassword(candidateReqDto.getPassword());
             candidate.setProfileImageUrl(fileNameAndPath.toString());
             candidate.setUserType(candidateReqDto.getUserType());
             candidate.setDeleted(candidateReqDto.isDeleted());
@@ -405,14 +332,76 @@ public class CandidateService {
             candidate.setCollegeName(candidateReqDto.getCollegeName());
             candidate.setUniversityName(candidateReqDto.getUniversityName());
             candidate.setSchoolName(candidateReqDto.getSchoolName());
-            candidateRepository.save(candidate);
+            candidate.setEmailVerifyCode(Common.getRandomNumberString());
+            candidate.setEmailVerified(false);
+         Candidate candidate1 =  candidateRepository.save(candidate);
+            sendVerificationEmail(candidate1,siteURL);
+
+
         } catch (BadReqException e) {
             throw new BadReqException(e.getMessage());
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
             e.printStackTrace();
         }
         return candidateReqDto;
 
     }
+
+
+
+    //_________________________cHECK EMAIL VERIFIED OR NOT __________________________________________________________________
+    public Boolean emailVerify(Long uid, String code) throws ResourceNotFoundException {
+        Boolean verifyStatus = false;
+        try {
+            Optional<Candidate> candidate = candidateRepository.findById(uid);
+            if (candidate.isPresent()) {
+                Candidate candidate1 = candidate.get();
+                if (candidate1.getEmailVerifyCode().equals(code)) {
+                    candidate1.setEmailVerified(true);
+                    candidateRepository.save(candidate1);
+                    verifyStatus = true;
+                }
+            } else {
+                throw new ResourceNotFoundException(ApiMessage.CANDIDATE_NOT_FOUND);
+            }
+        } catch (Exception e) {
+            throw new ResourceNotFoundException(ApiMessage.CANDIDATE_NOT_FOUND);
+        }
+        return verifyStatus;
+    }
+
+ //___________________________________eMAIL VERIFICATION CODE____________________________________________________________
+
+    private void sendVerificationEmail(Candidate candidate, String siteURL)
+            throws MessagingException, UnsupportedEncodingException {
+        try {
+            System.out.println("Candidate Email : "+candidate.getEmail());
+            String toAddress = candidate.getEmail();
+//            String fromAddress = "rawatkiran21298@gmail.com";
+//            String senderName = "Ebench App";
+            String subject = "Please verify your registration";
+            String content = "Dear "+candidate.getFirstName()+" "+candidate.getLastName()+",<br>"
+                    + "Please click the link below to verify your registration:<br>"
+                    + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
+                    + "Thank you,<br>"
+                    + "The Ebench Team";
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message,true,"UTF-8");
+//            helper.setFrom(fromAddress, senderName);
+            helper.setTo(toAddress);
+            helper.setSubject(subject);
+//            content = content.replace("[[name]]", candidate.getFirstName());
+            String verifyURL = siteURL + "/email/verify/" + candidate.getId() + "/" + candidate.getEmailVerifyCode();
+            content = content.replace("[[URL]]", verifyURL);
+            helper.setText(content, true);
+            message.setContent(content,"text/html");
+            mailSender.send(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 

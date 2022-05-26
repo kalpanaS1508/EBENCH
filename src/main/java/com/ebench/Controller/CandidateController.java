@@ -2,6 +2,7 @@ package com.ebench.Controller;
 
 import com.ebench.Apimessage.ApiMessage;
 import com.ebench.dto.CandidateReqDto;
+import com.ebench.exception.ResourceNotFoundException;
 import com.ebench.repository.CandidateRepository;
 import com.ebench.service.CandidateService;
 import com.ebench.utils.ApiResponse;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @RestController
@@ -28,19 +30,18 @@ public class CandidateController {
 //_____________________________________Register api for candidate__________________________________________________________________________
 
 
-    @PostMapping(value = "/register_Candidate")
-    public ResponseEntity register(@RequestBody CandidateReqDto candidateReqDto )
-            throws IOException {
-//        CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.register(candidateReqDto), ApiMessage.Api_Message);
-        return apiResponse.getResponse(apiResponse);
-    }
-
+//    @PostMapping(value = "/register_Candidate")
+//    public ResponseEntity register(@RequestBody CandidateReqDto candidateReqDto )
+//            throws IOException {
+////        CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
+//        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.register(candidateReqDto), ApiMessage.Api_Message);
+//        return apiResponse.getResponse(apiResponse);
+//    }
+//_________________________________________Register Candidate________________________________________________________________
     @PostMapping(value = "/register_Candidate1")
-    public ResponseEntity registerCandidate(@RequestPart CandidateReqDto candidateReqDto,@RequestPart MultipartFile file )
+    public ResponseEntity registerCandidate(@RequestPart CandidateReqDto candidateReqDto,@RequestPart MultipartFile file,HttpServletRequest request )
             throws IOException {
-//        CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.registerCandidate(candidateReqDto,file), ApiMessage.Api_Message);
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.registerCandidate(candidateReqDto,file,getSiteURL(request)), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 
@@ -81,5 +82,16 @@ public class CandidateController {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.getCandidate(keyExperience, skills, city ,mobile), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
+//_________________________________Email verification___________________________________________________________________
 
+    @RequestMapping(value = "/email/verify/", method = RequestMethod.GET)
+    public ResponseEntity emailVerify(@RequestParam("uid") Long uid, @RequestParam("code") String code) throws JsonProcessingException, ResourceNotFoundException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.emailVerify(uid,code), ApiMessage.Email_Verified);
+        return apiResponse.getResponse(apiResponse);
+    }
+
+    private String getSiteURL(HttpServletRequest request) {
+        String siteURL = request.getRequestURL().toString();
+        return siteURL.replace(request.getServletPath(), "");
+    }
 }

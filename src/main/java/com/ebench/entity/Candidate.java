@@ -3,6 +3,7 @@ package com.ebench.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -28,8 +29,7 @@ import java.util.Set;
 @Data
 @Valid
 @Table(name = "Candidate", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
-//@SQLDelete(sql = "UPDATE Candidate SET deleted = true WHERE id=?")
-//@Where(clause = "deleted=false")
+@AllArgsConstructor
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Candidate {
@@ -157,6 +157,10 @@ public class Candidate {
     public String universityName;
     @Column(name = "schoolName")
     public String schoolName;
+    @Column(name = "email_verification_code")
+    public String emailVerifyCode;
+    @Column(name = "email_verified")
+    public boolean emailVerified;
 
 
     public Candidate(Long id, String firstName, String lastName, String keyExperience,
@@ -176,49 +180,5 @@ public class Candidate {
         }
 
 
-    public Candidate(Long id, String firstName, String lastName, String keyExperience, String skills, String address, boolean deleted,
-                     String skypeId, String whatsapp, String country, String state, String city, String hobbies, String email, String interest,
-                     String mobile, boolean availableForWork, String password, String profileImageUrl, String twitterId, String linkedIn, String pincode, boolean activeStatus, Time lastSeen, String currentDesignation, String jobProfile, String overview, String currentlyWorkingCompanyName, String roleInHiring, Date joiningDateInCompany, Boolean isCandidate, UserType userType, Date createdAt, Date updatedAt, String specialization,
-                     String yearOfPassing, BigDecimal percentage, String collegeName, String universityName, String schoolName) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.keyExperience = keyExperience;
-        this.skills = skills;
-        this.address = address;
-        this.deleted = deleted;
-        this.skypeId = skypeId;
-        this.whatsapp = whatsapp;
-        this.country = country;
-        this.state = state;
-        this.city = city;
-        this.hobbies = hobbies;
-        this.email = email;
-        this.interest = interest;
-        this.mobile = mobile;
-        this.availableForWork = availableForWork;
-        this.password = password;
-        this.profileImageUrl = profileImageUrl;
-        this.twitterId = twitterId;
-        this.linkedIn = linkedIn;
-        this.pincode = pincode;
-        this.activeStatus = activeStatus;
-        this.lastSeen = lastSeen;
-        this.currentDesignation = currentDesignation;
-        this.jobProfile = jobProfile;
-        this.overview = overview;
-        CurrentlyWorkingCompanyName = currentlyWorkingCompanyName;
-        this.roleInHiring = roleInHiring;
-        this.joiningDateInCompany = joiningDateInCompany;
-        this.isCandidate = isCandidate;
-        this.userType = userType;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.specialization = specialization;
-        this.yearOfPassing = yearOfPassing;
-        this.percentage = percentage;
-        this.collegeName = collegeName;
-        this.universityName = universityName;
-        this.schoolName = schoolName;
-    }
+
 }

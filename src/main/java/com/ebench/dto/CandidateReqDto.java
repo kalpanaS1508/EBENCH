@@ -4,6 +4,7 @@ import com.ebench.entity.UserType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -19,8 +20,7 @@ import java.util.Date;
 
 @Data
 @Valid
-@SQLDelete(sql = "UPDATE Candidate SET deleted = true WHERE id=?")
-@Where(clause = "deleted=false")
+@AllArgsConstructor
 @Table(uniqueConstraints =@UniqueConstraint(columnNames = {"email"}))
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties
@@ -69,51 +69,10 @@ public class CandidateReqDto {
     public String collegeName;
     public String universityName;
     public String schoolName;
+    public String emailVerifyCode;
+    public boolean emailVerified;
 
-    public CandidateReqDto(Long id, String firstName, String lastName, String keyExperience, String skills, String address, String skypeId, String whatsapp, String country, String state, String city,
-                           String hobbies, String email, String interest, String mobile,
-                           boolean deleted, boolean availableForWork, String password, String profileImageUrl, String twitterId, String linkedIn, String pincode, boolean activeStatus, Time lastSeen,
-                           String currentDesignation,
-                           String jobProfile, String overview, String currentlyWorkingCompanyName, String roleInHiring, Date joiningDateInCompany, UserType userType, String specialization,
-                           String yearOfPassing, BigDecimal percentage, String collegeName, String universityName, String schoolName) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.keyExperience = keyExperience;
-        this.skills = skills;
-        this.address = address;
-        this.skypeId = skypeId;
-        this.whatsapp = whatsapp;
-        this.country = country;
-        this.state = state;
-        this.city = city;
-        this.hobbies = hobbies;
-        this.email = email;
-        this.interest = interest;
-        this.mobile = mobile;
-        this.deleted = deleted;
-        this.availableForWork = availableForWork;
-        this.password = password;
-        this.profileImageUrl = profileImageUrl;
-        this.twitterId = twitterId;
-        this.linkedIn = linkedIn;
-        this.pincode = pincode;
-        this.activeStatus = activeStatus;
-        this.lastSeen = lastSeen;
-        this.currentDesignation = currentDesignation;
-        this.jobProfile = jobProfile;
-        this.overview = overview;
-        CurrentlyWorkingCompanyName = currentlyWorkingCompanyName;
-        this.roleInHiring = roleInHiring;
-        this.joiningDateInCompany = joiningDateInCompany;
-        this.userType = userType;
-        this.specialization = specialization;
-        this.yearOfPassing = yearOfPassing;
-        this.percentage = percentage;
-        this.collegeName = collegeName;
-        this.universityName = universityName;
-        this.schoolName = schoolName;
-    }
+
 
     public CandidateReqDto() {
     }
