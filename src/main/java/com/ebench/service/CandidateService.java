@@ -251,13 +251,10 @@ public class CandidateService {
         boolean emailValidation = Pattern.compile(regexPattern)
                 .matcher(candidateReqDto.getEmail())
                 .matches();
-        System.out.println((emailValidation));
         String PASSWORD_PATTERN = "^(?=(?:[a-zA-Z0-9]*[a-zA-Z]){2})(?=(?:[a-zA-Z0-9]*\\d){2})[a-zA-Z0-9]{8,}$";
         boolean pattern = Pattern.compile(PASSWORD_PATTERN)
                 .matcher(candidateReqDto.getPassword())
                 .matches();
-        System.out.println((pattern));
-
         if (emailAlreadyExist(candidateReqDto.getEmail())) {
             System.out.println("User Already Exist");
             throw new BadReqException(ApiMessage.EMAIL_ALREADY_USED);
@@ -272,16 +269,10 @@ public class CandidateService {
             }
 
             String fileNameWithTime = str[0]+"_"+System.currentTimeMillis()+"."+str[1];
-            System.out.println("FIle NAme With TIme : "+fileNameWithTime);
             Path fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + fileNameWithTime);
             fileName.append(file.getOriginalFilename());
             Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
-
             String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
-
-            System.out.println("file uploaded successfully  " + fileNameAndPath);
-            System.out.println(candidateReqDto);
-
             Candidate candidate = new Candidate();
             candidate.setFirstName(candidateReqDto.getFirstName());
             candidate.setLastName(candidateReqDto.getLastName());
@@ -377,24 +368,18 @@ public class CandidateService {
     private void sendVerificationEmail(Candidate candidate, String siteURL)
             throws MessagingException, UnsupportedEncodingException {
         try {
-            System.out.println("Candidate Email : "+candidate.getEmail());
             String toAddress = candidate.getEmail();
-//            String fromAddress = "rawatkiran21298@gmail.com";
-//            String senderName = "Ebench App";
             String subject = "Please verify your registration";
             String content = "Dear "+candidate.getFirstName()+" "+candidate.getLastName()+",<br>"
-                    + "Please click the link below to verify your registration:<br>"
-                    + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
+                    + "Please Enter this verification code to verify your registration sucessfully:<br>"
+                    +"<h3>"+candidate.getEmailVerifyCode()+"</h3><br>"
                     + "Thank you,<br>"
+                    +"Have a nice day,<br>"
                     + "The Ebench Team";
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message,true,"UTF-8");
-//            helper.setFrom(fromAddress, senderName);
             helper.setTo(toAddress);
             helper.setSubject(subject);
-//            content = content.replace("[[name]]", candidate.getFirstName());
-            String verifyURL = siteURL + "/email/verify/" + candidate.getId() + "/" + candidate.getEmailVerifyCode();
-            content = content.replace("[[URL]]", verifyURL);
             helper.setText(content, true);
             message.setContent(content,"text/html");
             mailSender.send(message);
