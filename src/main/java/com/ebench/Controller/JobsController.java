@@ -2,7 +2,7 @@ package com.ebench.Controller;
 
 import com.ebench.entity.Jobs;
 import com.ebench.service.JobService;
-import com.ebench.utils.ApiResponse;
+import com.ebench.Utils.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

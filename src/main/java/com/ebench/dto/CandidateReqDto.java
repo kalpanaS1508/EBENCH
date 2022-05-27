@@ -68,6 +68,7 @@ public class CandidateReqDto {
     public String collegeName;
     public String universityName;
     public String schoolName;
+    public String resumeUrl;
 
 }
 

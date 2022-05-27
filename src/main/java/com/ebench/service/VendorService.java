@@ -1,18 +1,30 @@
 package com.ebench.service;
 
 import com.ebench.Apimessage.ApiMessage;
-import com.ebench.entity.Candidate;
+import com.ebench.Utils.VerificationCode;
 import com.ebench.entity.Vendor;
 import com.ebench.exception.BadReqException;
 import com.ebench.exception.UserNotFoundException;
 import com.ebench.repository.VendorRepository;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.security.PublicKey;
-import java.util.List;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -20,12 +32,24 @@ import java.util.regex.Pattern;
 @Service
 public class VendorService {
 
+    @Value("${spring.mail.username}")
+    private String email;
+
+    @Value("${spring.mail.password}")
+    private String password;
+
     @Autowired
     public VendorRepository vendorRepository;
 
-//    private String UPLOAD_DIR = "D://EBench V1//EBENCH//target//classes//Static//image";
+    @Autowired
+    public JavaMailSender javaMailSender;
 
-    public Vendor Register(Vendor vendor){
+
+
+
+    private String UPLOAD_DIR = "D://EBench V1//EBENCH//target//classes//Static//file";
+
+    public Vendor Register(Vendor vendor , MultipartFile file , String siteURL){
 
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
@@ -53,19 +77,20 @@ public class VendorService {
             //----------image url save in database code--------------------
 
 
-//            StringBuilder fileName = new StringBuilder();
-//            Path fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + file.getOriginalFilename());
-//            fileName.append(file.getOriginalFilename());
-//
-//            Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
-//
-//            String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
-//
-//            System.out.println("file uploaded successfully  " + fileNameAndPath);
-//
-//            System.out.println(vendor);
+            StringBuilder fileName = new StringBuilder();
+            Path fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + file.getOriginalFilename());
+            fileName.append(file.getOriginalFilename());
 
-            //------------------------------------------------------------------------------
+            Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
+
+            String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
+
+            System.out.println("file uploaded successfully  " + fileNameAndPath);
+
+            System.out.println(vendor);
+
+            vendor1.setVerificationCode(VerificationCode.getRandomNumberString());
+
 
             vendor1.setName(vendor.getName());
 
@@ -74,8 +99,6 @@ public class VendorService {
             }else {
                 vendor1.setEmail(vendor.getEmail());
             }
-
-
 
 
             if (pattern != true) {
@@ -104,23 +127,52 @@ public class VendorService {
             vendor1.setSkypeId(vendor.getSkypeId());
             vendor1.setTwitterId(vendor.getTwitterId());
 
-            vendor1.setVendorProfileImageUrl(vendor.getVendorProfileImageUrl());
+            vendor1.setVendorProfileImageUrl(fileNameAndPath.toString());
 
             vendor1.setAvailability(vendor.getAvailability());
             vendor1.setExperience(vendor.getExperience());
 
             System.out.println("vendor details " + vendor1);
-            vendorRepository.save(vendor1);
+          Vendor vendor2 = vendorRepository.save(vendor1);
+            sendVerificationEmail(vendor2,siteURL);
 
         } catch (BadReqException e) {
             throw new BadReqException(e.getMessage());
 
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-//        catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
         return vendor1;
     }
+//-------------------------Email verification code-----------------------------------------------------
+    private void sendVerificationEmail(Vendor vendor , String siteURL)
+          throws MessagingException, UnsupportedEncodingException {
+
+            String toAddress = vendor.getEmail();
+            System.out.println( "email address " + toAddress);
+            String subject = "Please verify your registration";
+            String content = "Dear " + vendor.getName() + "<br>"
+                    + "Please click the verification code below to verify your registration:<br>"
+                    + "<h3>" + vendor.getVerificationCode() + "</h3>"
+                    + "Thank you,<br>"
+                    + "EBECNCH TEAM.com";
+
+
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message);
+
+            helper.setTo(toAddress);
+            helper.setSubject(subject);
+            helper.setText(content, true);
+            message.setContent(content , "text/html");
+            javaMailSender.send(message);
+
+        }
+
 
     public Boolean emailAlreadyExist(String email) {
 
@@ -189,6 +241,7 @@ public class VendorService {
                     vendor1.setAvailability(vendor.getAvailability());
 
                     vendorRepository.save(vendor1);
+
 
                 }
                 catch (Exception e) {
