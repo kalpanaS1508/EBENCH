@@ -133,7 +133,8 @@ public class VendorService {
             vendor1.setExperience(vendor.getExperience());
 
             System.out.println("vendor details " + vendor1);
-          Vendor vendor2 = vendorRepository.save(vendor1);
+
+            Vendor vendor2 = vendorRepository.save(vendor1);
             sendVerificationEmail(vendor2,siteURL);
 
         } catch (BadReqException e) {
