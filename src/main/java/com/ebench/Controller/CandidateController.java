@@ -59,10 +59,11 @@ public class CandidateController {
     @PutMapping(value = "/update_Candidate")
     public ResponseEntity updatecandidate(@RequestBody CandidateReqDto candidateReqDto)
             throws IOException {
-       // CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.updateCandidate(candidateReqDto), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
+
+
     // __________________________Delete api for candidate______________________________________________________________
 
 

@@ -3,5 +3,9 @@ package com.ebench.entity;
 public enum UserType {
     CANDIDATE,
     VENDOR,
-    ADMIN
+    ADMIN;
+
+    public String toString(UserType candidate) {
+        return "candidate";
+    }
 }

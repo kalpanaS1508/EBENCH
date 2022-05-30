@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import org.springframework.util.StringUtils;
@@ -34,7 +37,7 @@ import java.util.Properties;
 import java.util.regex.Pattern;
 
 @Service
-public class CandidateService {
+public class CandidateService  {
 
     @Value("${spring.mail.username}")
     private String email;
@@ -284,6 +287,7 @@ public class CandidateService {
             candidate.setCountry(candidateReqDto.getCountry());
             candidate.setState(candidateReqDto.getState());
             candidate.setCity(candidateReqDto.getCity());
+            candidate.setRole(candidateReqDto.getRole());
             candidate.setHobbies(candidateReqDto.getHobbies());
             if (!emailValidation) {
                 throw new BadReqException(ApiMessage.Email_Not_In_Proper_Format);
@@ -387,6 +391,7 @@ public class CandidateService {
             e.printStackTrace();
         }
     }
+
 
 }
 

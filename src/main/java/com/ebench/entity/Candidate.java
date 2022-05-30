@@ -161,6 +161,8 @@ public class Candidate {
     public String emailVerifyCode;
     @Column(name = "email_verified")
     public boolean emailVerified;
+    @Column(name = "role")
+    public String role;
 
 
     public Candidate(Long id, String firstName, String lastName, String keyExperience,
