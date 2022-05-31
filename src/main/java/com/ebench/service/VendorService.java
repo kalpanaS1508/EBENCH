@@ -6,7 +6,6 @@ import com.ebench.entity.Vendor;
 import com.ebench.exception.BadReqException;
 import com.ebench.exception.UserNotFoundException;
 import com.ebench.repository.VendorRepository;
-import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -191,9 +190,12 @@ public class VendorService {
 
 //    --------------------------------UPDATE-------------------------------------------
 
-    public Vendor updateVendor(Vendor vendor) {
+    public Vendor updateVendor(Vendor vendor , MultipartFile file) {
+
         System.out.println(vendor.getVendorId());
+
         Optional<Vendor> id = vendorRepository.findById(vendor.getVendorId());
+
         System.out.println("Entered");
         Vendor vendor1 = null;
         try {
@@ -211,6 +213,19 @@ public class VendorService {
                         .matcher(vendor.getPassword())
                         .matches();
                 try {
+
+//-------------------------------------------------------------------------------------------------------------
+                    StringBuilder fileName = new StringBuilder();
+                    Path fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + file.getOriginalFilename());
+                    fileName.append(file.getOriginalFilename());
+
+                    Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
+
+                    String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
+
+                    System.out.println("file uploaded successfully  " + fileNameAndPath);
+//---------------------------------------------------------------------------------------------------------------------
+
                     vendor1.setName(vendor.getName());
 
                     if (!emailValidation) {
@@ -218,6 +233,7 @@ public class VendorService {
                     } else {
                         vendor1.setEmail(vendor.getEmail());
                     }
+                    vendor1.setVendorId(vendor.getVendorId());
                     vendor1.setAddress(vendor.getAddress());
                     vendor1.setPassword(vendor.getPassword());
                     vendor1.setDesignation(vendor.getDesignation());
@@ -237,12 +253,11 @@ public class VendorService {
                     vendor1.setRecentActivities(vendor.getRecentActivities());
                     vendor1.setRecentDateActivities(vendor.getRecentDateActivities());
                     vendor1.setDailyActivities(vendor.getDailyActivities());
-                    vendor1.setVendorProfileImageUrl(vendor.getVendorProfileImageUrl());
+                    vendor1.setVendorProfileImageUrl(fileNameAndPath.toString());
                     vendor1.setExperience(vendor.getExperience());
                     vendor1.setAvailability(vendor.getAvailability());
 
                     vendorRepository.save(vendor1);
-
 
                 }
                 catch (Exception e) {

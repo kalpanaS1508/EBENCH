@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.IOException;
 
 
@@ -29,7 +30,7 @@ public class VendorController {
 //   ---------------------------VENDOR REGISTRATION-----------------------------------------
 
     @PostMapping(value = "/registervendor" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity Register(@RequestPart(value = "vendor" , required = true) Vendor vendor , @RequestPart("file") MultipartFile file ,HttpServletRequest request)
+    public ResponseEntity Register(@RequestPart(value = "vendor" , required = true) Vendor vendor , @RequestPart("file")  MultipartFile file , HttpServletRequest request)
             throws IOException {
 
 //        Vendor vendor1= new ObjectMapper().readValue(vendor,Vendor.class);
@@ -60,10 +61,10 @@ public class VendorController {
 
 //    --------------------------------VENDOR UPDATE API-----------------------------------------------
 
-    @PutMapping(value = "/update_vendor")
-    public ResponseEntity updateVendor(@RequestBody Vendor vendor)
+    @PutMapping(value = "/update_vendor" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity updateVendor(@RequestPart(value = "vendor" , required = true) Vendor vendor , @RequestPart("file") MultipartFile file)
             throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.updateVendor(vendor), ApiMessage.Api_Message);
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.updateVendor(vendor , file), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 
