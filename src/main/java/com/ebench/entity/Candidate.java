@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 
 import java.math.BigDecimal;
 import java.sql.Clob;
@@ -88,6 +89,7 @@ public class Candidate {
     @Column(name = "available_for_work")
     public boolean availableForWork;
 
+    @Size(min = 2, max = 30)
     @Column(name = "password")
     public String password;
 

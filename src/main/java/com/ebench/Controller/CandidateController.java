@@ -81,5 +81,13 @@ public class CandidateController {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.getCandidate(keyExperience, skills, city ,mobile), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
+    //_________________________________Update api for candidate_____________________________________________________________
+
+    @PutMapping(value = "/update_Candidate1")
+    public ResponseEntity updatecandidate1(@RequestPart CandidateReqDto candidateReqDto,@RequestPart MultipartFile file )
+            throws IOException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.updateCandidate1(candidateReqDto,file), ApiMessage.Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
 
 }
