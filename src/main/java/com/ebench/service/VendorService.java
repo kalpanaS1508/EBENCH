@@ -6,6 +6,8 @@ import com.ebench.entity.Vendor;
 import com.ebench.exception.BadReqException;
 import com.ebench.exception.UserNotFoundException;
 import com.ebench.repository.VendorRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,12 +22,16 @@ import java.util.regex.Pattern;
 @Service
 public class VendorService {
 
+    private static final Logger logger = LoggerFactory.getLogger(VendorService.class);
+
     @Autowired
     public VendorRepository vendorRepository;
 
 //    private String UPLOAD_DIR = "D://EBench V1//EBENCH//target//classes//Static//image";
 
-    public Vendor Register(Vendor vendor){
+    public Vendor Register(Vendor vendor) throws Exception {
+
+        logger.info("vendor Email should be in format ");
 
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
@@ -34,16 +40,16 @@ public class VendorService {
                 .matches();
         System.out.println((emailValidation));
 
+        logger.info("vendor password should be in format ");
 
         String PASSWORD_PATTERN = "^(?=(?:[a-zA-Z0-9]*[a-zA-Z]){2})(?=(?:[a-zA-Z0-9]*\\d){2})[a-zA-Z0-9]{8,}$";
         boolean pattern = Pattern.compile(PASSWORD_PATTERN)
                 .matcher(vendor.getPassword())
                 .matches();
 
-        System.out.println((pattern));
+        logger.info("pattern " + pattern);
 
         if (emailAlreadyExist(vendor.getEmail())) {
-            System.out.println("Vendor Already Exist");
             throw new BadReqException(ApiMessage.EMAIL_IS_PRESENT);
         }
 
@@ -74,9 +80,6 @@ public class VendorService {
             }else {
                 vendor1.setEmail(vendor.getEmail());
             }
-
-
-
 
             if (pattern != true) {
                 throw new BadReqException(ApiMessage.Password_Not_Proper_Format);
@@ -138,13 +141,18 @@ public class VendorService {
 
 //    --------------------------------UPDATE-------------------------------------------
 
-    public Vendor updateVendor(Vendor vendor) {
+    public Vendor updateVendor(Vendor vendor) throws Exception {
         System.out.println(vendor.getVendorId());
+
         Optional<Vendor> id = vendorRepository.findById(vendor.getVendorId());
-        System.out.println("Entered");
+
         Vendor vendor1 = null;
-        try {
-            if (id.isPresent()) {
+
+            if(!id.isPresent()){
+                throw new BadReqException(ApiMessage.VENDOR_NOT_PRESENT);
+            }
+            else{
+                id.isPresent();
                 vendor1 = id.get();
 
                 String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
@@ -157,6 +165,11 @@ public class VendorService {
                 boolean pattern = Pattern.compile(PASSWORD_PATTERN)
                         .matcher(vendor.getPassword())
                         .matches();
+
+                if (emailAlreadyExist(vendor.getEmail())) {
+                    throw new BadReqException(ApiMessage.EMAIL_IS_PRESENT);
+                }
+
                 try {
                     vendor1.setName(vendor.getName());
 
@@ -196,10 +209,7 @@ public class VendorService {
                 }
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return vendor;
+        return vendor1;
     }
 
 // ---------------------------------- GET VENDOR ---------------------------------------------------------------
