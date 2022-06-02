@@ -32,13 +32,11 @@ public class VendorService {
     public Vendor Register(Vendor vendor) throws Exception {
 
         logger.info("vendor Email should be in format ");
-
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
         boolean emailValidation = Pattern.compile(regexPattern)
                 .matcher(vendor.getEmail())
                 .matches();
-        System.out.println((emailValidation));
 
         logger.info("vendor password should be in format ");
 
@@ -47,31 +45,15 @@ public class VendorService {
                 .matcher(vendor.getPassword())
                 .matches();
 
-        logger.info("pattern " + pattern);
 
         if (emailAlreadyExist(vendor.getEmail())) {
+            logger.info("vendor will get the email and check it is present or not " + vendor.getEmail());
             throw new BadReqException(ApiMessage.EMAIL_IS_PRESENT);
         }
 
         Vendor vendor1 = new Vendor();
 
         try {
-            //----------image url save in database code--------------------
-
-
-//            StringBuilder fileName = new StringBuilder();
-//            Path fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + file.getOriginalFilename());
-//            fileName.append(file.getOriginalFilename());
-//
-//            Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
-//
-//            String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
-//
-//            System.out.println("file uploaded successfully  " + fileNameAndPath);
-//
-//            System.out.println(vendor);
-
-            //------------------------------------------------------------------------------
 
             vendor1.setName(vendor.getName());
 
@@ -112,16 +94,14 @@ public class VendorService {
             vendor1.setAvailability(vendor.getAvailability());
             vendor1.setExperience(vendor.getExperience());
 
-            System.out.println("vendor details " + vendor1);
+            logger.info("vendor details " , vendor1);
             vendorRepository.save(vendor1);
 
         } catch (BadReqException e) {
             throw new BadReqException(e.getMessage());
 
         }
-//        catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        logger.info("vendor register yourself successfully");
         return vendor1;
     }
 
@@ -142,13 +122,13 @@ public class VendorService {
 //    --------------------------------UPDATE-------------------------------------------
 
     public Vendor updateVendor(Vendor vendor) throws Exception {
-        System.out.println(vendor.getVendorId());
 
         Optional<Vendor> id = vendorRepository.findById(vendor.getVendorId());
 
         Vendor vendor1 = null;
 
             if(!id.isPresent()){
+                logger.info("id is not present firstly you have to register yourself");
                 throw new BadReqException(ApiMessage.VENDOR_NOT_PRESENT);
             }
             else{
@@ -200,6 +180,7 @@ public class VendorService {
                     vendor1.setVendorProfileImageUrl(vendor.getVendorProfileImageUrl());
                     vendor1.setExperience(vendor.getExperience());
                     vendor1.setAvailability(vendor.getAvailability());
+                    logger.info("vendor details are updated by this Id !! " + vendor.getVendorId());
 
                     vendorRepository.save(vendor1);
 
@@ -215,6 +196,7 @@ public class VendorService {
 // ---------------------------------- GET VENDOR ---------------------------------------------------------------
 
     public Vendor getVendor(Long vendorId){
+
         Optional<Vendor> id = vendorRepository.findById(vendorId);
         if(id.isPresent()){
             Vendor vendor = id.get();
