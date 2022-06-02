@@ -105,7 +105,7 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
             }
             candidate.setAvailableForWork(candidateReqDto.isAvailableForWork());
             if (pattern != true) {
-                logger.error("Password validation:password not in proper format");
+              //  logger.error("Password validation:password not in proper format");
                 throw new BadReqException(ApiMessage.Password_Not_Proper_Format);
             } else {
                 candidate.setPassword(candidateReqDto.getPassword());
@@ -141,23 +141,23 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
 
     public Boolean emailAlreadyExist(String email) {
         System.out.println("In Email Exist Checking Method");
-        logger.info("validating email msgs_________________");
-        logger.error("fetching candidate details from candidateRepository");
-        Optional<Candidate> user = candidateRepository.findUserByEmail(email);
-        if (user.isPresent()) {
+      logger.info("fetching candidate details from candidateRepository where candidateemail is" +  email);
+        Optional<Candidate> candidate = candidateRepository.findUserByEmail(email);
+        if (candidate.isPresent()) {
             System.out.println("True");
-            return true;
+            logger.error("Candidate with this email "+email +" with id "+candidate.get().getId()+" is already present ");
+
+           return true;
         } else {
             System.out.println("False");
             return false;
         }
     }
 
-
     // _______________________________Get Api for Candidate ______________________________________________________________________//
 
     public Candidate getCandidate(Long id) {
-        logger.info("get candidate details from candidate repository");
+        logger.info("get candidate details from candidate repository"+"bythis "+id);
         Optional<Candidate> user = candidateRepository.findById(id);
         Candidate candidate1 = null;
         try {
@@ -179,7 +179,7 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
     // _____________________________________Update Api for candidate Registration ________________________________________//
 
     public CandidateReqDto updateCandidate(CandidateReqDto candidateReqDto) {
-        logger.info("In updatecandidate method : fetching details from candidate by id");
+        logger.info("In updatecandidate method : fetching details from candidate by id"+candidateReqDto.getId());
         Optional<Candidate> candidate = candidateRepository.findById(candidateReqDto.getId());
         Candidate candidate1 = null;
         candidate1 = candidate.get();
@@ -279,6 +279,7 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
 
     //_______________________________Delete api for candidate______________________________________
     public Candidate deletecandidate(Long id) {
+        logger.info("getting candidtae id for soft delete"+""+id);
         Optional<Candidate> candidate1 = candidateRepository.findById(id);
         Candidate candidate = null;
         if (candidate1.isPresent()) {
@@ -296,6 +297,7 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
     //___________________________________Login for user_________________________________________________________________
     public Candidate login(String email, String password, boolean isCandidate) {
         System.out.println("The user is candidate");
+        logger.info("The user is candidate");
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
         boolean emailValidation = Pattern.compile(regexPattern)
@@ -304,16 +306,20 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
         Candidate candidate1 = candidateRepository.findByEmailAndPassword(email, password);
         try {
             if (email.isEmpty() || !emailValidation) {
+                logger.info("Please Enter Email");
                 throw new BadReqException(ApiMessage.ENTER_EMAIL);
             }
             if (password.isEmpty() || password.length() < 4) {
+                logger.info("please Enter valid password");
                 throw new BadReqException(ApiMessage.ENTER_PASSWORD);
             } else if (candidate1 == null) {
+                logger.info("Invalid credentials in login candidate");
                 throw new BadReqException(ApiMessage.INVALID_credential);
             }
         } catch (Exception e) {
             throw new BadReqException(e.getMessage());
         }
+        logger.info("candidate login sucessfully");
         return candidate1;
     }
 
@@ -428,12 +434,12 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
             candidate.setSchoolName(candidateReqDto.getSchoolName());
             candidateRepository.save(candidate);
         } catch (BadReqException e) {
-            logger.error("version 2 of register api not working sucessfully");
+            logger.error("version 2 of register api not saving sucessfully_____________________>------");
             throw new BadReqException(e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        logger.info("registered vesion 2 candidate  api sucessfully ");
+        logger.info("registered vesion 2 candidate  api sucessfully_____________>----------- ");
         return candidateReqDto;
 
     }
@@ -443,10 +449,9 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
         Optional<Candidate> candidate = candidateRepository.findById(candidateReqDto.getId());
 
         Candidate candidate1 = null;
-        candidate1 = candidate.get();
-
 
         if (candidate.isPresent()) {
+            candidate1 = candidate.get();
             String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                     + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
             boolean emailValidation = Pattern.compile(regexPattern)
@@ -459,10 +464,6 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
                     .matches();
             System.out.println((pattern));
 
-            if (emailAlreadyExist(candidateReqDto.getEmail())) {
-                System.out.println("User Already Exist");
-                throw new BadReqException(ApiMessage.EMAIL_ALREADY_USED);
-            }
             try {
                 StringBuilder fileName = new StringBuilder();
                 String filename = file.getOriginalFilename();
@@ -494,11 +495,7 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
                 candidate1.setState(candidateReqDto.getState());
                 candidate1.setCity(candidateReqDto.getCity());
                 candidate1.setHobbies(candidateReqDto.getHobbies());
-                if (!emailValidation) {
-                    throw new BadReqException(ApiMessage.Email_Not_In_Proper_Format);
-                } else {
-                    candidate1.setEmail(candidateReqDto.getEmail());
-                }
+                candidate1.setEmail(candidateReqDto.getEmail());
                 candidate1.setInterest(candidateReqDto.getInterest());
                 if (candidateReqDto.getMobile().isEmpty() || candidateReqDto.getMobile().length() != 10) {
                     throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
@@ -533,15 +530,18 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
                 candidate1.setSchoolName(candidateReqDto.getSchoolName());
                 candidateRepository.save(candidate1);
             } catch (BadReqException e) {
+                logger.error("candidate not updated sucessfully");
                 throw new BadReqException(e.getMessage());
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            logger.info(" candidate of id "+ candidateReqDto.getId() +" updated sucessfully by version 2 ");
             return candidateReqDto;
         }
-        logger.info("candidate updated sucessfully by version 2");
-        return candidateReqDto;
+        else
+        {
+            throw new UserNotFoundException(ApiMessage.THIS_CANDIDATE_ID_IS_NOT_PRESENT);
+        }
+
     }
-
-
 }

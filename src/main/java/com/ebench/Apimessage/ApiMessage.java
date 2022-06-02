@@ -29,7 +29,8 @@ public class ApiMessage {
     public static final String TASK_SUCESSFULLY_NOT_CREATED ="Task sucessfully not created" ;
     public static final String TASK_NOT_DELETED_SUCESSFULLY = "Task not deleted sucessfully";
     public static final String NO_PENDING_TASK ="There is no any pending task remain" ;
-    public static final String THIS_CANDIDATE_ID_IS_NOT_PRESENT = "This id is not present plaese Insert valid id" ;
+    public static final String THIS_CANDIDATE_ID_IS_NOT_PRESENT = "This id is not present please Insert valid id" ;
+    public static final String TASK_HISTORY_NOT_FOUND = "Task history not found ";
     public static String INVALID_credential="Please give the correct email and password here";
     public static String Task_Not_Found="No any task assigned to this candidate";
 
