@@ -602,7 +602,7 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
                 candidate1.setSchoolName(candidateReqDto.getSchoolName());
                 candidateRepository.save(candidate1);
             } catch (BadReqException e) {
-                logger.error("candidate not updated sucessfully");
+                logger.error("candidate not updated successfully");
                 throw new BadReqException(e.getMessage());
             } catch (IOException e) {
                 e.printStackTrace();

@@ -91,7 +91,7 @@ public class CandidateController {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.getCandidate(keyExperience, skills, city ,mobile), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
-//_________________________________Email verification___________________________________________________________________
+
     //_________________________________Update api for candidate_____________________________________________________________
 
     @PutMapping(value = "/update_Candidate1")
@@ -100,7 +100,7 @@ public class CandidateController {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.updateCandidate1(candidateReqDto,file), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
-
+//______________________________Email Verification___________________________________________________________________________
     @RequestMapping(value = "/email/verify/", method = RequestMethod.GET)
     public ResponseEntity emailVerify(@RequestParam("uid") Long uid, @RequestParam("code") String code) throws JsonProcessingException, ResourceNotFoundException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.emailVerify(uid,code), ApiMessage.Email_Verified);
