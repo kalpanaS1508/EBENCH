@@ -6,6 +6,7 @@ import com.ebench.dto.CandidateReqDto;
 import com.ebench.entity.ChangeTaskStatus;
 import com.ebench.entity.Task;
 import com.ebench.entity.UserType;
+import com.ebench.exception.ResourceNotFoundException;
 import com.ebench.service.Taskservice;
 import com.ebench.utils.ApiResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -54,7 +55,7 @@ public class TaskController {
         return apiResponse.getResponse(apiResponse);
     }
     @RequestMapping(value = "/get_task_History", method = RequestMethod.GET)
-    public ResponseEntity taskHistory(@RequestParam("candidate id") Long candidateId ) throws IOException {
+    public ResponseEntity taskHistory(@RequestParam("candidate id") Long candidateId ) throws IOException, ResourceNotFoundException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,taskservice.getTaskHistory(candidateId), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }

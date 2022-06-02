@@ -14,6 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.util.Date;
@@ -45,6 +46,7 @@ public class CandidateReqDto {
     public String mobile;
     public boolean deleted;
     public boolean availableForWork;
+    @Size(min = 2, max = 30)
     public String password;
     public String profileImageUrl;
     public String twitterId;

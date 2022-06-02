@@ -38,6 +38,14 @@ public class CandidateController {
 //        return apiResponse.getResponse(apiResponse);
 //    }
 //_________________________________________Register Candidate________________________________________________________________
+    @PostMapping(value = "/register_Candidate")
+    public ResponseEntity register(@RequestBody CandidateReqDto candidateReqDto )
+            throws Exception {
+//        CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.register(candidateReqDto), ApiMessage.Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+
     @PostMapping(value = "/register_Candidate1")
     public ResponseEntity registerCandidate(@RequestPart CandidateReqDto candidateReqDto,@RequestPart MultipartFile file,HttpServletRequest request )
             throws IOException {
@@ -84,6 +92,14 @@ public class CandidateController {
         return apiResponse.getResponse(apiResponse);
     }
 //_________________________________Email verification___________________________________________________________________
+    //_________________________________Update api for candidate_____________________________________________________________
+
+    @PutMapping(value = "/update_Candidate1")
+    public ResponseEntity updatecandidate1(@RequestPart CandidateReqDto candidateReqDto,@RequestPart MultipartFile file )
+            throws IOException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.updateCandidate1(candidateReqDto,file), ApiMessage.Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
 
     @RequestMapping(value = "/email/verify/", method = RequestMethod.GET)
     public ResponseEntity emailVerify(@RequestParam("uid") Long uid, @RequestParam("code") String code) throws JsonProcessingException, ResourceNotFoundException {

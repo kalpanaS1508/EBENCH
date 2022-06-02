@@ -3,9 +3,12 @@ package com.ebench.service;
 import com.ebench.Apimessage.ApiMessage;
 import com.ebench.entity.*;
 import com.ebench.exception.BadReqException;
+import com.ebench.exception.ResourceNotFoundException;
 import com.ebench.exception.UserNotFoundException;
 import com.ebench.repository.ProjectRepository;
 import com.ebench.repository.TaskRepository;
+import com.ebench.utils.GlobalResources;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,7 @@ import java.util.Set;
 
 @Service
 public class Taskservice {
+    private Logger logger = GlobalResources.getlogger(Taskservice.class);
 
     @Autowired
     TaskRepository taskRepository;
@@ -22,10 +26,12 @@ public class Taskservice {
 
     //_______________________________________GetProjects___________________________________________________________________________
     public Set<String> getProjectList(Long candidateId) {
+        logger.info("fetching data from project repo by candidate id");
         Set<String> projectList = projectRepository.findByCandidateId(candidateId);
         if (projectList.size() < 1) {
             throw new BadReqException(ApiMessage.PROJECT_NOT_FOUND);
         }
+        logger.info("getting project list");
         return projectList;
     }
 
@@ -36,6 +42,7 @@ public class Taskservice {
         if (tasks.size() < 1) {
             throw new BadReqException(ApiMessage.Task_Not_Found);
         }
+        logger.info("getting all task ");
         return tasks;
     }
 
@@ -46,6 +53,7 @@ public class Taskservice {
         if (tasks.size() < 1) {
             throw new BadReqException(ApiMessage.NO_PENDING_TASK);
         }
+        logger.info("getting pending task");
         return tasks;
     }
 
@@ -73,8 +81,10 @@ public class Taskservice {
             taskmanagement1.setAnyDependency(taskmanagement.getAnyDependency());
             taskRepository.save(taskmanagement1);
         } catch (BadReqException e) {
+            logger.info("task_sucessfully_not_created");
             throw new BadReqException(ApiMessage.TASK_SUCESSFULLY_NOT_CREATED);
         }
+        logger.info("Task created sucessfullly");
         return taskmanagement;
     }
 
@@ -104,8 +114,10 @@ public class Taskservice {
             taskmanagement1.setAnyDependency(taskmanagement.getAnyDependency());
             taskRepository.save(taskmanagement1);
         } catch (Exception e) {
+            logger.info("Task not updated sucessfully");
             throw new BadReqException(ApiMessage.TASK_NOT_UPDATED_SUCESSFULLY);
         }
+        logger.info("Task updated sucessfully");
         return taskmanagement;
     }
 
@@ -113,6 +125,7 @@ public class Taskservice {
     //____________________________________________________Deletetask___________________________________________________________________
     public Task deleteTask(Long taskManagementId) {
         Optional<Task> task1 = taskRepository.findById(taskManagementId);
+
         Task taskmanagement = null;
         if (task1.isPresent()) {
             taskmanagement = task1.get();
@@ -128,9 +141,14 @@ public class Taskservice {
 
     //______________________________________GetTaskHistory________________________________________________________________________________
     //I have to do some chnge in it by (apply chnage tast sttaus as parameter
-    public List<Task> getTaskHistory(Long candidateId) {
+    public List<Task> getTaskHistory(Long candidateId) throws ResourceNotFoundException {
 
         List<Task> taskHistory = taskRepository.findTaskHistory(candidateId);
+        if(taskHistory.isEmpty())
+        {
+            throw new ResourceNotFoundException(ApiMessage.TASK_HISTORY_NOT_FOUND);
+        }else
+        logger.info("getTaskhistory");
         return taskHistory;
     }
 //_________________________________PendingTaskForm___________________________________________________________________________________
@@ -142,6 +160,7 @@ public class Taskservice {
        task1.setAddCommentsFromCandidate(task.getAddCommentsFromCandidate());
        task1.setTaskDescription(task.getTaskDescription());
        taskRepository.save(task1);
+       logger.info("Pending task form");
        return task;
     }
 //________________________________________________PendingTaskByProjectName_______________________________________________________________
