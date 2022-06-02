@@ -26,7 +26,6 @@ public class VendorController {
     public VendorService vendorService;
 
 
-
 //   ---------------------------VENDOR REGISTRATION-----------------------------------------
 
     @PostMapping(value = "/registervendor" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -62,9 +61,9 @@ public class VendorController {
 //    --------------------------------VENDOR UPDATE API-----------------------------------------------
 
     @PutMapping(value = "/update_vendor" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity updateVendor(@RequestPart(value = "vendor" , required = true) Vendor vendor , @RequestPart("file") MultipartFile file)
-            throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.updateVendor(vendor , file), ApiMessage.Api_Message);
+    public ResponseEntity updateVendor(@RequestPart(value = "vendor" , required = true) Vendor vendor, @RequestPart("file") MultipartFile file,HttpServletRequest request)
+            throws Exception {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.updateVendor(vendor , file,getSiteURL(request)), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 
@@ -84,5 +83,13 @@ public class VendorController {
         return apiResponse.getResponse(apiResponse);
     }
 
+//   ------------------------- LOGIN VENDOR----------------------------------------------------------------------
+
+    @GetMapping(value = "/login_vendor")
+    public ResponseEntity loginVendor(@RequestParam String email, @RequestParam String password )
+            throws IOException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.login(email, password), ApiMessage.Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
 }
 

@@ -13,4 +13,7 @@ public interface VendorRepository extends JpaRepository<Vendor , Long> {
 
     Optional<Vendor> findVendorByEmail(String email);
 
+    @Query(value = "select * from vendor v where email=?1 and password=?2",nativeQuery = true)
+    Vendor findByEmailAndPassword(String email, String password);
+
 }
