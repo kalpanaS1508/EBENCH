@@ -8,9 +8,6 @@ import com.ebench.exception.UserNotFoundException;
 import com.ebench.repository.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -148,7 +145,7 @@ public class CandidateService {
 
     // _____________________________________Update Api for candidate Registration ________________________________________//
 
-    public CandidateReqDto updateCandidate(CandidateReqDto candidateReqDto,MultipartFile file) {
+    public CandidateReqDto updateCandidate(CandidateReqDto candidateReqDto) {
         Optional<Candidate> candidate = candidateRepository.findById(candidateReqDto.getId());
         Candidate candidate1 = new Candidate();
         candidate1 = candidate.get();

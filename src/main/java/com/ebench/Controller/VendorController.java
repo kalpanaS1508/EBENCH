@@ -3,6 +3,7 @@ package com.ebench.Controller;
 import com.ebench.Apimessage.ApiMessage;
 import com.ebench.dto.CandidateReqDto;
 import com.ebench.entity.Vendor;
+import com.ebench.exception.GlobalException;
 import com.ebench.service.VendorService;
 import com.ebench.utils.ApiResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -28,7 +29,7 @@ public class VendorController {
 
     @PostMapping(value = "/registervendor")
     public ResponseEntity Register(@RequestBody Vendor vendor)
-            throws IOException {
+            throws Exception {
 
 //        Vendor vendor1= new ObjectMapper().readValue(vendor,Vendor.class);
 
@@ -53,11 +54,9 @@ public class VendorController {
 //    --------------------------------VENDOR UPDATE API-----------------------------------------------
 
     @PutMapping(value = "/update_vendor")
-    public ResponseEntity updateVendor(@RequestBody Vendor vendor)
-            throws IOException {
+    public ResponseEntity updateVendor(@RequestBody Vendor vendor) throws Exception {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.updateVendor(vendor), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
-
     }
 
 //    --------------------------VENDOR DELETE API----------------------------------------------------------

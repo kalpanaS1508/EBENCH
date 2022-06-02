@@ -5,9 +5,6 @@ public class ExceptionResponse {
     private String httpCode;
     private Boolean success;
 
-
-
-
     public String getMessage() {
         return message;
     }

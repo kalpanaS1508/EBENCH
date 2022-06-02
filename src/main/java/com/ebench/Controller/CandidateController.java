@@ -29,10 +29,9 @@ public class CandidateController {
 
 
     @PostMapping(value = "/registercandidate")
-    public ResponseEntity register(  @RequestBody CandidateReqDto candidateReqDto)
+    public ResponseEntity register(@RequestBody CandidateReqDto candidateReqDto )
             throws IOException {
-//       CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
-
+//        CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.register(candidateReqDto), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
@@ -47,17 +46,17 @@ public class CandidateController {
 // __________________________________________Update api for Candidate __________________________________________________
 
     @PutMapping(value = "/updatecandidate")
-    public ResponseEntity updatecandidate(@RequestParam("file") MultipartFile file, String candidateReqDto)
+    public ResponseEntity updatecandidate(@RequestBody CandidateReqDto candidateReqDto)
             throws IOException {
-        CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.updateCandidate(candidateReqDto1, file), ApiMessage.Api_Message);
+       // CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.updateCandidate(candidateReqDto), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
 
     }
     // __________________________Delete api for candidate______________________________________________________________
 
     @RequestMapping(value = "/deletecandidate" , method=RequestMethod.DELETE)
-    public ResponseEntity deleteContactInfo(@RequestParam("id") Long id) throws JsonProcessingException {
+    public ResponseEntity deletecandidate(@RequestParam("id") Long id) throws JsonProcessingException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.deletecandidate(id), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
