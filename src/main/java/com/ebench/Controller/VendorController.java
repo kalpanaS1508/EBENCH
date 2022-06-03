@@ -43,7 +43,6 @@ public class VendorController {
         return siteURL.replace(request.getServletPath(), "");
     }
 
-
     @PostMapping(value = "/sample")
     public String TestApi(@RequestParam("name") String name){
         return String.format("%s", name);
