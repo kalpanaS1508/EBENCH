@@ -25,8 +25,8 @@ public interface CandidateRepository extends JpaRepository<Candidate,Long> {
             "and c.mobile =ifnull(?4 ,c.mobile) " ,nativeQuery = true)
          List<Candidate> findBySkillAndExperience(String keyExperience, String skills, String city, String mobile);
 
-
-             Candidate findByEmail(String email);
+            @Query("Select c from Candidate c where c.email=:email")
+            Candidate findByEmail(String email);
 
     @Query(value = "select c.email from candidate c where id = ?1",nativeQuery = true)
     Optional<Candidate> findByCandidateId(Long id);

@@ -154,7 +154,7 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
 
     public Boolean emailAlreadyExist(String email) {
         System.out.println("In Email Exist Checking Method");
-      logger.info("fetching candidate details from candidateRepository where candidateemail is" +  email);
+      logger.info(" fetching candidate details from candidateRepository where candidate email is " +  email);
         Optional<Candidate> candidate = candidateRepository.findUserByEmail(email);
         if (candidate.isPresent()) {
             System.out.println("True");
@@ -170,7 +170,7 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
     // _______________________________Get Api for Candidate ______________________________________________________________________//
 
     public Candidate getCandidate(Long id) {
-        logger.info("get candidate details from candidate repository"+"bythis "+id);
+        logger.info(" get candidate details from candidate repository "+" by this id "+id);
         Optional<Candidate> user = candidateRepository.findById(id);
         Candidate candidate1 = null;
         try {
@@ -365,7 +365,7 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
         boolean emailValidation = Pattern.compile(regexPattern)
                 .matcher(candidateReqDto.getEmail())
                 .matches();
-        logger.info("email validate in version 2 regiater api");
+        logger.info("email validate in version 2 register api");
         System.out.println((emailValidation));
         String PASSWORD_PATTERN = "^(?=(?:[a-zA-Z0-9]*[a-zA-Z]){2})(?=(?:[a-zA-Z0-9]*\\d){2})[a-zA-Z0-9]{8,}$";
         boolean pattern = Pattern.compile(PASSWORD_PATTERN)
@@ -473,6 +473,7 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
             Optional<Candidate> candidate = candidateRepository.findById(uid);
             if (candidate.isPresent()) {
                 Candidate candidate1 = candidate.get();
+                System.out.println(candidate1.getEmailVerifyCode());
                 if (candidate1.getEmailVerifyCode().equals(code)) {
                     candidate1.setEmailVerified(true);
                     candidateRepository.save(candidate1);
@@ -529,12 +530,11 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
             boolean emailValidation = Pattern.compile(regexPattern)
                     .matcher(candidateReqDto.getEmail())
                     .matches();
-            System.out.println((emailValidation));
+
             String PASSWORD_PATTERN = "^(?=(?:[a-zA-Z0-9]*[a-zA-Z]){2})(?=(?:[a-zA-Z0-9]*\\d){2})[a-zA-Z0-9]{8,}$";
             boolean pattern = Pattern.compile(PASSWORD_PATTERN)
                     .matcher(candidateReqDto.getPassword())
                     .matches();
-            System.out.println((pattern));
 
             try {
                 StringBuilder fileName = new StringBuilder();
@@ -600,6 +600,8 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
                 candidate1.setCollegeName(candidateReqDto.getCollegeName());
                 candidate1.setUniversityName(candidateReqDto.getUniversityName());
                 candidate1.setSchoolName(candidateReqDto.getSchoolName());
+                candidate1.setEmailVerified(false);
+                candidate1.setEmailVerifyCode(candidateReqDto.getEmailVerifyCode());
                 candidateRepository.save(candidate1);
             } catch (BadReqException e) {
                 logger.error("candidate not updated successfully");
@@ -615,5 +617,10 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
             throw new UserNotFoundException(ApiMessage.THIS_CANDIDATE_ID_IS_NOT_PRESENT);
         }
 
+    }
+
+     public Candidate findByEmail(String email)
+    {
+        return candidateRepository.findByEmail(email);
     }
 }
