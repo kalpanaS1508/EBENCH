@@ -1,4 +1,4 @@
-package com.ebench.utils;
+package com.ebench.Utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;

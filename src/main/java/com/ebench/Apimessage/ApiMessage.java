@@ -17,11 +17,12 @@ public class ApiMessage {
     public static final String INVALID_EMAIL_AND_PASSWORD = "Email and password is invalid";
     public static final String EMAIL_ALREADY_USED ="This Email is already used" ;
     public static final String PROPER_DETAILS = "Something is missing, please fill proper details";
-    public static final String VENDOR_NOT_PRESENT = "Vendor is not present by this Id , firstly you have to register yourself!!";
-    public static final String VENDOR_IS_PRESENT = "Vendor is present by this Id !!";
+
+    public static final String VENDOR_NOT_PRESENT = "Vendor is not present by this Id !! firstly you have to register yourself";
+    public static final String JOB_NOT_PRESENT = "Jobs are not present by this Id !!";
+    public static final String CANDIDATE_NOT_PRESENT = "Candidates are not present by this Id !!";
     public static final String ENTER_EMAIL = "Please enter the email !!";
     public static final String ENTER_PASSWORD = "Please enter the password!!";
     public static final String INVALID_CREDENTIAL = "Email and Password is not present!!";
-
 
 }

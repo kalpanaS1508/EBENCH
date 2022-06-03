@@ -3,11 +3,9 @@ package com.ebench.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -32,6 +30,10 @@ import java.util.Set;
 @Table(name = "Candidate", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@SecondaryTable(name = "education", pkJoinColumns = @PrimaryKeyJoinColumn(name = "education_id", referencedColumnName = "id"))
+@AllArgsConstructor
+@NoArgsConstructor
+
 public class Candidate {
 
     @Id
@@ -152,6 +154,8 @@ public class Candidate {
     public String universityName;
     @Column(name="schoolName")
     public String schoolName;
+    @Column(name="resume_url")
+    public String resumeUrl;
 
 
     /*@PrePersist
@@ -174,53 +178,4 @@ public class Candidate {
         this.email = email;
     }
 
-    public Candidate(Long id, String firstName, String lastName, String keyExperience, String skills, String address, String skypeId,
-                     String whatsapp, String country, String state, String city, String hobbies, String email, String interest,
-                     String mobile, boolean availableForWork, String password, String profileImageUrl, String twitterId,
-                     String linkedIn, String pincode, boolean activeStatus, Time lastSeen, String currentDesignation,
-                     String jobProfile, String overview, String currentlyWorkingCompanyName, String roleInHiring,
-                     Date joiningDateInCompany, UserType userType, Date createdAt, Date updatedAt,
-                     String specialization, String yearOfPassing, BigDecimal percentage, String collegeName, String universityName, String schoolName) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.keyExperience = keyExperience;
-        this.skills = skills;
-        this.address = address;
-        this.skypeId = skypeId;
-        this.whatsapp = whatsapp;
-        this.country = country;
-        this.state = state;
-        this.city = city;
-        this.hobbies = hobbies;
-        this.email = email;
-        this.interest = interest;
-        this.mobile = mobile;
-        this.availableForWork = availableForWork;
-        this.password = password;
-        this.profileImageUrl = profileImageUrl;
-        this.twitterId = twitterId;
-        this.linkedIn = linkedIn;
-        this.pincode = pincode;
-        this.activeStatus = activeStatus;
-        this.lastSeen = lastSeen;
-        this.currentDesignation = currentDesignation;
-        this.jobProfile = jobProfile;
-        this.overview = overview;
-        CurrentlyWorkingCompanyName = currentlyWorkingCompanyName;
-        this.roleInHiring = roleInHiring;
-        this.joiningDateInCompany = joiningDateInCompany;
-        this.userType = userType;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.specialization = specialization;
-        this.yearOfPassing = yearOfPassing;
-        this.percentage = percentage;
-        this.collegeName = collegeName;
-        this.universityName = universityName;
-        this.schoolName = schoolName;
-    }
-
-    public Candidate() {
-    }
 }

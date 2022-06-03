@@ -1,6 +1,4 @@
-package com.ebench.utils;
-
-import io.swagger.models.auth.In;
+package com.ebench.Utils;
 
 public class Constant {
     public static final Integer ZERO  = 0;

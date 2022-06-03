@@ -1,7 +1,7 @@
 package com.ebench.service;
 
 import com.ebench.Apimessage.ApiMessage;
-import com.ebench.entity.Candidate;
+import com.ebench.Utils.VerificationCode;
 import com.ebench.entity.Vendor;
 import com.ebench.exception.BadReqException;
 import com.ebench.exception.UserNotFoundException;
@@ -9,12 +9,23 @@ import com.ebench.repository.VendorRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.security.PublicKey;
-import java.util.List;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -24,12 +35,24 @@ public class VendorService {
 
     private static final Logger logger = LoggerFactory.getLogger(VendorService.class);
 
+    @Value("${spring.mail.username}")
+    private String email;
+
+    @Value("${spring.mail.password}")
+    private String password;
+
+
     @Autowired
     public VendorRepository vendorRepository;
 
-//    private String UPLOAD_DIR = "D://EBench V1//EBENCH//target//classes//Static//image";
+    @Autowired
+    public JavaMailSender javaMailSender;
 
-    public Vendor Register(Vendor vendor) throws Exception {
+
+    private String UPLOAD_DIR = "D://EBench V1//EBENCH//target//classes//Static//file";
+
+    public Vendor Register(Vendor vendor , MultipartFile file , String siteURL){
+
 
         logger.info("vendor Email should be in format ");
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
@@ -54,6 +77,23 @@ public class VendorService {
         Vendor vendor1 = new Vendor();
 
         try {
+
+            //----------image url save in database code--------------------
+
+
+            StringBuilder fileName = new StringBuilder();
+            Path fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + file.getOriginalFilename());
+            fileName.append(file.getOriginalFilename());
+
+            Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
+
+            String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
+
+            System.out.println("file uploaded successfully  " + fileNameAndPath);
+
+            System.out.println(vendor);
+
+            vendor1.setVerificationCode(VerificationCode.getRandomNumberString());
 
             vendor1.setName(vendor.getName());
 
@@ -89,7 +129,7 @@ public class VendorService {
             vendor1.setSkypeId(vendor.getSkypeId());
             vendor1.setTwitterId(vendor.getTwitterId());
 
-            vendor1.setVendorProfileImageUrl(vendor.getVendorProfileImageUrl());
+            vendor1.setVendorProfileImageUrl(fileNameAndPath.toString());
 
             vendor1.setAvailability(vendor.getAvailability());
             vendor1.setExperience(vendor.getExperience());
@@ -97,31 +137,68 @@ public class VendorService {
             logger.info("vendor details " , vendor1);
             vendorRepository.save(vendor1);
 
+            Vendor vendor2 = vendorRepository.save(vendor1);
+            sendVerificationEmail(vendor2,siteURL);
+
+
         } catch (BadReqException e) {
             throw new BadReqException(e.getMessage());
 
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
         logger.info("vendor register yourself successfully");
         return vendor1;
     }
+//-------------------------Email verification code-----------------------------------------------------
+    private void sendVerificationEmail(Vendor vendor , String siteURL)
+          throws MessagingException, UnsupportedEncodingException {
+
+            String toAddress = vendor.getEmail();
+            System.out.println( "email address " + toAddress);
+            String subject = "Please verify your registration";
+            String content = "Dear " + vendor.getName() + "<br>"
+                    + "Please click the verification code below to verify your registration:<br>"
+                    + "<h3>" + vendor.getVerificationCode() + "</h3>"
+                    + "Thank you,<br>"
+                    + "EBECNCH TEAM.com";
+
+
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message);
+
+            helper.setTo(toAddress);
+            helper.setSubject(subject);
+            helper.setText(content, true);
+            message.setContent(content , "text/html");
+            javaMailSender.send(message);
+
+        }
+
 
     public Boolean emailAlreadyExist(String email) {
 
-        System.out.println("In Email Exist Checking Method");
+        logger.info("In Email Exist Checking Method " + emailAlreadyExist(email));
 
         Optional<Vendor> vendor = vendorRepository.findVendorByEmail(email);
         if (vendor.isPresent()) {
-            System.out.println("True");
+
             return true;
         } else {
-            System.out.println("False");
+
             return false;
         }
     }
 
 //    --------------------------------UPDATE-------------------------------------------
 
-    public Vendor updateVendor(Vendor vendor) throws Exception {
+
+    public Vendor updateVendor(Vendor vendor , MultipartFile file , String siteURL) throws Exception {
 
         Optional<Vendor> id = vendorRepository.findById(vendor.getVendorId());
 
@@ -131,7 +208,7 @@ public class VendorService {
                 logger.info("id is not present firstly you have to register yourself");
                 throw new BadReqException(ApiMessage.VENDOR_NOT_PRESENT);
             }
-            else{
+            else {
                 id.isPresent();
                 vendor1 = id.get();
 
@@ -141,16 +218,33 @@ public class VendorService {
                         .matcher(vendor.getEmail())
                         .matches();
                 System.out.println((emailValidation));
+
                 String PASSWORD_PATTERN = "^(?=(?:[a-zA-Z0-9]*[a-zA-Z]){2})(?=(?:[a-zA-Z0-9]*\\d){2})[a-zA-Z0-9]{8,}$";
                 boolean pattern = Pattern.compile(PASSWORD_PATTERN)
                         .matcher(vendor.getPassword())
                         .matches();
 
                 if (emailAlreadyExist(vendor.getEmail())) {
-                    throw new BadReqException(ApiMessage.EMAIL_IS_PRESENT);
+
+                    logger.info("vendor will get the email and check it is present or not " + vendor.getEmail());
+                    throw new BadReqException(ApiMessage.EMAIL_ALREADY_USED);
+
                 }
 
                 try {
+
+//-------------------------------------------------------------------------------------------------------------
+                    StringBuilder fileName = new StringBuilder();
+                    Path fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + file.getOriginalFilename());
+                    fileName.append(file.getOriginalFilename());
+
+                    Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
+
+                    String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
+
+                    System.out.println("file uploaded successfully  " + fileNameAndPath);
+//---------------------------------------------------------------------------------------------------------------------
+
                     vendor1.setName(vendor.getName());
 
                     if (!emailValidation) {
@@ -158,6 +252,7 @@ public class VendorService {
                     } else {
                         vendor1.setEmail(vendor.getEmail());
                     }
+                    vendor1.setVendorId(vendor.getVendorId());
                     vendor1.setAddress(vendor.getAddress());
                     vendor1.setPassword(vendor.getPassword());
                     vendor1.setDesignation(vendor.getDesignation());
@@ -177,18 +272,19 @@ public class VendorService {
                     vendor1.setRecentActivities(vendor.getRecentActivities());
                     vendor1.setRecentDateActivities(vendor.getRecentDateActivities());
                     vendor1.setDailyActivities(vendor.getDailyActivities());
-                    vendor1.setVendorProfileImageUrl(vendor.getVendorProfileImageUrl());
+                    vendor1.setVendorProfileImageUrl(fileNameAndPath.toString());
                     vendor1.setExperience(vendor.getExperience());
                     vendor1.setAvailability(vendor.getAvailability());
                     logger.info("vendor details are updated by this Id !! " + vendor.getVendorId());
 
-                    vendorRepository.save(vendor1);
-
+                    Vendor vendor2 = vendorRepository.save(vendor1);
+                    sendVerificationEmail(vendor2,siteURL);
                 }
                 catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+            logger.info("vendor's  details has been updated successfully " + vendor1);
 
         return vendor1;
     }
@@ -203,6 +299,7 @@ public class VendorService {
             return vendor;
         }
         else{
+            logger.info("Not get vendor details by this id " + vendorId);
             throw new BadReqException(ApiMessage.VENDOR_NOT_PRESENT);
         }
     }
@@ -213,6 +310,7 @@ public class VendorService {
     public Vendor deleteVendor(Long  vendorId){
         Optional<Vendor> vendorId1 = vendorRepository.findById(vendorId);
         if(!vendorId1.isPresent()){
+            logger.info("vendor is not present by this id "  + vendorId);
             throw new RuntimeException(ApiMessage.VENDOR_NOT_PRESENT);
         } else{
             vendorId1.isPresent();
@@ -242,4 +340,32 @@ public class VendorService {
         return vendor ;
     }
 
+//    ------------------------- LOGIN VENDOR-----------------------------------------------------------------
+
+        public Vendor login(String email, String password) {
+
+            String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+                    + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+            boolean emailValidation = Pattern.compile(regexPattern)
+                    .matcher(email)
+                    .matches();
+
+            Vendor vendor = vendorRepository.findByEmailAndPassword(email, password);
+            try {
+                if (email.isEmpty() || !emailValidation) {
+                    logger.info("Email is empty");
+                    throw new BadReqException(ApiMessage.ENTER_EMAIL);
+                }
+                if (password.isEmpty() || password.length() < 4) {
+                    logger.info("password is empty and password length should be greater than 4");
+                    throw new BadReqException(ApiMessage.ENTER_PASSWORD);
+                } else if (vendor == null) {
+                    throw new BadReqException(ApiMessage.INVALID_CREDENTIAL);
+                }
+            } catch (Exception e) {
+                throw new BadReqException(e.getMessage());
+            }
+            logger.info("vendor details by login " + vendor);
+            return vendor;
+        }
 }

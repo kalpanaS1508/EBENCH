@@ -8,7 +8,17 @@ import com.ebench.exception.UserNotFoundException;
 import com.ebench.repository.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -23,16 +33,20 @@ public class CandidateService {
 
     // __________________________________ Register Api for Candidate__________________________________________//
 
-//    private String UPLOAD_DIR = "D://EBENCH MAY//EBENCH//target//classes//Static//image";
 
-    public CandidateReqDto register(CandidateReqDto candidateReqDto) {
+    private String UPLOAD_DIR = "D://EBench V1//EBENCH//src//main//resources//Static//file";
+
+    public CandidateReqDto register(CandidateReqDto candidateReqDto , MultipartFile file , MultipartFile file1) {
+
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
         boolean emailValidation = Pattern.compile(regexPattern)
                 .matcher(candidateReqDto.getEmail())
                 .matches();
         System.out.println((emailValidation));
+
         String PASSWORD_PATTERN = "^(?=(?:[a-zA-Z0-9]*[a-zA-Z]){2})(?=(?:[a-zA-Z0-9]*\\d){2})[a-zA-Z0-9]{8,}$";
+
         boolean pattern = Pattern.compile(PASSWORD_PATTERN)
                 .matcher(candidateReqDto.getPassword())
                 .matches();
@@ -42,18 +56,38 @@ public class CandidateService {
             System.out.println("User Already Exist");
             throw new BadReqException(ApiMessage.EMAIL_ALREADY_USED);
         }
+
         try {
-//            StringBuilder fileName = new StringBuilder();
-//            Path fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + file.getOriginalFilename());
-//            fileName.append(file.getOriginalFilename());
-//            Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
-//
-//            String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
-//
-//            System.out.println("file uploaded successfully  " + fileNameAndPath);
-//            System.out.println(candidateReqDto);
+
+            StringBuilder fileName = new StringBuilder();
+
+            String filename = file.getOriginalFilename();
+            String[] str = filename.split("[.]",2);
+            for(String i:str)
+
+            {
+                System.out.println(i);
+            }
+
+            String fileNameWithTime = str[0]+ "_" + System.currentTimeMillis()+"."+str[1];
+
+            Path fileNameAndPath = Paths.get(UPLOAD_DIR ,File.separator + fileNameWithTime);
+            Path fileNameAndPath1 = Paths.get(UPLOAD_DIR, File.separator + file1.getOriginalFilename());
+
+            fileName.append(file.getOriginalFilename());
+            fileName.append(file1.getOriginalFilename());
+
+            Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(file1.getInputStream(), fileNameAndPath1, StandardCopyOption.REPLACE_EXISTING);
+
+            String fileName1 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
+            String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath1.getFileName()));
+
+            System.out.println("file uploaded successfully  " + fileNameAndPath );
+            System.out.println("resume uploaded successfully  " + fileNameAndPath1);
 
             Candidate candidate = new Candidate();
+
             candidate.setFirstName(candidateReqDto.getFirstName());
             candidate.setLastName(candidateReqDto.getLastName());
             candidate.setKeyExperience(candidateReqDto.getKeyExperience());
@@ -65,24 +99,28 @@ public class CandidateService {
             candidate.setState(candidateReqDto.getState());
             candidate.setCity(candidateReqDto.getCity());
             candidate.setHobbies(candidateReqDto.getHobbies());
+
             if (!emailValidation) {
                 throw new BadReqException(ApiMessage.Email_Not_In_Proper_Format);
             } else {
                 candidate.setEmail(candidateReqDto.getEmail());
             }
             candidate.setInterest(candidateReqDto.getInterest());
+
             if (candidateReqDto.getMobile().isEmpty() || candidateReqDto.getMobile().length() != 10) {
                 throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
             } else {
                 candidate.setMobile(candidateReqDto.getMobile());
             }
             candidate.setAvailableForWork(candidateReqDto.isAvailableForWork());
+
             if (pattern != false) {
                 throw new BadReqException(ApiMessage.Password_Not_Proper_Format);
             } else {
                 candidate.setPassword(candidateReqDto.getPassword());
             }
-           // candidate.setProfileImageUrl(fileNameAndPath.toString());
+
+            candidate.setProfileImageUrl(fileNameAndPath.toString());
             candidate.setUserType(candidateReqDto.getUserType());
             candidate.setTwitterId(candidateReqDto.getTwitterId());
             candidate.setLinkedIn(candidateReqDto.getLinkedIn());
@@ -101,10 +139,16 @@ public class CandidateService {
             candidate.setCollegeName(candidateReqDto.getCollegeName());
             candidate.setUniversityName(candidateReqDto.getUniversityName());
             candidate.setSchoolName(candidateReqDto.getSchoolName());
+            candidate.setResumeUrl(fileNameAndPath1.toString());
             candidateRepository.save(candidate);
-        } catch (BadReqException e) {
-            throw new BadReqException(e.getMessage());
+
         }
+        catch (BadReqException e) {
+       }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return candidateReqDto;
     }
 
@@ -121,6 +165,7 @@ public class CandidateService {
             return false;
         }
     }
+
     // _______________________________Get Api for Candidate ______________________________________________________________________//
 
     public Candidate getCandidate(Long id) {
