@@ -40,7 +40,7 @@ import java.util.Properties;
 import java.util.regex.Pattern;
 
 @Service
-public class CandidateService  {
+public class CandidateService {
 
     @Value("${spring.mail.username}")
     private String email;
@@ -56,11 +56,11 @@ public class CandidateService  {
     @Autowired
     VendorRepository vendorRepository;
 
-private Logger logger= GlobalResources.getlogger(CandidateService.class);
+    private Logger logger = GlobalResources.getlogger(CandidateService.class);
     // __________________________________ Register Api for Candidate__________________________________________//
 
 
-   private String UPLOAD_DIR="D://EBENCH MAY//EBENCH//target//classes//Static//image";
+    private String UPLOAD_DIR = "D://EBENCH MAY//EBENCH//target//classes//Static//image";
 
     public CandidateReqDto register(CandidateReqDto candidateReqDto) {
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
@@ -109,8 +109,7 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
                 candidate.setEmail(candidateReqDto.getEmail());
             }
             candidate.setInterest(candidateReqDto.getInterest());
-            if (candidateReqDto.getMobile().isEmpty() || candidateReqDto.getMobile().length() != 10)
-            {
+            if (candidateReqDto.getMobile().isEmpty() || candidateReqDto.getMobile().length() != 10) {
                 logger.error("Email validating");
                 throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
             } else {
@@ -118,7 +117,7 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
             }
             candidate.setAvailableForWork(candidateReqDto.isAvailableForWork());
             if (pattern != true) {
-              //  logger.error("Password validation:password not in proper format");
+                //  logger.error("Password validation:password not in proper format");
                 throw new BadReqException(ApiMessage.Password_Not_Proper_Format);
             } else {
                 candidate.setPassword(candidateReqDto.getPassword());
@@ -154,13 +153,13 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
 
     public Boolean emailAlreadyExist(String email) {
         System.out.println("In Email Exist Checking Method");
-      logger.info(" fetching candidate details from candidateRepository where candidate email is " +  email);
+        logger.info(" fetching candidate details from candidateRepository where candidate email is " + email);
         Optional<Candidate> candidate = candidateRepository.findUserByEmail(email);
         if (candidate.isPresent()) {
             System.out.println("True");
-            logger.error("Candidate with this email "+email +" with id "+candidate.get().getId()+" is already present ");
+            logger.error("Candidate with this email " + email + " with id " + candidate.get().getId() + " is already present ");
 
-           return true;
+            return true;
         } else {
             System.out.println("False");
             return false;
@@ -170,7 +169,7 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
     // _______________________________Get Api for Candidate ______________________________________________________________________//
 
     public Candidate getCandidate(Long id) {
-        logger.info(" get candidate details from candidate repository "+" by this id "+id);
+        logger.info(" get candidate details from candidate repository " + " by this id " + id);
         Optional<Candidate> user = candidateRepository.findById(id);
         Candidate candidate1 = null;
         try {
@@ -192,7 +191,7 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
     // _____________________________________Update Api for candidate Registration ________________________________________//
 
     public CandidateReqDto updateCandidate(CandidateReqDto candidateReqDto) {
-        logger.info("In updatecandidate method : fetching details from candidate by id"+candidateReqDto.getId());
+        logger.info("In updatecandidate method : fetching details from candidate by id" + candidateReqDto.getId());
         Optional<Candidate> candidate = candidateRepository.findById(candidateReqDto.getId());
         Candidate candidate1 = null;
         candidate1 = candidate.get();
@@ -292,7 +291,7 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
 
     //_______________________________Delete api for candidate______________________________________
     public Candidate deletecandidate(Long id) {
-        logger.info("getting candidtae id for soft delete"+""+id);
+        logger.info("getting candidtae id for soft delete" + "" + id);
         Optional<Candidate> candidate1 = candidateRepository.findById(id);
         Candidate candidate = null;
         if (candidate1.isPresent()) {
@@ -358,8 +357,9 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
         System.out.println(bySkillAndExperience);
         return bySkillAndExperience;
     }
-// ___________________________________Register api for candidate_________________________________________________________
-    public CandidateReqDto registerCandidate(CandidateReqDto candidateReqDto, MultipartFile file,String siteURL) {
+
+    // ___________________________________Register api for candidate_________________________________________________________
+    public CandidateReqDto registerCandidate(CandidateReqDto candidateReqDto, MultipartFile file, String siteURL) {
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
         boolean emailValidation = Pattern.compile(regexPattern)
@@ -381,7 +381,7 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
 
         try {
 //            Path fileNameAndPath = null;
-            if(!file.isEmpty()) {
+            if (!file.isEmpty()) {
                 StringBuilder fileName = new StringBuilder();
                 String filename = file.getOriginalFilename();
                 String[] str = filename.split("[.]", 2);
@@ -469,7 +469,6 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
     }
 
 
-
     //_________________________cHECK EMAIL VERIFIED OR NOT __________________________________________________________________
     public Boolean emailVerify(Long uid, String code) throws ResourceNotFoundException {
         Boolean verifyStatus = false;
@@ -492,25 +491,25 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
         return verifyStatus;
     }
 
- //___________________________________eMAIL VERIFICATION CODE____________________________________________________________
+    //___________________________________eMAIL VERIFICATION CODE____________________________________________________________
 
     private void sendVerificationEmail(Candidate candidate, String siteURL)
             throws MessagingException, UnsupportedEncodingException {
         try {
             String toAddress = candidate.getEmail();
             String subject = "Please verify your registration";
-            String content = "Dear "+candidate.getFirstName()+" "+candidate.getLastName()+",<br>"
+            String content = "Dear " + candidate.getFirstName() + " " + candidate.getLastName() + ",<br>"
                     + "Please Enter this verification code to verify your registration sucessfully:<br>"
-                    +"<h3>"+candidate.getEmailVerifyCode()+"</h3><br>"
+                    + "<h3>" + candidate.getEmailVerifyCode() + "</h3><br>"
                     + "Thank you,<br>"
-                    +"Have a nice day,<br>"
+                    + "Have a nice day,<br>"
                     + "The Ebench Team";
             MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message,true,"UTF-8");
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
             helper.setTo(toAddress);
             helper.setSubject(subject);
             helper.setText(content, true);
-            message.setContent(content,"text/html");
+            message.setContent(content, "text/html");
             mailSender.send(message);
         } catch (Exception e) {
             e.printStackTrace();
@@ -518,14 +517,10 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
     }
 
 
-
-
-
-
     public CandidateReqDto updateCandidate1(CandidateReqDto candidateReqDto, MultipartFile file) {
         Optional<Candidate> candidate = candidateRepository.findById(candidateReqDto.getId());
 
-        System.out.println("File "+file);
+        System.out.println("File " + file);
 
         Candidate candidate1 = null;
 
@@ -543,83 +538,84 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
                     .matches();
 
             try {
-                StringBuilder fileName = new StringBuilder();
-                String filename = file.getOriginalFilename();
-                String[] str = filename.split("[.]", 2);
-                for (String i : str) {
-                    System.out.println(i);
+
+                if (!file.isEmpty()) {
+                    StringBuilder fileName = new StringBuilder();
+                    String filename = file.getOriginalFilename();
+                    String[] str = filename.split("[.]", 2);
+                    for (String i : str) {
+                        System.out.println(i);
+                    }
+
+                    String fileNameWithTime = str[0] + "_" + System.currentTimeMillis() + "." + str[1];
+                    System.out.println("FIle NAme With TIme : " + fileNameWithTime);
+                    Path fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + fileNameWithTime);
+                    fileName.append(file.getOriginalFilename());
+                    Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
+
+                    String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
+
+                    System.out.println("file uploaded successfully  " + fileNameAndPath);
+                    System.out.println(candidateReqDto);
+
+
+                    candidate1.setFirstName(candidateReqDto.getFirstName());
+                    candidate1.setLastName(candidateReqDto.getLastName());
+                    candidate1.setKeyExperience(candidateReqDto.getKeyExperience());
+                    candidate1.setSkills(candidateReqDto.getSkills());
+                    candidate1.setAddress(candidateReqDto.getAddress());
+                    candidate1.setSkypeId(candidateReqDto.getSkypeId());
+                    candidate1.setWhatsapp(candidateReqDto.getWhatsapp());
+                    candidate1.setCountry(candidateReqDto.getCountry());
+                    candidate1.setState(candidateReqDto.getState());
+                    candidate1.setCity(candidateReqDto.getCity());
+                    candidate1.setHobbies(candidateReqDto.getHobbies());
+                    candidate1.setEmail(candidateReqDto.getEmail());
+                    candidate1.setInterest(candidateReqDto.getInterest());
+                    if (candidateReqDto.getMobile().isEmpty() || candidateReqDto.getMobile().length() != 10) {
+                        throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
+                    } else {
+                        candidate1.setMobile(candidateReqDto.getMobile());
+                    }
+                    candidate1.setAvailableForWork(candidateReqDto.isAvailableForWork());
+                    if (pattern != true) {
+                        throw new BadReqException(ApiMessage.Password_Not_Proper_Format);
+                    } else {
+                        candidate1.setPassword(candidateReqDto.getPassword());
+                    }
+                    candidate1.setProfileImageUrl(fileNameAndPath.toString());
+                    candidate1.setUserType(candidateReqDto.getUserType());
+                    candidate1.setDeleted(candidateReqDto.isDeleted());
+                    candidate1.setTwitterId(candidateReqDto.getTwitterId());
+                    candidate1.setLinkedIn(candidateReqDto.getLinkedIn());
+                    candidate1.setPincode(candidateReqDto.getPincode());
+                    candidate1.setActiveStatus(candidateReqDto.isActiveStatus());
+                    candidate1.setLastSeen(candidateReqDto.getLastSeen());
+                    candidate1.setCurrentDesignation(candidateReqDto.getCurrentDesignation());
+                    candidate1.setJobProfile(candidateReqDto.getJobProfile());
+                    candidate1.setOverview(candidateReqDto.getOverview());
+                    candidate1.setCurrentlyWorkingCompanyName(candidateReqDto.getCurrentlyWorkingCompanyName());
+                    candidate1.setRoleInHiring(candidateReqDto.getRoleInHiring());
+                    candidate1.setJoiningDateInCompany(candidateReqDto.getJoiningDateInCompany());
+                    candidate1.setSpecialization(candidateReqDto.getSpecialization());
+                    candidate1.setYearOfPassing(candidateReqDto.getYearOfPassing());
+                    candidate1.setPercentage(candidateReqDto.getPercentage());
+                    candidate1.setCollegeName(candidateReqDto.getCollegeName());
+                    candidate1.setUniversityName(candidateReqDto.getUniversityName());
+                    candidate1.setSchoolName(candidateReqDto.getSchoolName());
+                    candidate1.setEmailVerifyCode(candidateReqDto.getEmailVerifyCode());
+                    candidateRepository.save(candidate1);
                 }
-
-                String fileNameWithTime = str[0] + "_" + System.currentTimeMillis() + "." + str[1];
-                System.out.println("FIle NAme With TIme : " + fileNameWithTime);
-                Path fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + fileNameWithTime);
-                fileName.append(file.getOriginalFilename());
-                Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
-
-                String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
-
-                System.out.println("file uploaded successfully  " + fileNameAndPath);
-                System.out.println(candidateReqDto);
-
-
-                candidate1.setFirstName(candidateReqDto.getFirstName());
-                candidate1.setLastName(candidateReqDto.getLastName());
-                candidate1.setKeyExperience(candidateReqDto.getKeyExperience());
-                candidate1.setSkills(candidateReqDto.getSkills());
-                candidate1.setAddress(candidateReqDto.getAddress());
-                candidate1.setSkypeId(candidateReqDto.getSkypeId());
-                candidate1.setWhatsapp(candidateReqDto.getWhatsapp());
-                candidate1.setCountry(candidateReqDto.getCountry());
-                candidate1.setState(candidateReqDto.getState());
-                candidate1.setCity(candidateReqDto.getCity());
-                candidate1.setHobbies(candidateReqDto.getHobbies());
-                candidate1.setEmail(candidateReqDto.getEmail());
-                candidate1.setInterest(candidateReqDto.getInterest());
-                if (candidateReqDto.getMobile().isEmpty() || candidateReqDto.getMobile().length() != 10) {
-                    throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
-                } else {
-                    candidate1.setMobile(candidateReqDto.getMobile());
-                }
-                candidate1.setAvailableForWork(candidateReqDto.isAvailableForWork());
-                if (pattern != true) {
-                    throw new BadReqException(ApiMessage.Password_Not_Proper_Format);
-                } else {
-                    candidate1.setPassword(candidateReqDto.getPassword());
-                }
-                candidate1.setProfileImageUrl(fileNameAndPath.toString());
-                candidate1.setUserType(candidateReqDto.getUserType());
-                candidate1.setDeleted(candidateReqDto.isDeleted());
-                candidate1.setTwitterId(candidateReqDto.getTwitterId());
-                candidate1.setLinkedIn(candidateReqDto.getLinkedIn());
-                candidate1.setPincode(candidateReqDto.getPincode());
-                candidate1.setActiveStatus(candidateReqDto.isActiveStatus());
-                candidate1.setLastSeen(candidateReqDto.getLastSeen());
-                candidate1.setCurrentDesignation(candidateReqDto.getCurrentDesignation());
-                candidate1.setJobProfile(candidateReqDto.getJobProfile());
-                candidate1.setOverview(candidateReqDto.getOverview());
-                candidate1.setCurrentlyWorkingCompanyName(candidateReqDto.getCurrentlyWorkingCompanyName());
-                candidate1.setRoleInHiring(candidateReqDto.getRoleInHiring());
-                candidate1.setJoiningDateInCompany(candidateReqDto.getJoiningDateInCompany());
-                candidate1.setSpecialization(candidateReqDto.getSpecialization());
-                candidate1.setYearOfPassing(candidateReqDto.getYearOfPassing());
-                candidate1.setPercentage(candidateReqDto.getPercentage());
-                candidate1.setCollegeName(candidateReqDto.getCollegeName());
-                candidate1.setUniversityName(candidateReqDto.getUniversityName());
-                candidate1.setSchoolName(candidateReqDto.getSchoolName());
-                candidate1.setEmailVerifyCode(candidateReqDto.getEmailVerifyCode());
-                candidateRepository.save(candidate1);
             } catch (BadReqException e) {
-                logger.error("candidate not updated successfully");
+                logger.error("version 2 of register api not saving sucessfully_____________________>------");
                 throw new BadReqException(e.getMessage());
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            logger.info(" candidate of id "+ candidateReqDto.getId() +" updated sucessfully by version 2 ");
             return candidateReqDto;
         }
-        else
-        {
-            throw new UserNotFoundException(ApiMessage.THIS_CANDIDATE_ID_IS_NOT_PRESENT);
-        }
-
+        return candidateReqDto;
     }
+}
