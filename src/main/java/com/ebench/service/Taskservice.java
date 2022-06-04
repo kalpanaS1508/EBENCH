@@ -67,7 +67,6 @@ public class Taskservice {
             taskmanagement1.setClientId(taskmanagement.getClientId());
             taskmanagement1.setCandidateName(taskmanagement.getCandidateName());
             taskmanagement1.setProjectName(taskmanagement.getProjectName());
-            taskmanagement1.setProjectName(taskmanagement.getProjectName());
             taskmanagement1.setTaskName(taskmanagement.getTaskName());
             taskmanagement1.setTaskStartDate(taskmanagement.getTaskStartDate());
             taskmanagement1.setTaskDueDate(taskmanagement.getTaskDueDate());
@@ -92,30 +91,35 @@ public class Taskservice {
     //_______________________________Update Task____________________________________________
     public Task updateTask(Task taskmanagement, Long taskManagementId) {
 
-        Task taskmanagement1 = taskRepository.findById(taskManagementId).get();
-        System.out.println(taskmanagement1);
-        try {
-            taskmanagement1.setCandidateId(taskmanagement.getCandidateId());
-            taskmanagement1.setVendorId(taskmanagement.getVendorId());
-            taskmanagement1.setClientId(taskmanagement.getClientId());
-            taskmanagement1.setCandidateName(taskmanagement.getCandidateName());
-            taskmanagement1.setProjectName(taskmanagement.getProjectName());
-            taskmanagement1.setProjectName(taskmanagement.getProjectName());
-            taskmanagement1.setTaskName(taskmanagement.getTaskName());
-            taskmanagement1.setTaskStartDate(taskmanagement.getTaskStartDate());
-            taskmanagement1.setTaskDueDate(taskmanagement.getTaskDueDate());
-            taskmanagement1.setTaskStatus(taskmanagement.isTaskStatus());
-            taskmanagement1.setChangeTaskStatus(taskmanagement.getChangeTaskStatus());
-            taskmanagement1.setNoOfDelayedDate(taskmanagement.getNoOfDelayedDate());
-            taskmanagement1.setTaskDescription(taskmanagement.getTaskDescription());
-            taskmanagement1.setAddCommentsFromClient(taskmanagement.getAddCommentsFromClient());
-            taskmanagement1.setAddCommentsFromCandidate(taskmanagement.getAddCommentsFromCandidate());
-            taskmanagement1.setWaitingResponseFrom(taskmanagement.getWaitingResponseFrom());
-            taskmanagement1.setAnyDependency(taskmanagement.getAnyDependency());
-            taskRepository.save(taskmanagement1);
-        } catch (Exception e) {
-            logger.info("Task not updated sucessfully");
-            throw new BadReqException(ApiMessage.TASK_NOT_UPDATED_SUCESSFULLY);
+        Optional<Task> taskmanage = taskRepository.findById(taskManagementId);
+        if(taskmanage.isPresent()) {
+            Task taskmanagement1 = taskmanage.get();
+            try {
+                taskmanagement1.setCandidateId(taskmanagement.getCandidateId());
+                taskmanagement1.setVendorId(taskmanagement.getVendorId());
+                taskmanagement1.setClientId(taskmanagement.getClientId());
+                taskmanagement1.setCandidateName(taskmanagement.getCandidateName());
+                taskmanagement1.setProjectName(taskmanagement.getProjectName());
+                taskmanagement1.setProjectName(taskmanagement.getProjectName());
+                taskmanagement1.setTaskName(taskmanagement.getTaskName());
+                taskmanagement1.setTaskStartDate(taskmanagement.getTaskStartDate());
+                taskmanagement1.setTaskDueDate(taskmanagement.getTaskDueDate());
+                taskmanagement1.setTaskStatus(taskmanagement.isTaskStatus());
+                taskmanagement1.setChangeTaskStatus(taskmanagement.getChangeTaskStatus());
+                taskmanagement1.setNoOfDelayedDate(taskmanagement.getNoOfDelayedDate());
+                taskmanagement1.setTaskDescription(taskmanagement.getTaskDescription());
+                taskmanagement1.setAddCommentsFromClient(taskmanagement.getAddCommentsFromClient());
+                taskmanagement1.setAddCommentsFromCandidate(taskmanagement.getAddCommentsFromCandidate());
+                taskmanagement1.setWaitingResponseFrom(taskmanagement.getWaitingResponseFrom());
+                taskmanagement1.setAnyDependency(taskmanagement.getAnyDependency());
+                taskRepository.save(taskmanagement1);
+            } catch (Exception e) {
+                logger.info("Task not updated sucessfully");
+                throw new BadReqException(ApiMessage.TASK_NOT_UPDATED_SUCESSFULLY);
+            }
+        }
+        else {
+            throw new BadReqException(ApiMessage.Task_Not_Found);
         }
         logger.info("Task updated sucessfully");
         return taskmanagement;
@@ -130,7 +134,7 @@ public class Taskservice {
         if (task1.isPresent()) {
             taskmanagement = task1.get();
         } else {
-            throw new UserNotFoundException(ApiMessage.TASK_NOT_DELETED_SUCESSFULLY);
+            throw new UserNotFoundException(ApiMessage.Task_Not_Found);
         }
         taskmanagement.setTaskStatus(false);
 
@@ -147,7 +151,7 @@ public class Taskservice {
         if(taskHistory.isEmpty())
         {
             throw new ResourceNotFoundException(ApiMessage.TASK_HISTORY_NOT_FOUND);
-        }else
+        }
         logger.info("getTaskhistory");
         return taskHistory;
     }
@@ -155,17 +159,27 @@ public class Taskservice {
 
     public Task pendingTaskForm(Task task,Long candidateId) {
         Task task1= taskRepository.findByTaskOwnerId(candidateId);
-       task1.setAnyDependency(task.getAnyDependency());
-       task1.setWaitingResponseFrom(task.getWaitingResponseFrom());
-       task1.setAddCommentsFromCandidate(task.getAddCommentsFromCandidate());
-       task1.setTaskDescription(task.getTaskDescription());
-       taskRepository.save(task1);
-       logger.info("Pending task form");
-       return task;
+        if(task1!=null) {
+            task1.setAnyDependency(task.getAnyDependency());
+            task1.setWaitingResponseFrom(task.getWaitingResponseFrom());
+            task1.setAddCommentsFromCandidate(task.getAddCommentsFromCandidate());
+            task1.setTaskDescription(task.getTaskDescription());
+            taskRepository.save(task1);
+            logger.info("Pending task form");
+        }
+        else
+        {
+            throw new BadReqException(ApiMessage.Task_Not_Found);
+        }
+        return task;
     }
 //________________________________________________PendingTaskByProjectName_______________________________________________________________
     public List<Task> getPendingTaskByProjectName(String projectName) {
         List<Task> taskList = taskRepository.findTaskProjectName(projectName);
+        if(taskList.size()<1)
+        {
+            throw new BadReqException(ApiMessage.NO_PENDING_TASK);
+        }
         return taskList;
     }
 }

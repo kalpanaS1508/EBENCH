@@ -45,20 +45,27 @@ public class ProjectService {
     public Project updateProject(Project project,Long id)
     {
         logger.info("fetching data by id");
-        Project project1 = projectRepository.findById(id).get();
-        try {
-            project1.setProjectName(project.getProjectName());
-            project1.setCandidateId(project.getCandidateId());
-            project1.setTaskId(project.getTaskId());
-            project1.setVendorId(project.getVendorId());
-            project1.setClientId(project.getClientId());
-            project1.setDeleted(project.isDeleted());
-            logger.info("project saved sucessfully________________________________>-___________________________________");
-            projectRepository.save(project1);
-        }catch(Exception e)
+        Optional<Project> proj = projectRepository.findById(id);
+        if(proj.isPresent()) {
+            Project project1 = proj.get();
+
+            try {
+                project1.setProjectName(project.getProjectName());
+                project1.setCandidateId(project.getCandidateId());
+                project1.setTaskId(project.getTaskId());
+                project1.setVendorId(project.getVendorId());
+                project1.setClientId(project.getClientId());
+                project1.setDeleted(project.isDeleted());
+                logger.info("project saved sucessfully________________________________>-___________________________________");
+                projectRepository.save(project1);
+            } catch (Exception e) {
+                logger.error("project has not created sucessfully_____________________________________>-_____________________________");
+                throw new RuntimeException(ApiMessage.PROJECT_NOT_UPDATE_SUCESSFULLY);
+            }
+        }
+        else
         {
-            logger.error("project has not created sucessfully_____________________________________>-_____________________________");
-            throw new RuntimeException(ApiMessage.PROJECT_NOT_UPDATE_SUCESSFULLY);
+            throw new BadReqException(ApiMessage.PROJECT_NOT_FOUND);
         }
         return project;
     }
