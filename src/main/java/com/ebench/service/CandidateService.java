@@ -446,32 +446,23 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
     }
 
 
-    public Candidate updateCandidate1(CandidateReqDto candidateReqDto, MultipartFile file) {
-
+    public CandidateReqDto updateCandidate1(CandidateReqDto candidateReqDto, MultipartFile file) {
         Optional<Candidate> candidate = candidateRepository.findById(candidateReqDto.getId());
+
         Candidate candidate1 = null;
 
-        if (!candidate.isPresent()) {
-            throw new BadReqException(ApiMessage.THIS_CANDIDATE_ID_IS_NOT_PRESENT);
-        }
-        else{
-            candidate.isPresent();
+        if (candidate.isPresent()) {
             candidate1 = candidate.get();
             String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                     + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
             boolean emailValidation = Pattern.compile(regexPattern)
                     .matcher(candidateReqDto.getEmail())
                     .matches();
-            System.out.println((emailValidation));
+
             String PASSWORD_PATTERN = "^(?=(?:[a-zA-Z0-9]*[a-zA-Z]){2})(?=(?:[a-zA-Z0-9]*\\d){2})[a-zA-Z0-9]{8,}$";
             boolean pattern = Pattern.compile(PASSWORD_PATTERN)
                     .matcher(candidateReqDto.getPassword())
                     .matches();
-            System.out.println((pattern));
-            if (emailAlreadyExist(candidateReqDto.getEmail())) {
-                System.out.println("User Already Exist");
-                throw new BadReqException(ApiMessage.EMAIL_ALREADY_USED);
-            }
 
             try {
                 StringBuilder fileName = new StringBuilder();
@@ -517,12 +508,7 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
                 } else {
                     candidate1.setPassword(candidateReqDto.getPassword());
                 }
-                if(candidateReqDto.getProfileImageUrl().isEmpty())
-                {
-                    candidateReqDto=null;
-                }else {
-                    candidate1.setProfileImageUrl(fileNameAndPath.toString());
-                }
+                candidate1.setProfileImageUrl(fileNameAndPath.toString());
                 candidate1.setUserType(candidateReqDto.getUserType());
                 candidate1.setDeleted(candidateReqDto.isDeleted());
                 candidate1.setTwitterId(candidateReqDto.getTwitterId());
@@ -544,13 +530,19 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
                 candidate1.setSchoolName(candidateReqDto.getSchoolName());
                 candidateRepository.save(candidate1);
             } catch (BadReqException e) {
-                logger.error("candidate not updated sucessfully");
+                logger.error("candidate not updated successfully");
                 throw new BadReqException(e.getMessage());
             } catch (IOException e) {
                 e.printStackTrace();
             }
             logger.info(" candidate of id "+ candidateReqDto.getId() +" updated sucessfully by version 2 ");
-            return candidate1;
+            return candidateReqDto;
         }
+        else
+        {
+            throw new UserNotFoundException(ApiMessage.THIS_CANDIDATE_ID_IS_NOT_PRESENT);
+        }
+
     }
+
 }
