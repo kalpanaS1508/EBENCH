@@ -446,8 +446,12 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
     }
 
 
+    //_________________________________-latest update______________________________________________
+
     public CandidateReqDto updateCandidate1(CandidateReqDto candidateReqDto, MultipartFile file) {
         Optional<Candidate> candidate = candidateRepository.findById(candidateReqDto.getId());
+
+        System.out.println("File " + file);
 
         Candidate candidate1 = null;
 
@@ -465,84 +469,84 @@ private Logger logger= GlobalResources.getlogger(CandidateService.class);
                     .matches();
 
             try {
-                StringBuilder fileName = new StringBuilder();
-                String filename = file.getOriginalFilename();
-                String[] str = filename.split("[.]", 2);
-                for (String i : str) {
-                    System.out.println(i);
+
+                if (!file.isEmpty()) {
+                    StringBuilder fileName = new StringBuilder();
+                    String filename = file.getOriginalFilename();
+                    String[] str = filename.split("[.]", 2);
+                    for (String i : str) {
+                        System.out.println(i);
+                    }
+
+                    String fileNameWithTime = str[0] + "_" + System.currentTimeMillis() + "." + str[1];
+                    System.out.println("FIle NAme With TIme : " + fileNameWithTime);
+                    Path fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + fileNameWithTime);
+                    fileName.append(file.getOriginalFilename());
+                    Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
+
+                    String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
+
+                    System.out.println("file uploaded successfully  " + fileNameAndPath);
+                    System.out.println(candidateReqDto);
+
+
+                    candidate1.setFirstName(candidateReqDto.getFirstName());
+                    candidate1.setLastName(candidateReqDto.getLastName());
+                    candidate1.setKeyExperience(candidateReqDto.getKeyExperience());
+                    candidate1.setSkills(candidateReqDto.getSkills());
+                    candidate1.setAddress(candidateReqDto.getAddress());
+                    candidate1.setSkypeId(candidateReqDto.getSkypeId());
+                    candidate1.setWhatsapp(candidateReqDto.getWhatsapp());
+                    candidate1.setCountry(candidateReqDto.getCountry());
+                    candidate1.setState(candidateReqDto.getState());
+                    candidate1.setCity(candidateReqDto.getCity());
+                    candidate1.setHobbies(candidateReqDto.getHobbies());
+                    candidate1.setEmail(candidateReqDto.getEmail());
+                    candidate1.setInterest(candidateReqDto.getInterest());
+                    if (candidateReqDto.getMobile().isEmpty() || candidateReqDto.getMobile().length() != 10) {
+                        throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
+                    } else {
+                        candidate1.setMobile(candidateReqDto.getMobile());
+                    }
+                    candidate1.setAvailableForWork(candidateReqDto.isAvailableForWork());
+                    if (pattern != true) {
+                        throw new BadReqException(ApiMessage.Password_Not_Proper_Format);
+                    } else {
+                        candidate1.setPassword(candidateReqDto.getPassword());
+                    }
+                    candidate1.setProfileImageUrl(fileNameAndPath.toString());
+                    candidate1.setUserType(candidateReqDto.getUserType());
+                    candidate1.setDeleted(candidateReqDto.isDeleted());
+                    candidate1.setTwitterId(candidateReqDto.getTwitterId());
+                    candidate1.setLinkedIn(candidateReqDto.getLinkedIn());
+                    candidate1.setPincode(candidateReqDto.getPincode());
+                    candidate1.setActiveStatus(candidateReqDto.isActiveStatus());
+                    candidate1.setLastSeen(candidateReqDto.getLastSeen());
+                    candidate1.setCurrentDesignation(candidateReqDto.getCurrentDesignation());
+                    candidate1.setJobProfile(candidateReqDto.getJobProfile());
+                    candidate1.setOverview(candidateReqDto.getOverview());
+                    candidate1.setCurrentlyWorkingCompanyName(candidateReqDto.getCurrentlyWorkingCompanyName());
+                    candidate1.setRoleInHiring(candidateReqDto.getRoleInHiring());
+                    candidate1.setJoiningDateInCompany(candidateReqDto.getJoiningDateInCompany());
+                    candidate1.setSpecialization(candidateReqDto.getSpecialization());
+                    candidate1.setYearOfPassing(candidateReqDto.getYearOfPassing());
+                    candidate1.setPercentage(candidateReqDto.getPercentage());
+                    candidate1.setCollegeName(candidateReqDto.getCollegeName());
+                    candidate1.setUniversityName(candidateReqDto.getUniversityName());
+                    candidate1.setSchoolName(candidateReqDto.getSchoolName());
+
+                    candidateRepository.save(candidate1);
                 }
-
-                String fileNameWithTime = str[0] + "_" + System.currentTimeMillis() + "." + str[1];
-                System.out.println("FIle NAme With TIme : " + fileNameWithTime);
-                Path fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + fileNameWithTime);
-                fileName.append(file.getOriginalFilename());
-                Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
-
-                String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
-
-                System.out.println("file uploaded successfully  " + fileNameAndPath);
-                System.out.println(candidateReqDto);
-
-
-                candidate1.setFirstName(candidateReqDto.getFirstName());
-                candidate1.setLastName(candidateReqDto.getLastName());
-                candidate1.setKeyExperience(candidateReqDto.getKeyExperience());
-                candidate1.setSkills(candidateReqDto.getSkills());
-                candidate1.setAddress(candidateReqDto.getAddress());
-                candidate1.setSkypeId(candidateReqDto.getSkypeId());
-                candidate1.setWhatsapp(candidateReqDto.getWhatsapp());
-                candidate1.setCountry(candidateReqDto.getCountry());
-                candidate1.setState(candidateReqDto.getState());
-                candidate1.setCity(candidateReqDto.getCity());
-                candidate1.setHobbies(candidateReqDto.getHobbies());
-                candidate1.setEmail(candidateReqDto.getEmail());
-                candidate1.setInterest(candidateReqDto.getInterest());
-                if (candidateReqDto.getMobile().isEmpty() || candidateReqDto.getMobile().length() != 10) {
-                    throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
-                } else {
-                    candidate1.setMobile(candidateReqDto.getMobile());
-                }
-                candidate1.setAvailableForWork(candidateReqDto.isAvailableForWork());
-                if (pattern != true) {
-                    throw new BadReqException(ApiMessage.Password_Not_Proper_Format);
-                } else {
-                    candidate1.setPassword(candidateReqDto.getPassword());
-                }
-                candidate1.setProfileImageUrl(fileNameAndPath.toString());
-                candidate1.setUserType(candidateReqDto.getUserType());
-                candidate1.setDeleted(candidateReqDto.isDeleted());
-                candidate1.setTwitterId(candidateReqDto.getTwitterId());
-                candidate1.setLinkedIn(candidateReqDto.getLinkedIn());
-                candidate1.setPincode(candidateReqDto.getPincode());
-                candidate1.setActiveStatus(candidateReqDto.isActiveStatus());
-                candidate1.setLastSeen(candidateReqDto.getLastSeen());
-                candidate1.setCurrentDesignation(candidateReqDto.getCurrentDesignation());
-                candidate1.setJobProfile(candidateReqDto.getJobProfile());
-                candidate1.setOverview(candidateReqDto.getOverview());
-                candidate1.setCurrentlyWorkingCompanyName(candidateReqDto.getCurrentlyWorkingCompanyName());
-                candidate1.setRoleInHiring(candidateReqDto.getRoleInHiring());
-                candidate1.setJoiningDateInCompany(candidateReqDto.getJoiningDateInCompany());
-                candidate1.setSpecialization(candidateReqDto.getSpecialization());
-                candidate1.setYearOfPassing(candidateReqDto.getYearOfPassing());
-                candidate1.setPercentage(candidateReqDto.getPercentage());
-                candidate1.setCollegeName(candidateReqDto.getCollegeName());
-                candidate1.setUniversityName(candidateReqDto.getUniversityName());
-                candidate1.setSchoolName(candidateReqDto.getSchoolName());
-                candidateRepository.save(candidate1);
             } catch (BadReqException e) {
-                logger.error("candidate not updated successfully");
+                logger.error("version 2 of register api not saving sucessfully_____________________>------");
                 throw new BadReqException(e.getMessage());
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            logger.info(" candidate of id "+ candidateReqDto.getId() +" updated sucessfully by version 2 ");
             return candidateReqDto;
         }
-        else
-        {
-            throw new UserNotFoundException(ApiMessage.THIS_CANDIDATE_ID_IS_NOT_PRESENT);
-        }
-
+        return candidateReqDto;
     }
-
 }
