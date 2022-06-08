@@ -84,7 +84,7 @@ public class Vendor {
     @Column(name = "experience")
     public String experience;
 
-    @Column(name = "verification_code" , updatable = false)
+    @Column(name = "verification_code" , updatable = true)
     public String verificationCode;
 
 }
