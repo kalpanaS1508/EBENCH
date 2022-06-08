@@ -16,9 +16,18 @@ public class ApiMessage {
     public static final String You_Have_Not_Authority = "You have not authority to access";
     public static final String INVALID_EMAIL_AND_PASSWORD = "Email and password is invalid";
     public static final String EMAIL_ALREADY_USED ="This Email is already used" ;
+    public static final String PROPER_DETAILS = "Something is missing, please fill proper details";
 
-    public static final String ENTER_EMAIL = "Please Enter the email in valid format";
-    public static final String ENTER_PASSWORD = "Please Enter the password ";
+    public static final String VENDOR_NOT_PRESENT = "Vendor is not present by this Id !! firstly you have to register yourself";
+    public static final String JOB_NOT_PRESENT = "Jobs are not present by this Id !!";
+    public static final String CANDIDATE_NOT_PRESENT = "Candidates are not present by this Id !!";
+    public static final String ENTER_EMAIL = "Please enter the email !!";
+    public static final String ENTER_PASSWORD = "Please enter the password!!";
+    public static final String INVALID_CREDENTIAL = "Email and Password is not present!!";
+
+
+//    public static final String ENTER_EMAIL = "Please Enter the email in valid format";
+//    public static final String ENTER_PASSWORD = "Please Enter the password ";
     public static final String TASK_SUCESSFULLY_CREATED = "Task successfully created" ;
 
     public static final String TASK_DELETED_SUCESSFULLY = "task  not deleted sucessfully";
@@ -35,7 +44,7 @@ public class ApiMessage {
     public static final String TASK_HISTORY_NOT_FOUND = "Task history not found ";
     public static String INVALID_credential="Please give the correct email and password here";
     public static String Task_Not_Found="No any task assigned to this candidate";
-    public static final String VENDOR_NOT_PRESENT = "Vendor is not present by this Id !!";
+//    public static final String VENDOR_NOT_PRESENT = "Vendor is not present by this Id !!";
     public static String Email_Verified="Your Email verified sucessfully";
     public static String PROVIDE_VALID_TASK_ID = "Task is not available, Please provide valid task id.";
     public static String TASK_ID_NULL = "Task id must not be null";

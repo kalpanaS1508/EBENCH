@@ -1,4 +1,4 @@
-package com.ebench.utils;
+package com.ebench.Utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

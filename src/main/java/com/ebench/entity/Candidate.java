@@ -142,7 +142,8 @@ public class Candidate {
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "created_at")
-    public Date createdAt = new Date();
+    public Date createdAt= new Date();
+
     @LastModifiedDate
     @Column(name = "updated_at")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

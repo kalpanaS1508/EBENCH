@@ -2,13 +2,14 @@ package com.ebench.Controller;
 
 import com.ebench.Apimessage.ApiMessage;
 import com.ebench.Config.JwtTokenUtil;
+import com.ebench.Utils.ApiResponse;
 import com.ebench.entity.Candidate;
 import com.ebench.exception.BadReqException;
 import com.ebench.repository.CandidateRepository;
 import com.ebench.repository.VendorRepository;
 import com.ebench.service.CandidateService;
 import com.ebench.service.VendorService;
-import com.ebench.utils.ApiResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

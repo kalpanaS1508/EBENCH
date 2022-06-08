@@ -1,11 +1,11 @@
 package com.ebench.Controller;
 
 import com.ebench.Apimessage.ApiMessage;
+import com.ebench.Utils.ApiResponse;
 import com.ebench.dto.CandidateReqDto;
 import com.ebench.exception.ResourceNotFoundException;
 import com.ebench.repository.CandidateRepository;
 import com.ebench.service.CandidateService;
-import com.ebench.utils.ApiResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
