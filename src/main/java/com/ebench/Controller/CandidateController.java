@@ -95,9 +95,9 @@ public class CandidateController {
     //_________________________________Update api for candidate_____________________________________________________________
 
     @PutMapping(value = "/update_Candidate1")
-    public ResponseEntity updatecandidate1(@RequestPart CandidateReqDto candidateReqDto,@RequestPart MultipartFile file )
+    public ResponseEntity updatecandidate1(@RequestPart CandidateReqDto candidateReqDto,@RequestPart MultipartFile file,HttpServletRequest request  )
             throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.updateCandidate1(candidateReqDto,file), ApiMessage.Api_Message);
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.updateCandidate1(candidateReqDto,file,getSiteURL(request)), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 //______________________________Email Verification___________________________________________________________________________

@@ -31,10 +31,14 @@ public class ApiMessage {
     public static final String NO_PENDING_TASK ="There is no any pending task remain" ;
     public static final String CANDIDATE_NOT_FOUND ="CANDIDATE NOT FOUND" ;
     public static final String SOMETHING_ELSE_ERROR = "something wrong";
-    public static final String THIS_CANDIDATE_ID_IS_NOT_PRESENT = "This id is not present please Insert valid id" ;
+    public static final String THIS_CANDIDATE_ID_IS_NOT_PRESENT = "Candidate for this id is not present, Please Insert valid id";
     public static final String TASK_HISTORY_NOT_FOUND = "Task history not found ";
     public static String INVALID_credential="Please give the correct email and password here";
     public static String Task_Not_Found="No any task assigned to this candidate";
     public static final String VENDOR_NOT_PRESENT = "Vendor is not present by this Id !!";
     public static String Email_Verified="Your Email verified sucessfully";
+    public static String PROVIDE_VALID_TASK_ID = "Task is not available, Please provide valid task id.";
+    public static String TASK_ID_NULL = "Task id must not be null";
+    public static String Enter_VALID_EMAIL="Please enter the valid email";
+
 }

@@ -1,7 +1,9 @@
 package com.ebench.service;
 
 import com.ebench.Apimessage.ApiMessage;
+import com.ebench.Config.JwtTokenUtil;
 import com.ebench.dto.CandidateReqDto;
+import com.ebench.dto.loginDto.LoginResponseDto;
 import com.ebench.entity.Candidate;
 import com.ebench.exception.BadReqException;
 import com.ebench.exception.ResourceNotFoundException;
@@ -17,14 +19,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import org.springframework.util.StringUtils;
 
 import org.springframework.web.multipart.MultipartFile;
+import responses.JwtRequest;
 
 import javax.mail.Authenticator;
 import javax.mail.Session;
@@ -35,6 +43,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.regex.Pattern;
@@ -55,6 +64,16 @@ public class CandidateService {
     CandidateRepository candidateRepository;
     @Autowired
     VendorRepository vendorRepository;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    private UserDetailsService jwtInMemoryUserDetailsService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
 
     private Logger logger = GlobalResources.getlogger(CandidateService.class);
     // __________________________________ Register Api for Candidate__________________________________________//
@@ -307,7 +326,7 @@ public class CandidateService {
     }
 
     //___________________________________Login for user_________________________________________________________________
-    public Candidate login(String email, String password, boolean isCandidate) {
+    public LoginResponseDto login(String email,String password) throws Exception {
         System.out.println("The user is candidate");
         logger.info("The user is candidate");
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
@@ -331,8 +350,32 @@ public class CandidateService {
         } catch (Exception e) {
             throw new BadReqException(e.getMessage());
         }
+
+        authenticate(email, password);
+
+        final UserDetails userDetails = jwtInMemoryUserDetailsService
+                .loadUserByUsername(email);
+
+        final String token = jwtTokenUtil.generateToken(userDetails);
+
+        LoginResponseDto loginResponseDto = new LoginResponseDto(token);
+
         logger.info("candidate login sucessfully");
-        return candidate1;
+
+     return loginResponseDto;
+    }
+
+    private void authenticate(String username, String password) throws Exception {
+        Objects.requireNonNull(username);
+        Objects.requireNonNull(password);
+
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        } catch (DisabledException e) {
+            throw new Exception("USER_DISABLED", e);
+        } catch (BadCredentialsException e) {
+            throw new Exception("INVALID_CREDENTIALS", e);
+        }
     }
 
 // ------------------------------- GET CANDIDATE------------------------------
@@ -517,11 +560,8 @@ public class CandidateService {
     }
 
 
-    public CandidateReqDto updateCandidate1(CandidateReqDto candidateReqDto, MultipartFile file) {
+    public Candidate updateCandidate1(CandidateReqDto candidateReqDto, MultipartFile file,String siteURL) {
         Optional<Candidate> candidate = candidateRepository.findById(candidateReqDto.getId());
-
-        System.out.println("File " + file);
-
         Candidate candidate1 = null;
 
         if (candidate.isPresent()) {
@@ -539,6 +579,8 @@ public class CandidateService {
 
             try {
 
+                Path fileNameAndPath = null;
+
                 if (!file.isEmpty()) {
                     StringBuilder fileName = new StringBuilder();
                     String filename = file.getOriginalFilename();
@@ -549,7 +591,7 @@ public class CandidateService {
 
                     String fileNameWithTime = str[0] + "_" + System.currentTimeMillis() + "." + str[1];
                     System.out.println("FIle NAme With TIme : " + fileNameWithTime);
-                    Path fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + fileNameWithTime);
+                    fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + fileNameWithTime);
                     fileName.append(file.getOriginalFilename());
                     Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
 
@@ -558,6 +600,7 @@ public class CandidateService {
                     System.out.println("file uploaded successfully  " + fileNameAndPath);
                     System.out.println(candidateReqDto);
 
+                }
 
                     candidate1.setFirstName(candidateReqDto.getFirstName());
                     candidate1.setLastName(candidateReqDto.getLastName());
@@ -583,7 +626,7 @@ public class CandidateService {
                     } else {
                         candidate1.setPassword(candidateReqDto.getPassword());
                     }
-                    candidate1.setProfileImageUrl(fileNameAndPath.toString());
+                    candidate1.setProfileImageUrl((fileNameAndPath==null) ? "" : fileNameAndPath.toString());
                     candidate1.setUserType(candidateReqDto.getUserType());
                     candidate1.setDeleted(candidateReqDto.isDeleted());
                     candidate1.setTwitterId(candidateReqDto.getTwitterId());
@@ -603,9 +646,10 @@ public class CandidateService {
                     candidate1.setCollegeName(candidateReqDto.getCollegeName());
                     candidate1.setUniversityName(candidateReqDto.getUniversityName());
                     candidate1.setSchoolName(candidateReqDto.getSchoolName());
-                    candidate1.setEmailVerifyCode(candidateReqDto.getEmailVerifyCode());
-                    candidateRepository.save(candidate1);
-                }
+                    candidate1.setEmailVerifyCode(Common.getRandomNumberString());
+                    candidate1.setEmailVerified(false);
+                 Candidate candidate2=   candidateRepository.save(candidate1);
+                    sendVerificationEmail(candidate2, siteURL);
             } catch (BadReqException e) {
                 logger.error("version 2 of register api not saving sucessfully_____________________>------");
                 throw new BadReqException(e.getMessage());
@@ -614,8 +658,8 @@ public class CandidateService {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return candidateReqDto;
+            return candidate1;
         }
-        return candidateReqDto;
+        return candidate1;
     }
 }

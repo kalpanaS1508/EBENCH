@@ -44,8 +44,8 @@ public class TaskController {
         return apiResponse.getResponse(apiResponse);
     }
     @PutMapping(value = "/update_Task")
-      public ResponseEntity updateTask( @RequestBody Task taskmanagement,@RequestParam("id") Long taskManagementId) throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, taskservice.updateTask(taskmanagement,taskManagementId), ApiMessage.Api_Message);
+      public ResponseEntity updateTask( @RequestBody Task taskmanagement) throws IOException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, taskservice.updateTask(taskmanagement), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 

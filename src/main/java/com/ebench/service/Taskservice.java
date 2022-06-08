@@ -5,8 +5,10 @@ import com.ebench.entity.*;
 import com.ebench.exception.BadReqException;
 import com.ebench.exception.ResourceNotFoundException;
 import com.ebench.exception.UserNotFoundException;
+import com.ebench.repository.CandidateRepository;
 import com.ebench.repository.ProjectRepository;
 import com.ebench.repository.TaskRepository;
+import com.ebench.repository.VendorRepository;
 import com.ebench.utils.GlobalResources;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,15 @@ public class Taskservice {
 
     @Autowired
     TaskRepository taskRepository;
+
+    @Autowired
     ProjectRepository projectRepository;
+
+    @Autowired
+    CandidateRepository candidateRepository;
+
+    @Autowired
+    VendorRepository vendorRepository;
 
     //_______________________________________GetProjects___________________________________________________________________________
     public Set<String> getProjectList(Long candidateId) {
@@ -60,69 +70,43 @@ public class Taskservice {
 
     //_________________________________________________CreateTask_____________________________________________________________________________
     public Task createTask(Task taskmanagement) {
-        try {
-            Task taskmanagement1 = new Task();
-            taskmanagement1.setCandidateId(taskmanagement.getCandidateId());
-            taskmanagement1.setVendorId(taskmanagement.getVendorId());
-            taskmanagement1.setClientId(taskmanagement.getClientId());
-            taskmanagement1.setCandidateName(taskmanagement.getCandidateName());
-            taskmanagement1.setProjectName(taskmanagement.getProjectName());
-            taskmanagement1.setTaskName(taskmanagement.getTaskName());
-            taskmanagement1.setTaskStartDate(taskmanagement.getTaskStartDate());
-            taskmanagement1.setTaskDueDate(taskmanagement.getTaskDueDate());
-            taskmanagement1.setTaskStatus(taskmanagement.isTaskStatus());
-            taskmanagement1.setChangeTaskStatus(taskmanagement.getChangeTaskStatus());
-            taskmanagement1.setNoOfDelayedDate(taskmanagement.getNoOfDelayedDate());
-            taskmanagement1.setTaskDescription(taskmanagement.getTaskDescription());
-            taskmanagement1.setAddCommentsFromClient(taskmanagement.getAddCommentsFromClient());
-            taskmanagement1.setAddCommentsFromCandidate(taskmanagement.getAddCommentsFromCandidate());
-            taskmanagement1.setWaitingResponseFrom(taskmanagement.getWaitingResponseFrom());
-            taskmanagement1.setAnyDependency(taskmanagement.getAnyDependency());
-            taskRepository.save(taskmanagement1);
-        } catch (BadReqException e) {
-            logger.info("task_sucessfully_not_created");
-            throw new BadReqException(ApiMessage.TASK_SUCESSFULLY_NOT_CREATED);
-        }
+            if(!checkCandidateExist(taskmanagement.getCandidateId())) {
+                throw new BadReqException(ApiMessage.THIS_CANDIDATE_ID_IS_NOT_PRESENT);
+            }
+            if(!checkVendorExist(taskmanagement.getVendorId())) {
+                throw new BadReqException(ApiMessage.VENDOR_NOT_PRESENT);
+            }
+            if(!checkProjectExist(taskmanagement.getProjectId())) {
+            throw new BadReqException(ApiMessage.PROJECT_NOT_FOUND);
+            }
         logger.info("Task created sucessfullly");
-        return taskmanagement;
+        return taskRepository.save(taskmanagement);
     }
 
 
     //_______________________________Update Task____________________________________________
-    public Task updateTask(Task taskmanagement, Long taskManagementId) {
+    public Task updateTask(Task taskmanagement) {
 
-        Optional<Task> taskmanage = taskRepository.findById(taskManagementId);
-        if(taskmanage.isPresent()) {
-            Task taskmanagement1 = taskmanage.get();
-            try {
-                taskmanagement1.setCandidateId(taskmanagement.getCandidateId());
-                taskmanagement1.setVendorId(taskmanagement.getVendorId());
-                taskmanagement1.setClientId(taskmanagement.getClientId());
-                taskmanagement1.setCandidateName(taskmanagement.getCandidateName());
-                taskmanagement1.setProjectName(taskmanagement.getProjectName());
-                taskmanagement1.setProjectName(taskmanagement.getProjectName());
-                taskmanagement1.setTaskName(taskmanagement.getTaskName());
-                taskmanagement1.setTaskStartDate(taskmanagement.getTaskStartDate());
-                taskmanagement1.setTaskDueDate(taskmanagement.getTaskDueDate());
-                taskmanagement1.setTaskStatus(taskmanagement.isTaskStatus());
-                taskmanagement1.setChangeTaskStatus(taskmanagement.getChangeTaskStatus());
-                taskmanagement1.setNoOfDelayedDate(taskmanagement.getNoOfDelayedDate());
-                taskmanagement1.setTaskDescription(taskmanagement.getTaskDescription());
-                taskmanagement1.setAddCommentsFromClient(taskmanagement.getAddCommentsFromClient());
-                taskmanagement1.setAddCommentsFromCandidate(taskmanagement.getAddCommentsFromCandidate());
-                taskmanagement1.setWaitingResponseFrom(taskmanagement.getWaitingResponseFrom());
-                taskmanagement1.setAnyDependency(taskmanagement.getAnyDependency());
-                taskRepository.save(taskmanagement1);
-            } catch (Exception e) {
-                logger.info("Task not updated sucessfully");
-                throw new BadReqException(ApiMessage.TASK_NOT_UPDATED_SUCESSFULLY);
-            }
+        if(taskmanagement.getTaskManagementId()==null)
+        {
+            throw new BadReqException(ApiMessage.TASK_ID_NULL);
         }
-        else {
-            throw new BadReqException(ApiMessage.Task_Not_Found);
+        else if(!taskRepository.existsById(taskmanagement.getTaskManagementId()))
+        {
+            throw new BadReqException(ApiMessage.PROVIDE_VALID_TASK_ID);
         }
-        logger.info("Task updated sucessfully");
-        return taskmanagement;
+
+        if(!checkCandidateExist(taskmanagement.getCandidateId())) {
+            throw new BadReqException(ApiMessage.THIS_CANDIDATE_ID_IS_NOT_PRESENT);
+        }
+        if(!checkVendorExist(taskmanagement.getVendorId())) {
+            throw new BadReqException(ApiMessage.VENDOR_NOT_PRESENT);
+        }
+        if(!checkProjectExist(taskmanagement.getProjectId())) {
+            throw new BadReqException(ApiMessage.PROJECT_NOT_FOUND);
+        }
+        logger.info("Task updated sucessfullly");
+        return taskRepository.save(taskmanagement);
     }
 
 
@@ -182,4 +166,41 @@ public class Taskservice {
         }
         return taskList;
     }
+
+    public Boolean checkCandidateExist(Long id)
+    {
+        Optional<Candidate> candidateData = candidateRepository.findById(id);
+        if(candidateData.isPresent())
+        {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public Boolean checkVendorExist(Long id)
+    {
+        Optional<Vendor> vendorData = vendorRepository.findById(id);
+        if(vendorData.isPresent())
+        {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public Boolean checkProjectExist(Long id)
+    {
+        Optional<Project> projectData = projectRepository.findById(id);
+        if(projectData.isPresent())
+        {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 }

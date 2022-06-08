@@ -13,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Table(name = "taskmanagement")
 public class Task {
-
+// dekh le
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="taskmanagementId")
@@ -25,7 +25,7 @@ public class Task {
     @Column(name="clientId")
     public Long clientId;
     @Column(name="projectId")
-    public String projectId;
+    public Long projectId;
     @Column(name="candidateName")
     public String candidateName;
     @Column(name="projectName")

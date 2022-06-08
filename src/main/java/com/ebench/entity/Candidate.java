@@ -89,7 +89,7 @@ public class Candidate {
     @Column(name = "available_for_work")
     public boolean availableForWork;
 
-    @Size(min = 2, max = 30)
+
     @Column(name = "password")
     public String password;
 

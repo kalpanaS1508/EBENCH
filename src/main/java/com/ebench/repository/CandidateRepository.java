@@ -28,6 +28,9 @@ public interface CandidateRepository extends JpaRepository<Candidate,Long> {
             @Query("Select c from Candidate c where c.email=:email")
             Candidate findByEmail(String email);
 
+            @Query("Select c from Candidate c where c.password=:password")
+            Candidate findByPassword(String password);
+
     @Query(value = "select c.email from candidate c where id = ?1",nativeQuery = true)
     Optional<Candidate> findByCandidateId(Long id);
 }
