@@ -6,13 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 public class VerificationCode {
-//    public static String generateHash(String valueToBeHashed) throws NoSuchAlgorithmException {
-//        String stringToHash = valueToBeHashed;
-//        MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-//        messageDigest.update(stringToHash.getBytes());
-//        byte[] digest = messageDigest.digest();
-//        return DatatypeConverter.printHexBinary(digest);
-//    }
+
     public static String getRandomNumberString() {
         // It will generate 6 digit random Number.
         // from 0 to 999999

@@ -12,15 +12,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.io.IOException;
 
 
 @RestController
-@RequestMapping(value = "/vendor")
+@RequestMapping(value = "vendor")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
+
 public class VendorController {
 
     @Autowired
@@ -29,12 +30,11 @@ public class VendorController {
 
 //   ---------------------------VENDOR REGISTRATION-----------------------------------------
 
-    @PostMapping(value = "/registervendor" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity Register(@RequestPart(value = "vendor" , required = true) Vendor vendor , @RequestPart("file")  MultipartFile file , HttpServletRequest request)
+    @PostMapping(value = "/register_vendor" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity Register(@RequestPart(value = "vendor" , required = true) Vendor vendor , @RequestPart(name="file",required=false)  MultipartFile file , HttpServletRequest request)
             throws IOException {
 //        Vendor vendor1= new ObjectMapper().readValue(vendor,Vendor.class);
-
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.Register(vendor ,file , getSiteURL(request)), ApiMessage.Api_Message);
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.Register(vendor ,file), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 
@@ -61,9 +61,9 @@ public class VendorController {
 
 
     @PutMapping(value = "/update_vendor" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity updateVendor(@RequestPart(value = "vendor" , required = true) Vendor vendor, @RequestPart("file") MultipartFile file,HttpServletRequest request)
+    public ResponseEntity updateVendor(@RequestPart(value = "vendor" , required = true) Vendor vendor, @RequestPart(name="file",required=false) MultipartFile file,HttpServletRequest request)
             throws Exception {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.updateVendor(vendor , file,getSiteURL(request)), ApiMessage.Api_Message);
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.updateVendor(vendor , file), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 
