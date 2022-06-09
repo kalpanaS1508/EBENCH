@@ -3,14 +3,21 @@ package com.ebench.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jdk.jfr.Timestamp;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 
 import java.math.BigDecimal;
 import java.sql.Clob;
@@ -23,11 +30,9 @@ import java.util.Set;
 @Data
 @Valid
 @Table(name = "Candidate", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
+@AllArgsConstructor
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@SecondaryTable(name = "education", pkJoinColumns = @PrimaryKeyJoinColumn(name = "education_id", referencedColumnName = "id"))
-@AllArgsConstructor
-@NoArgsConstructor
 public class Candidate {
 
     @Id
@@ -38,22 +43,25 @@ public class Candidate {
     @Column(name = "first_name")
     public String firstName;
 
-    @Column(name="last_name")
+    @Column(name = "last_name")
     public String lastName;
 
-    @Column(name="key_experience")
+    @Column(name = "key_experience")
     public String keyExperience;
 
-    @Column(name="skills")
+    @Column(name = "skills")
     public String skills;
 
     @Column(name = "address")
     public String address;
 
-    @Column(name ="skype_id")
+    @Column(name = "deleted")
+    public boolean deleted;
+
+    @Column(name = "skype_id")
     public String skypeId;
 
-    @Column(name ="whatsapp")
+    @Column(name = "whatsapp")
     public String whatsapp;
 
     @Column(name = "country")
@@ -62,66 +70,70 @@ public class Candidate {
     @Column(name = "state")
     public String state;
 
-    @Column(name ="city")
+    @Column(name = "city")
     public String city;
 
-    @Column(name ="hobbies")
+    @Column(name = "hobbies")
     public String hobbies;
 
-    @Column(name = "email",unique = true)
+    @Column(name = "email", unique = true)
     @Valid
     private String email;
 
     @Column(name = "interest")
     public String interest;
 
-    @Column(name="mobile")
+    @Column(name = "mobile")
     public String mobile;
 
     @Column(name = "available_for_work")
     public boolean availableForWork;
 
+
     @Column(name = "password")
     public String password;
 
-    @Column(name = " profile_image_url" )
+    @Column(name = " profile_image_url")
     public String profileImageUrl;
 
-    @Column(name="twitterId")
+    @Column(name = "twitterId")
     public String twitterId;
 
-    @Column(name="linkedIn")
+    @Column(name = "linkedIn")
     public String linkedIn;
 
-    @Column(name="pincode")
+    @Column(name = "pincode")
     public String pincode;
 
-    @Column(name ="activeStatus")
+    @Column(name = "activeStatus")
     public boolean activeStatus;
 
     @JsonFormat(pattern = "HH:mm:ss")
-    @Column(name="lastSeen")
+    @Column(name = "lastSeen")
     public Time lastSeen;
 
-    @Column(name="currentDesignation")
+    @Column(name = "currentDesignation")
     public String currentDesignation;
 
-    @Column(name="jobProfile")
-    public  String jobProfile;
+    @Column(name = "jobProfile")
+    public String jobProfile;
 
     @Lob
     @Column(name = "overview")
     public String overview;
 
-    @Column(name="currentlyWorkingCompanyName")
+    @Column(name = "currentlyWorkingCompanyName")
     public String CurrentlyWorkingCompanyName;
 
-    @Column(name="roleInHiring")
+    @Column(name = "roleInHiring")
     public String roleInHiring;
 
     @Column(name = "joiningDateInCompany")
     @JsonFormat(pattern = "yyyy-MM-dd")
     public Date joiningDateInCompany;
+
+    @Column(name = "isCandidate", nullable = false)
+    public Boolean isCandidate;
 
     @Column(name = "user_type")
     @Enumerated(EnumType.STRING)
@@ -130,34 +142,30 @@ public class Candidate {
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "created_at")
-    public Date createdAt= new Date();
-
+    public Date createdAt = new Date();
     @LastModifiedDate
     @Column(name = "updated_at")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public Date updatedAt;
-    @Column(name="specialization")
+    @Column(name = "specialization")
     public String specialization;
-    @Column(name="yearOfPassing")
+    @Column(name = "yearOfPassing")
     public String yearOfPassing;
-    @Column(name="percentage")
+    @Column(name = "percentage")
     public BigDecimal percentage;
-    @Column(name="collegeName")
+    @Column(name = "collegeName")
     public String collegeName;
-    @Column(name="universityName")
+    @Column(name = "universityName")
     public String universityName;
-    @Column(name="schoolName")
+    @Column(name = "schoolName")
     public String schoolName;
-    @Column(name="resume_url")
-    public String resumeUrl;
+    @Column(name = "email_verification_code")
+    public String emailVerifyCode;
+    @Column(name = "email_verified")
+    public boolean emailVerified;
+    @Column(name = "role")
+    public String role;
 
-
-    /*@PrePersist
-    protected void prePerist() {
-        if (this.createdAt == null) createdAt = ;//iss code kya kya use h?
-
-        if (this.updatedAt == null) updatedAt = LocalDateTime.now();
-    }*/
 
     public Candidate(Long id, String firstName, String lastName, String keyExperience,
                      String skills, String address, String whatsapp, String city, String email) {
@@ -171,5 +179,10 @@ public class Candidate {
         this.city = city;
         this.email = email;
     }
+
+    public Candidate() {
+        }
+
+
 
 }

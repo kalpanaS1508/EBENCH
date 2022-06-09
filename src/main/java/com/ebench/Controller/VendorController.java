@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.io.IOException;
-
 
 @RestController
 @RequestMapping(value = "/vendor")
@@ -26,17 +24,21 @@ public class VendorController {
     public VendorService vendorService;
 
 
-//   ---------------------------VENDOR REGISTRATION-----------------------------------------
-
-    @PostMapping(value = "/registervendor" , consumes =  MediaType.MULTIPART_FORM_DATA_VALUE )
-    public ResponseEntity Register(@RequestPart(value = "vendor" , required = true) Vendor vendor , @RequestPart("file")  MultipartFile file , HttpServletRequest request)
+    //   ---------------------------VENDOR REGISTRATION-----------------------------------------
+    @PostMapping(value = "/register_vendor", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity Register(@RequestPart(value = "vendor", required = true) Vendor vendor, @RequestPart("file") MultipartFile file, HttpServletRequest request)
             throws IOException {
-
-//        Vendor vendor1= new ObjectMapper().readValue(vendor,Vendor.class);
-
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.Register(vendor ,file), ApiMessage.Api_Message);
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.Register(vendor, file), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
+
+    @PostMapping(value = "/registervendor")
+    public ResponseEntity Register(@RequestBody Vendor vendor)
+            throws Exception {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.Register(vendor), ApiMessage.Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+
 
     private String getSiteURL(HttpServletRequest request) {
         String siteURL = request.getRequestURL().toString();
@@ -44,7 +46,7 @@ public class VendorController {
     }
 
     @PostMapping(value = "/sample")
-    public String TestApi(@RequestParam("name") String name){
+    public String TestApi(@RequestParam("name") String name) {
         return String.format("%s", name);
     }
 
@@ -59,36 +61,43 @@ public class VendorController {
 
 //    --------------------------------VENDOR UPDATE API-----------------------------------------------
 
-    @PutMapping(value = "/update_vendor" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity updateVendor(@RequestPart(value = "vendor" , required = true) Vendor vendor, @RequestPart("file") MultipartFile file,HttpServletRequest request)
+    @PutMapping(value = "/update_vendor", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity updateVendor(@RequestPart(value = "vendor", required = true) Vendor vendor, @RequestPart("file") MultipartFile file, HttpServletRequest request)
             throws Exception {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.updateVendor(vendor , file), ApiMessage.Api_Message);
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.updateVendor(vendor, file), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
+
+        @PutMapping(value = "/updatevendor")
+        public ResponseEntity updateVendor(@RequestBody Vendor vendor)
+            throws IOException {
+            ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.updateVendor(vendor), ApiMessage.Api_Message);
+            return apiResponse.getResponse(apiResponse);
+        }
 
 //    --------------------------VENDOR DELETE API----------------------------------------------------------
 
-    @RequestMapping(value = "/delete_vendor" , method=RequestMethod.DELETE)
-    public ResponseEntity deleteContact(@RequestParam("id") Long vendorId) throws JsonProcessingException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.deleteVendor(vendorId), ApiMessage.Api_Message);
-        return apiResponse.getResponse(apiResponse);
-    }
+        @RequestMapping(value = "/delete_vendor", method = RequestMethod.DELETE)
+        public ResponseEntity deleteContact (@RequestParam("id") Long vendorId) throws JsonProcessingException {
+            ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.deleteVendor(vendorId), ApiMessage.Api_Message);
+            return apiResponse.getResponse(apiResponse);
+        }
 
 //    --------------------------VENDOR SOFT DELETE API----------------------------------------------------------
 
-    @RequestMapping(value = "/soft_delete_vendor" , method=RequestMethod.DELETE)
-    public ResponseEntity softDeleteContact(@RequestParam("id") Long vendorId) throws JsonProcessingException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.softDeleteVendor(vendorId), ApiMessage.Api_Message);
-        return apiResponse.getResponse(apiResponse);
-    }
+        @RequestMapping(value = "/soft_delete_vendor", method = RequestMethod.DELETE)
+        public ResponseEntity softDeleteContact (@RequestParam("id") Long vendorId) throws JsonProcessingException {
+            ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.softDeleteVendor(vendorId), ApiMessage.Api_Message);
+            return apiResponse.getResponse(apiResponse);
+        }
 
 //   ------------------------- LOGIN VENDOR----------------------------------------------------------------------
 
-    @GetMapping(value = "/login_vendor")
-    public ResponseEntity loginVendor(@RequestParam String email, @RequestParam String password )
+        @GetMapping(value = "/login_vendor")
+        public ResponseEntity loginVendor (@RequestParam String email, @RequestParam String password )
             throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.login(email, password), ApiMessage.Api_Message);
-        return apiResponse.getResponse(apiResponse);
+            ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.login(email, password), ApiMessage.Api_Message);
+            return apiResponse.getResponse(apiResponse);
+        }
     }
-}
 

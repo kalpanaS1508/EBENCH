@@ -49,6 +49,8 @@ public class VendorService {
 
     private String UPLOAD_DIR = "D://EBench V1//EBENCH//target//classes//Static//file";
 
+//-----------------------------------VENDOR REGISTRATION WITH IMAGE-------------------------------------------------------
+
         public Vendor Register(Vendor vendor, MultipartFile file) {
 
             String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
@@ -141,8 +143,8 @@ public class VendorService {
                 logger.info("vendor details " + vendor1);
                 // vendorRepository.save(vendor1);
 
-                vendorRepository.save(vendor1);
-                sendVerificationEmail(vendor1);
+                Vendor vendor2 = vendorRepository.save(vendor1);
+                sendVerificationEmail(vendor2);
 
             } catch (BadReqException e) {
                 throw new BadReqException(e.getMessage());
@@ -156,6 +158,84 @@ public class VendorService {
             logger.info("vendor register yourself successfully" + vendor1);
             return vendor1;
         }
+
+// -----------------------------------VENDOR REGISTRATION----------------------------------------------------------
+
+public Vendor Register(Vendor vendor) throws Exception {
+
+    logger.info("vendor Email should be in format ");
+    String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+            + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+    boolean emailValidation = Pattern.compile(regexPattern)
+            .matcher(vendor.getEmail())
+            .matches();
+
+    logger.info("vendor password should be in format ");
+
+    String PASSWORD_PATTERN = "^(?=(?:[a-zA-Z0-9]*[a-zA-Z]){2})(?=(?:[a-zA-Z0-9]*\\d){2})[a-zA-Z0-9]{8,}$";
+    boolean pattern = Pattern.compile(PASSWORD_PATTERN)
+            .matcher(vendor.getPassword())
+            .matches();
+
+
+    if (emailAlreadyExist(vendor.getEmail())) {
+        logger.info("vendor will get the email and check it is present or not " + vendor.getEmail());
+        throw new BadReqException(ApiMessage.EMAIL_IS_PRESENT);
+    }
+    Vendor vendor1 = new Vendor();
+
+    try {
+        vendor1.setName(vendor.getName());
+
+        if (!emailValidation) {
+            throw new BadReqException(ApiMessage.Email_Not_In_Proper_Format);
+        }else {
+            vendor1.setEmail(vendor.getEmail());
+        }
+
+        if (pattern != true) {
+            throw new BadReqException(ApiMessage.Password_Not_Proper_Format);
+        } else {
+            vendor1.setPassword(vendor.getPassword());
+        }
+
+
+        vendor1.setAddress(vendor.getAddress());
+        vendor1.setDesignation(vendor.getDesignation());
+        vendor1.setCity(vendor.getCity());
+        vendor1.setCountry(vendor.getCountry());
+        vendor1.setStatus(vendor.isStatus());
+        vendor1.setLastSeen(vendor.getLastSeen());
+
+        if (vendor.getContactNo().isEmpty() || vendor.getContactNo().length() != 10) {
+            throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
+
+        } else {
+            vendor1.setContactNo(vendor.getContactNo());
+        }
+        vendor1.setRecentActivities(vendor.getRecentActivities());
+        vendor1.setRecentDateActivities(vendor.getRecentDateActivities());
+        vendor1.setDailyActivities(vendor.getDailyActivities());
+        vendor1.setSkypeId(vendor.getSkypeId());
+        vendor1.setTwitterId(vendor.getTwitterId());
+
+        vendor1.setVendorProfileImageUrl(vendor.getVendorProfileImageUrl());
+
+        vendor1.setAvailability(vendor.getAvailability());
+        vendor1.setExperience(vendor.getExperience());
+        vendor1.setVerificationCode(VerificationCode.getRandomNumberString());
+
+        Vendor vendor2 = vendorRepository.save(vendor1);
+        sendVerificationEmail(vendor2);
+        logger.info("vendor details " , vendor1);
+
+    } catch (BadReqException e) {
+        throw new BadReqException(e.getMessage());
+
+    }
+    logger.info("vendor register yourself successfully");
+    return vendor1;
+}
 
 //-------------------------Email verification code-----------------------------------------------------
 
@@ -309,6 +389,73 @@ public class VendorService {
         return vendor1;
     }
 
+
+//    --------------------------------UPDATE-------------------------------------------
+
+    public Vendor updateVendor(Vendor vendor) {
+        System.out.println(vendor.getVendorId());
+        Optional<Vendor> id = vendorRepository.findById(vendor.getVendorId());
+        System.out.println("Entered");
+        Vendor vendor1 = null;
+        try {
+            if (id.isPresent()) {
+                vendor1 = id.get();
+
+                String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+                        + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+                boolean emailValidation = Pattern.compile(regexPattern)
+                        .matcher(vendor.getEmail())
+                        .matches();
+                System.out.println((emailValidation));
+                String PASSWORD_PATTERN = "^(?=(?:[a-zA-Z0-9]*[a-zA-Z]){2})(?=(?:[a-zA-Z0-9]*\\d){2})[a-zA-Z0-9]{8,}$";
+                boolean pattern = Pattern.compile(PASSWORD_PATTERN)
+                        .matcher(vendor.getPassword())
+                        .matches();
+                try {
+                    vendor1.setName(vendor.getName());
+
+                    if (!emailValidation) {
+                        throw new BadReqException(ApiMessage.Email_Not_In_Proper_Format);
+                    } else {
+                        vendor1.setEmail(vendor.getEmail());
+                    }
+                    vendor1.setAddress(vendor.getAddress());
+                    vendor1.setPassword(vendor.getPassword());
+                    vendor1.setDesignation(vendor.getDesignation());
+                    vendor1.setCity(vendor.getCity());
+                    vendor1.setCountry(vendor.getCountry());
+                    vendor1.setStatus(vendor.isStatus());
+                    vendor1.setTwitterId(vendor.getTwitterId());
+                    vendor1.setSkypeId(vendor.getSkypeId());
+                    vendor1.setLastSeen(vendor.getLastSeen());
+
+                    if (vendor.getContactNo().isEmpty() || vendor.getContactNo().length() != 10) {
+                        throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
+                    } else {
+                        vendor1.setContactNo(vendor.getContactNo());
+                    }
+
+                    vendor1.setRecentActivities(vendor.getRecentActivities());
+                    vendor1.setRecentDateActivities(vendor.getRecentDateActivities());
+                    vendor1.setDailyActivities(vendor.getDailyActivities());
+                    vendor1.setVendorProfileImageUrl(vendor.getVendorProfileImageUrl());
+                    vendor1.setExperience(vendor.getExperience());
+                    vendor1.setAvailability(vendor.getAvailability());
+
+                    vendorRepository.save(vendor1);
+
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return vendor;
+    }
+
 // ---------------------------------- GET VENDOR ---------------------------------------------------------------
 
     public Vendor getVendor(Long vendorId){
@@ -329,6 +476,7 @@ public class VendorService {
     public Vendor deleteVendor(Long  vendorId){
         Optional<Vendor> vendorId1 = vendorRepository.findById(vendorId);
         if(!vendorId1.isPresent()){
+
             logger.info("vendor is not present by this id "  + vendorId);
             throw new RuntimeException(ApiMessage.VENDOR_NOT_PRESENT);
         } else{
@@ -359,6 +507,7 @@ public class VendorService {
         return vendor ;
     }
 
+
 //    ------------------------- LOGIN VENDOR-----------------------------------------------------------------
 
         public Vendor login(String email, String password) {
@@ -388,3 +537,4 @@ public class VendorService {
             return vendor;
         }
 }
+

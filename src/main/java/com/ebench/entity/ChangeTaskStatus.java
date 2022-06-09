@@ -1,8 +1,7 @@
 package com.ebench.entity;
 
-public enum TaskStatus {
+public enum ChangeTaskStatus {
     PENDING,
     INPROGRESS,
     COMPLETED
-
 }
