@@ -5,15 +5,16 @@ import com.ebench.Config.JwtTokenUtil;
 import com.ebench.dto.CandidateReqDto;
 import com.ebench.dto.loginDto.LoginResponseDto;
 import com.ebench.entity.Candidate;
+import com.ebench.entity.UserType;
+import com.ebench.entity.Vendor;
 import com.ebench.exception.BadReqException;
 import com.ebench.exception.ResourceNotFoundException;
 import com.ebench.exception.UserNotFoundException;
 import com.ebench.repository.CandidateRepository;
 import com.ebench.repository.VendorRepository;
 import com.ebench.utils.Common;
-import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
+//import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 import com.ebench.utils.GlobalResources;
-import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,6 +37,7 @@ import org.springframework.web.multipart.MultipartFile;
 import responses.JwtRequest;
 
 import javax.mail.Authenticator;
+import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 import java.io.*;
@@ -42,10 +45,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @Service
@@ -79,8 +79,7 @@ public class CandidateService {
     // __________________________________ Register Api for Candidate__________________________________________//
 
 
-    private String UPLOAD_DIR = "D://EBENCH MAY//EBENCH//target//classes//Static//image";
-
+    private String UPLOAD_DIR = "D://EBENCH MAY//EBENCH//target//classes//Static//file";
     public CandidateReqDto register(CandidateReqDto candidateReqDto) {
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
@@ -326,43 +325,68 @@ public class CandidateService {
     }
 
     //___________________________________Login for user_________________________________________________________________
-    public LoginResponseDto login(String email,String password) throws Exception {
-        System.out.println("The user is candidate");
+    public LoginResponseDto login(String email, String password, UserType userType) throws Exception {
+        System.out.println("The user is "+userType);
         logger.info("The user is candidate");
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
         boolean emailValidation = Pattern.compile(regexPattern)
                 .matcher(email)
                 .matches();
-        Candidate candidate1 = candidateRepository.findByEmailAndPassword(email, password);
-        try {
-            if (email.isEmpty() || !emailValidation) {
-                logger.info("Please Enter Email");
-                throw new BadReqException(ApiMessage.ENTER_EMAIL);
-            }
-            if (password.isEmpty() || password.length() < 4) {
-                logger.info("please Enter valid password");
-                throw new BadReqException(ApiMessage.ENTER_PASSWORD);
-            } else if (candidate1 == null) {
-                logger.info("Invalid credentials in login candidate");
-                throw new BadReqException(ApiMessage.INVALID_credential);
-            }
-        } catch (Exception e) {
-            throw new BadReqException(e.getMessage());
+
+        if (email.isEmpty() || !emailValidation) {
+            logger.info("Please Ente valid email");
+            throw new BadReqException(ApiMessage.ENTER_EMAIL);
         }
+        if (password.isEmpty() || password.length() < 4) {
+            logger.info("please Enter valid password");
+            throw new BadReqException(ApiMessage.ENTER_PASSWORD);
+        }
+        String token="";
 
-        authenticate(email, password);
+        if(userType==UserType.CANDIDATE) {
+            System.out.println("Yes Candidate");
+            Candidate candidate1 = candidateRepository.findByEmailAndPassword(email, password);
+                 if (candidate1 == null) {
+                    logger.info("Invalid credentials in login candidate");
+                    throw new BadReqException(ApiMessage.INVALID_credential);
+                }
+                authenticate(email, password);
+                /*final UserDetails userDetails = jwtInMemoryUserDetailsService
+                        .loadUserByUsername(email);*/
 
-        final UserDetails userDetails = jwtInMemoryUserDetailsService
-                .loadUserByUsername(email);
+            final UserDetails userDetails = new User(candidate1.getEmail(), new BCryptPasswordEncoder().encode(candidate1.getPassword()),
+                    new ArrayList<>());
 
-        final String token = jwtTokenUtil.generateToken(userDetails);
+                token = jwtTokenUtil.generateToken(userDetails);
+            System.out.println("Token generated from candidate");
+                logger.info("candidate login sucessfully");
+        }
+        else
+        {
+            System.out.println("Yes Vendor");
+            Vendor vendor = vendorRepository.findByEmailAndPassword(email, password);
+
+               if(vendor == null) {
+                    throw new BadReqException(ApiMessage.INVALID_CREDENTIAL);
+                }
+            logger.info("vendor details by login " + vendor);
+            authenticate(email, password);
+            /*final UserDetails userDetails = jwtInMemoryUserDetailsService
+                    .loadUserByUsername(email);*/
+
+
+            final UserDetails userDetails = new User(vendor.getEmail(), new BCryptPasswordEncoder().encode(vendor.getPassword()),
+                    new ArrayList<>());
+
+            token = jwtTokenUtil.generateToken(userDetails);
+            System.out.println("token generated by vendor");
+            logger.info("vendor login sucessfully");
+        }
 
         LoginResponseDto loginResponseDto = new LoginResponseDto(token);
 
-        logger.info("candidate login sucessfully");
-
-     return loginResponseDto;
+        return loginResponseDto;
     }
 
     private void authenticate(String username, String password) throws Exception {
@@ -582,6 +606,7 @@ public class CandidateService {
                 Path fileNameAndPath = null;
 
                 if (!file.isEmpty()) {
+                    System.out.println("File is yes");
                     StringBuilder fileName = new StringBuilder();
                     String filename = file.getOriginalFilename();
                     String[] str = filename.split("[.]", 2);
@@ -601,6 +626,7 @@ public class CandidateService {
                     System.out.println(candidateReqDto);
 
                 }
+
 
                     candidate1.setFirstName(candidateReqDto.getFirstName());
                     candidate1.setLastName(candidateReqDto.getLastName());

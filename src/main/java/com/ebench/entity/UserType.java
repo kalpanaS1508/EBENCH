@@ -5,7 +5,7 @@ public enum UserType {
     VENDOR,
     ADMIN;
 
-    public String toString(UserType candidate) {
+    /*public String toString(UserType candidate) {
         return "candidate";
-    }
+    }*/
 }

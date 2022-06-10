@@ -17,6 +17,9 @@ public class LoginResponseDto {
     public String mobile;
     public String token;
 
+    public LoginResponseDto() {
+    }
+
     public LoginResponseDto(String token) {
         this.token = token;
     }

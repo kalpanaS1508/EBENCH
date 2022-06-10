@@ -9,9 +9,11 @@
         <outputRelativeToContentRoot value="true" />
         <module name="E-benchs" />
         <module name="ebench" />
-        <module name="EBENCH" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="EBENCH" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

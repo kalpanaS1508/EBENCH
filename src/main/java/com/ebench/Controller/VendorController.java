@@ -29,7 +29,16 @@ public class VendorController {
 
 //   ---------------------------VENDOR REGISTRATION-----------------------------------------
 
-    @PostMapping(value = "/registervendor" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/registervendor1")
+    public ResponseEntity Register(@RequestBody Vendor vendor )
+            throws Exception {
+
+
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.Register(vendor ), ApiMessage.Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+
+    @PostMapping(value = "/registervendor2" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity Register(@RequestPart(value = "vendor" , required = true) Vendor vendor , @RequestPart("file")  MultipartFile file , HttpServletRequest request)
             throws IOException {
 //        Vendor vendor1= new ObjectMapper().readValue(vendor,Vendor.class);
@@ -85,11 +94,11 @@ public class VendorController {
 
 //   ------------------------- LOGIN VENDOR----------------------------------------------------------------------
 
-    @GetMapping(value = "/login_vendor")
-    public ResponseEntity loginVendor(@RequestParam String email, @RequestParam String password )
-            throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.login(email, password), ApiMessage.Api_Message);
-        return apiResponse.getResponse(apiResponse);
-    }
+//    @GetMapping(value = "/login_vendor")
+//    public ResponseEntity loginVendor(@RequestParam String email, @RequestParam String password )
+//            throws IOException {
+//        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.login(email, password), ApiMessage.Api_Message);
+//        return apiResponse.getResponse(apiResponse);
+//    }
 }
 

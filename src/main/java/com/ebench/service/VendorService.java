@@ -1,7 +1,11 @@
 package com.ebench.service;
 
 import com.ebench.Apimessage.ApiMessage;
+import com.ebench.Config.JwtTokenUtil;
 import com.ebench.Utils.VerificationCode;
+import com.ebench.dto.loginDto.LoginResponseDto;
+import com.ebench.entity.Candidate;
+import com.ebench.entity.UserType;
 import com.ebench.entity.Vendor;
 import com.ebench.exception.BadReqException;
 import com.ebench.exception.UserNotFoundException;
@@ -12,6 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,6 +38,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -48,8 +62,99 @@ public class VendorService {
     @Autowired
     public JavaMailSender javaMailSender;
 
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    private UserDetailsService jwtInMemoryUserDetailsService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    JwtUserDetailsService jwtUserDetailsService;
+
+
+
 
     private String UPLOAD_DIR = "D://EBench V1//EBENCH//target//classes//Static//file";
+
+
+    public Vendor Register(Vendor vendor) throws Exception {
+
+        logger.info("vendor Email should be in format ");
+        String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+                + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+        boolean emailValidation = Pattern.compile(regexPattern)
+                .matcher(vendor.getEmail())
+                .matches();
+
+        logger.info("vendor password should be in format ");
+
+        String PASSWORD_PATTERN = "^(?=(?:[a-zA-Z0-9]*[a-zA-Z]){2})(?=(?:[a-zA-Z0-9]*\\d){2})[a-zA-Z0-9]{8,}$";
+        boolean pattern = Pattern.compile(PASSWORD_PATTERN)
+                .matcher(vendor.getPassword())
+                .matches();
+
+
+        if (emailAlreadyExist(vendor.getEmail())) {
+            logger.info("vendor will get the email and check it is present or not " + vendor.getEmail());
+            throw new BadReqException(ApiMessage.EMAIL_IS_PRESENT);
+        }
+        Vendor vendor1 = new Vendor();
+
+        try {
+            vendor1.setName(vendor.getName());
+
+            if (!emailValidation) {
+                throw new BadReqException(ApiMessage.Email_Not_In_Proper_Format);
+            }else {
+                vendor1.setEmail(vendor.getEmail());
+            }
+
+            if (pattern != true) {
+                throw new BadReqException(ApiMessage.Password_Not_Proper_Format);
+            } else {
+                vendor1.setPassword(vendor.getPassword());
+            }
+
+
+            vendor1.setAddress(vendor.getAddress());
+            vendor1.setDesignation(vendor.getDesignation());
+            vendor1.setCity(vendor.getCity());
+            vendor1.setCountry(vendor.getCountry());
+            vendor1.setStatus(vendor.isStatus());
+            vendor1.setLastSeen(vendor.getLastSeen());
+
+            if (vendor.getContactNo().isEmpty() || vendor.getContactNo().length() != 10) {
+                throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
+
+            } else {
+                vendor1.setContactNo(vendor.getContactNo());
+            }
+            vendor1.setRecentActivities(vendor.getRecentActivities());
+            vendor1.setRecentDateActivities(vendor.getRecentDateActivities());
+            vendor1.setDailyActivities(vendor.getDailyActivities());
+            vendor1.setSkypeId(vendor.getSkypeId());
+            vendor1.setTwitterId(vendor.getTwitterId());
+
+            vendor1.setVendorProfileImageUrl(vendor.getVendorProfileImageUrl());
+
+            vendor1.setAvailability(vendor.getAvailability());
+            vendor1.setExperience(vendor.getExperience());
+            vendor1.setVerificationCode(VerificationCode.getRandomNumberString());
+
+            Vendor vendor2 = vendorRepository.save(vendor1);
+
+            logger.info("vendor details " , vendor1);
+
+        } catch (BadReqException e) {
+            throw new BadReqException(e.getMessage());
+
+        }
+        logger.info("vendor register yourself successfully");
+        return vendor1;
+    }
 
     public Vendor Register(Vendor vendor, MultipartFile file, String siteURL) {
 
@@ -312,35 +417,7 @@ public class VendorService {
         return vendor ;
     }
 
-//    ------------------------- LOGIN VENDOR-----------------------------------------------------------------
-
-        public Vendor login(String email, String password) {
-
-            String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
-                    + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-            boolean emailValidation = Pattern.compile(regexPattern)
-                    .matcher(email)
-                    .matches();
-
-            Vendor vendor = vendorRepository.findByEmailAndPassword(email, password);
-            try {
-                if (email.isEmpty() || !emailValidation) {
-                    logger.info("Email is empty");
-                    throw new BadReqException(ApiMessage.ENTER_EMAIL);
-                }
-                if (password.isEmpty() || password.length() < 4) {
-                    logger.info("password is empty and password length should be greater than 4");
-                    throw new BadReqException(ApiMessage.ENTER_PASSWORD);
-                } else if (vendor == null) {
-                    throw new BadReqException(ApiMessage.INVALID_CREDENTIAL);
-                }
-            } catch (Exception e) {
-                throw new BadReqException(e.getMessage());
-            }
-            logger.info("vendor details by login " + vendor);
-            return vendor;
-        }
-
+// SendVerification_________________________________________________
     private void sendVerificationEmail(Vendor vendor, String siteURL)
             throws MessagingException, UnsupportedEncodingException {
 
