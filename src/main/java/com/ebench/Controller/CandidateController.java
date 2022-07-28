@@ -30,7 +30,7 @@ public class CandidateController {
 
 //_________________________________________Register Candidate________________________________________________________________
     @PostMapping(value = "/register_Candidate")
-    public ResponseEntity register(@RequestBody CandidateReqDto candidateReqDto )
+    public ResponseEntity register  (@RequestBody CandidateReqDto candidateReqDto )
             throws Exception {
 //        CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.register(candidateReqDto), ApiMessage.Api_Message);
