@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing
 public class  EbenchApplication {
 
+
 	public static void main(String[] args) {
 		SpringApplication.run(EbenchApplication.class, args);
 	}
