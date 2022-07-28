@@ -1,4 +1,4 @@
-package com.ebench.Utils;
+package com.ebench.utils;
 
 public class Constant {
     public static final Integer ZERO  = 0;

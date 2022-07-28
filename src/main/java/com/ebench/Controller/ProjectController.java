@@ -1,7 +1,7 @@
 package com.ebench.Controller;
 
 import com.ebench.Apimessage.ApiMessage;
-import com.ebench.Utils.ApiResponse;
+import com.ebench.utils.ApiResponse;
 import com.ebench.entity.Project;
 import com.ebench.exception.ProjectNotFoundException;
 import com.ebench.service.ProjectService;

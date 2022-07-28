@@ -2,8 +2,7 @@ package com.ebench.Controller;
 
 import com.ebench.Apimessage.ApiMessage;
 import com.ebench.Config.JwtTokenUtil;
-import com.ebench.Utils.ApiResponse;
-import com.ebench.entity.Candidate;
+import com.ebench.utils.ApiResponse;
 import com.ebench.exception.BadReqException;
 import com.ebench.repository.CandidateRepository;
 import com.ebench.repository.VendorRepository;

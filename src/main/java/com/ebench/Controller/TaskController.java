@@ -1,16 +1,12 @@
 package com.ebench.Controller;
 
 import com.ebench.Apimessage.ApiMessage;
-import com.ebench.Utils.ApiResponse;
-import com.ebench.dto.CandidateReqDto;
+import com.ebench.utils.ApiResponse;
 //import com.ebench.entity.ChangeTaskStatus;
-import com.ebench.entity.ChangeTaskStatus;
 import com.ebench.entity.Task;
-import com.ebench.entity.UserType;
 import com.ebench.exception.ResourceNotFoundException;
 import com.ebench.service.Taskservice;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import net.bytebuddy.implementation.auxiliary.AuxiliaryType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
