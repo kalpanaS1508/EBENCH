@@ -41,7 +41,7 @@ public class CandidateReqDto {
     @Column(unique = true)
     @Valid
     @NotNull(message = "Email Already Present")
-    private String email;
+    public String email;
     public String interest;
     public String mobile;
     public boolean deleted;
@@ -65,6 +65,7 @@ public class CandidateReqDto {
     public Date joiningDateInCompany;
     @Enumerated(EnumType.STRING)
     public UserType userType;
+    public boolean isCandidate;
     public String specialization;
     public String yearOfPassing;
     public BigDecimal percentage;
@@ -80,4 +81,3 @@ public class CandidateReqDto {
     public CandidateReqDto() {
     }
 }
-

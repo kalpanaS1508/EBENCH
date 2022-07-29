@@ -38,7 +38,7 @@ public class Candidate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    public Long id;
+    public Long candidateId;
 
     @Column(name = "first_name")
     public String firstName;
@@ -132,7 +132,7 @@ public class Candidate {
     @JsonFormat(pattern = "yyyy-MM-dd")
     public Date joiningDateInCompany;
 
-    @Column(name = "isCandidate", nullable = false)
+    @Column(name = "is_candidate")
     public Boolean isCandidate;
 
     @Column(name = "user_type")
@@ -168,9 +168,9 @@ public class Candidate {
     public String role;
 
 
-    public Candidate(Long id, String firstName, String lastName, String keyExperience,
+    public Candidate(Long candidateId, String firstName, String lastName, String keyExperience,
                      String skills, String address, String whatsapp, String city, String email) {
-        this.id = id;
+        this.candidateId = candidateId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.keyExperience = keyExperience;

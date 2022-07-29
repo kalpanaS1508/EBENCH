@@ -19,14 +19,15 @@ import java.util.Set;
 
 @Service
 public class ProjectService {
+
     private Logger logger= GlobalResources.getlogger(ProjectService.class);
 
     @Autowired
     ProjectRepository projectRepository;
 
     public Project createProject(Project project) throws ProjectNotFoundException {
+        Project project1 = new Project();
         try {
-            Project project1 = new Project();
             project1.setProjectName(project.getProjectName());
             project1.setCandidateId(project.getCandidateId());
             project1.setTaskId(project.getTaskId());
@@ -34,20 +35,23 @@ public class ProjectService {
             project1.setClientId(project.getClientId());
             project1.setDeleted(project.isDeleted());
             projectRepository.save(project1);
+
         } catch (Exception e) {
+
             logger.error("project not created___________________________________________>_____________________________");
             throw new ProjectNotFoundException(ApiMessage.PROJECT_NOT_CREATED);
         }
         logger.info("project created sucessfully________________________________>_______________");
-        return project;
+        return project1;
     }
 
-    public Project updateProject(Project project,Long id)
+    public Project updateProject(Project project,Long projectId)
     {
         logger.info("fetching data by id");
-        Optional<Project> proj = projectRepository.findById(id);
+        Optional<Project> proj = projectRepository.findById(projectId);
+        Project project1 = null;
         if(proj.isPresent()) {
-            Project project1 = proj.get();
+             project1 = proj.get();
 
             try {
                 project1.setProjectName(project.getProjectName());
@@ -57,7 +61,9 @@ public class ProjectService {
                 project1.setClientId(project.getClientId());
                 project1.setDeleted(project.isDeleted());
                 logger.info("project saved sucessfully________________________________>-___________________________________");
-                projectRepository.save(project1);
+                Project project2 = projectRepository.save(project1);
+                return project2;
+
             } catch (Exception e) {
                 logger.error("project has not created sucessfully_____________________________________>-_____________________________");
                 throw new RuntimeException(ApiMessage.PROJECT_NOT_UPDATE_SUCESSFULLY);
@@ -67,12 +73,13 @@ public class ProjectService {
         {
             throw new BadReqException(ApiMessage.PROJECT_NOT_FOUND);
         }
-        return project;
+
+
     }
 
-    public Project getProject(Long id)
+    public Project getProject(Long projectId)
     {  logger.error("fetching project details by projectId______________________________________________>-_____________________________________");
-        Optional<Project> project1 = projectRepository.findById(id);
+        Optional<Project> project1 = projectRepository.findById(projectId);
         if(project1.isPresent()){
             Project project = project1.get();
             return project;
@@ -83,9 +90,9 @@ public class ProjectService {
         }
     }
 
-    public Project deleteProject(Long id) {
+    public Project deleteProject(Long projectId) {
         logger.info("fetching project details by projectid from repository____________________>-______________");
-        Optional<Project> project =projectRepository.findById(id);
+        Optional<Project> project =projectRepository.findById(projectId);
         Project project1= null;
         if(project.isPresent())
         {
@@ -97,7 +104,7 @@ public class ProjectService {
             throw new UserNotFoundException(ApiMessage.PROJECT_NOT_FOUND);
         }
         logger.info("deleted project__________>__________________________________________");
-        project1.setDeleted(false);
+        project1.setDeleted(true);
         projectRepository.save(project1);
         return project1;
     }

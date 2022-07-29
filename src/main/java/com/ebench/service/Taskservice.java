@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -80,7 +81,9 @@ public class Taskservice {
             throw new BadReqException(ApiMessage.PROJECT_NOT_FOUND);
             }
         logger.info("Task created sucessfullly");
-        return taskRepository.save(taskmanagement);
+
+        Task task = taskRepository.save(taskmanagement);
+        return task;
     }
 
 
@@ -141,7 +144,8 @@ public class Taskservice {
     }
 //_________________________________PendingTaskForm___________________________________________________________________________________
 
-    public Task pendingTaskForm(Task task,Long candidateId) {
+    public Task pendingTaskForm(Long candidateId) {
+        Task task = new Task();
         Task task1= taskRepository.findByTaskOwnerId(candidateId);
         if(task1!=null) {
             task1.setAnyDependency(task.getAnyDependency());

@@ -16,6 +16,7 @@ import java.io.IOException;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
+@RequestMapping(value = "/candidate")
 public class TaskController {
     @Autowired
     Taskservice taskservice;
@@ -51,7 +52,7 @@ public class TaskController {
         return apiResponse.getResponse(apiResponse);
     }
     @RequestMapping(value = "/get_task_History", method = RequestMethod.GET)
-    public ResponseEntity taskHistory(@RequestParam("candidate id") Long candidateId ) throws IOException, ResourceNotFoundException {
+    public ResponseEntity taskHistory(@RequestParam("candidateId") Long candidateId ) throws IOException, ResourceNotFoundException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,taskservice.getTaskHistory(candidateId), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
@@ -62,9 +63,10 @@ public class TaskController {
         return apiResponse.getResponse(apiResponse);
     }
 
+//    ------------------------doubt on this-----------------------------
     @PostMapping(value = "/pendingFormtask")
-    public ResponseEntity pendingFormTask(@RequestBody Task task,@RequestParam  Long candidateId) throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, taskservice.pendingTaskForm(task,candidateId), ApiMessage.Api_Message);
+    public ResponseEntity pendingFormTask(@RequestParam  Long candidateId) throws IOException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, taskservice.pendingTaskForm(candidateId), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 

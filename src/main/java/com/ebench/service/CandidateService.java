@@ -5,6 +5,8 @@ import com.ebench.Config.JwtTokenUtil;
 import com.ebench.dto.CandidateReqDto;
 import com.ebench.dto.loginDto.LoginResponseDto;
 import com.ebench.entity.Candidate;
+import com.ebench.entity.UserType;
+import com.ebench.entity.Vendor;
 import com.ebench.exception.BadReqException;
 import com.ebench.exception.ResourceNotFoundException;
 import com.ebench.exception.UserNotFoundException;
@@ -22,29 +24,26 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import org.springframework.util.StringUtils;
 
 import org.springframework.web.multipart.MultipartFile;
-import responses.JwtRequest;
 
-import javax.mail.Authenticator;
-import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Properties;
 import java.util.regex.Pattern;
 
 @Service
@@ -161,6 +160,7 @@ public class CandidateService {
             candidate.setCollegeName(candidateReqDto.getCollegeName());
             candidate.setUniversityName(candidateReqDto.getUniversityName());
             candidate.setSchoolName(candidateReqDto.getSchoolName());
+            candidate.setIsCandidate(candidateReqDto.isCandidate());
             candidateRepository.save(candidate);
         } catch (BadReqException e) {
             logger.error("candidate not saved____________________>-_____________");
@@ -176,7 +176,7 @@ public class CandidateService {
         Optional<Candidate> candidate = candidateRepository.findUserByEmail(email);
         if (candidate.isPresent()) {
             System.out.println("True");
-            logger.error("Candidate with this email " + email + " with id " + candidate.get().getId() + " is already present ");
+            logger.error("Candidate with this email " + email + " with id " + candidate.get().candidateId + " is already present ");
 
             return true;
         } else {
@@ -308,9 +308,10 @@ public class CandidateService {
     }
 
     //_______________________________Delete api for candidate______________________________________
-    public Candidate deletecandidate(Long id) {
-        logger.info("getting candidtae id for soft delete" + "" + id);
-        Optional<Candidate> candidate1 = candidateRepository.findById(id);
+
+    public Candidate deletecandidate(Long candidateId) {
+        logger.info("getting candidate id for soft delete" + "" + candidateId);
+        Optional<Candidate> candidate1 = candidateRepository.findById(candidateId);
         Candidate candidate = null;
         if (candidate1.isPresent()) {
             candidate = candidate1.get();
@@ -318,48 +319,73 @@ public class CandidateService {
             logger.error("deleting candidate by soft delete but candidate not found ");
             throw new UserNotFoundException("Candidate Not Found");
         }
-        candidate.setDeleted(false);
+        candidate.setDeleted(true);
         candidateRepository.save(candidate);
         logger.info("candidate deleted sucessfully");
         return candidate;
     }
 
     //___________________________________Login for user_________________________________________________________________
-    public LoginResponseDto login(String email, String password) throws Exception {
-        System.out.println("The user is candidate");
+    public LoginResponseDto login(String email, String password, UserType userType) throws Exception {
+        System.out.println("The user is "+userType);
         logger.info("The user is candidate");
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
         boolean emailValidation = Pattern.compile(regexPattern)
                 .matcher(email)
                 .matches();
-        Candidate candidate1 = candidateRepository.findByEmailAndPassword(email, password);
-        try {
-            if (email.isEmpty() || !emailValidation) {
-                logger.info("Please Enter Email");
-                throw new BadReqException(ApiMessage.ENTER_EMAIL);
-            }
-            if (password.isEmpty() || password.length() < 4) {
-                logger.info("please Enter valid password");
-                throw new BadReqException(ApiMessage.ENTER_PASSWORD);
-            } else if (candidate1 == null) {
+
+        if (email.isEmpty() || !emailValidation) {
+            logger.info("Please Ente valid email");
+            throw new BadReqException(ApiMessage.ENTER_EMAIL);
+        }
+        if (password.isEmpty() || password.length() < 4) {
+            logger.info("please Enter valid password");
+            throw new BadReqException(ApiMessage.ENTER_PASSWORD);
+        }
+        String token="";
+
+        if(userType==UserType.CANDIDATE) {
+            System.out.println("Yes Candidate");
+            Candidate candidate1 = candidateRepository.findByEmailAndPassword(email, password);
+            if (candidate1 == null) {
                 logger.info("Invalid credentials in login candidate");
                 throw new BadReqException(ApiMessage.INVALID_credential);
             }
-        } catch (Exception e) {
-            throw new BadReqException(e.getMessage());
+            authenticate(email, password);
+                /*final UserDetails userDetails = jwtInMemoryUserDetailsService
+                        .loadUserByUsername(email);*/
+
+            final UserDetails userDetails = new User(candidate1.getEmail(), new BCryptPasswordEncoder().encode(candidate1.getPassword()),
+                    new ArrayList<>());
+
+            token = jwtTokenUtil.generateToken(userDetails);
+            System.out.println("Token generated from candidate");
+            logger.info("candidate login sucessfully");
+        }
+        else
+        {
+            System.out.println("Yes Vendor");
+            Vendor vendor = vendorRepository.findByEmailAndPassword(email, password);
+
+            if(vendor == null) {
+                throw new BadReqException(ApiMessage.INVALID_CREDENTIAL);
+            }
+            logger.info("vendor details by login " + vendor);
+            authenticate(email, password);
+            /*final UserDetails userDetails = jwtInMemoryUserDetailsService
+                    .loadUserByUsername(email);*/
+
+
+            final UserDetails userDetails = new User(vendor.getEmail(), new BCryptPasswordEncoder().encode(vendor.getPassword()),
+                    new ArrayList<>());
+
+            token = jwtTokenUtil.generateToken(userDetails);
+            System.out.println("token generated by vendor");
+            logger.info("vendor login sucessfully");
         }
 
-        authenticate(email, password);
-
-        final UserDetails userDetails = jwtInMemoryUserDetailsService
-                .loadUserByUsername(email);
-
-        final String token = jwtTokenUtil.generateToken(userDetails);
-
         LoginResponseDto loginResponseDto = new LoginResponseDto(token);
-
-        logger.info("candidate login sucessfully");
 
         return loginResponseDto;
     }
@@ -493,6 +519,7 @@ public class CandidateService {
                 candidate.setUniversityName(candidateReqDto.getUniversityName());
                 candidate.setSchoolName(candidateReqDto.getSchoolName());
                 candidate.setEmailVerifyCode(Common.getRandomNumberString());
+                candidate.setIsCandidate(candidateReqDto.isCandidate());
                 candidate.setEmailVerified(false);
                 Candidate candidate1 = candidateRepository.save(candidate);
                 sendVerificationEmail(candidate1, siteURL);
