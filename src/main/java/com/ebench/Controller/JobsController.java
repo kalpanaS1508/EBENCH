@@ -1,5 +1,6 @@
 package com.ebench.Controller;
 
+import com.ebench.entity.JobFilter;
 import com.ebench.entity.Jobs;
 import com.ebench.service.JobService;
 import com.ebench.utils.ApiResponse;
@@ -47,6 +48,18 @@ public class JobsController {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.getJobStatus(vendorId), Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
+
+
+    //_________________Get api for candidate on the basis of job location and job title_______________________________
+
+
+    @GetMapping(value = "/get_latestjobs")
+    public ResponseEntity getLatestJobs(@RequestParam  String jobTitle, @RequestParam String jobLocation,@RequestParam JobFilter jobFilter)
+            throws IOException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.getJobs_on_location_and_designation(jobTitle,jobLocation,jobFilter), Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+
 
     @PutMapping(value = "/get_active_deactive_status")
     public ResponseEntity getJobs(@RequestParam("id") Long jobId , @RequestParam("status") boolean jobStatus)

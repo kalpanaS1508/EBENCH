@@ -9,6 +9,7 @@ import java.util.Set;
 @Repository
 public interface ProjectRepository extends JpaRepository<Project,Long> {
 
-    @Query(value = " ",nativeQuery = true)
-   public Set<String> findByCandidateId(Long id);
+//    @Query(value = " ",nativeQuery = true)
+   public Set<Project> findByCandidateId(Long id);
+
 }

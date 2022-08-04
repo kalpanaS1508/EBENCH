@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import java.math.BigDecimal;
@@ -41,6 +43,7 @@ public class Candidate {
     public Long candidateId;
 
     @Column(name = "first_name")
+    @NotNull(message = "First name must not be empty")
     public String firstName;
 
     @Column(name = "last_name")

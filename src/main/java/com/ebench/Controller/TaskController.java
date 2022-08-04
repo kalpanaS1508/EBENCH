@@ -1,6 +1,7 @@
 package com.ebench.Controller;
 
 import com.ebench.Apimessage.ApiMessage;
+import com.ebench.entity.ChangeTaskStatus;
 import com.ebench.utils.ApiResponse;
 //import com.ebench.entity.ChangeTaskStatus;
 import com.ebench.entity.Task;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -30,8 +33,16 @@ public class TaskController {
 
     }
     @RequestMapping(value = "/get_Task", method = RequestMethod.GET)
-    public ResponseEntity getTask(@RequestParam("id") Long candidateId ) throws JsonProcessingException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, taskservice.getTask(candidateId), ApiMessage.Api_Message);
+    public ResponseEntity getTask(@RequestParam("id") Long candidateId,@RequestParam String projectName,@RequestParam ChangeTaskStatus changeTaskStatus) throws JsonProcessingException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, taskservice.getTask(candidateId,projectName,changeTaskStatus), ApiMessage.Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+
+
+    @RequestMapping(value = "/get_Task_By_date", method = RequestMethod.GET)
+    public ResponseEntity getTaskByDate(@RequestParam Long candidateId,@RequestParam String taskStartDate,@RequestParam String taskDueDate, @RequestParam ChangeTaskStatus changeTaskStatus
+    ) throws JsonProcessingException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, taskservice.getTaskByDate(candidateId,taskStartDate,taskDueDate,changeTaskStatus), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 
@@ -40,6 +51,7 @@ public class TaskController {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, taskservice.createTask(taskmanagement), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
+
     @PutMapping(value = "/update_Task")
       public ResponseEntity updateTask( @RequestBody Task taskmanagement) throws IOException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, taskservice.updateTask(taskmanagement), ApiMessage.Api_Message);
@@ -63,17 +75,16 @@ public class TaskController {
         return apiResponse.getResponse(apiResponse);
     }
 
-//    ------------------------doubt on this-----------------------------
-    @PostMapping(value = "/pendingFormtask")
-    public ResponseEntity pendingFormTask(@RequestParam  Long candidateId) throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, taskservice.pendingTaskForm(candidateId), ApiMessage.Api_Message);
+    @RequestMapping(value = "/get_Pending_Task_By_Filter", method = RequestMethod.GET)
+    public ResponseEntity getThisWeekPendingTask(@RequestParam("id") Long candidateId, String filterType) throws Exception {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,taskservice.getPendingTaskByFilter(candidateId,filterType), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 
-    @RequestMapping(value = "/getPendingTaskByProjectName", method = RequestMethod.GET)
-    public ResponseEntity getPendingTaskByProjectName(@RequestParam String projectName) throws Exception {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,taskservice.getPendingTaskByProjectName(projectName), ApiMessage.Api_Message);
-        return apiResponse.getResponse(apiResponse);
-    }
+
+
+
+
+
 
 }

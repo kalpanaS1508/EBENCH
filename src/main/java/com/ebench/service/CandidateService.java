@@ -5,6 +5,7 @@ import com.ebench.Config.JwtTokenUtil;
 import com.ebench.dto.CandidateReqDto;
 import com.ebench.dto.loginDto.LoginResponseDto;
 import com.ebench.entity.Candidate;
+import com.ebench.entity.Jobs;
 import com.ebench.entity.UserType;
 import com.ebench.entity.Vendor;
 import com.ebench.exception.BadReqException;
@@ -78,7 +79,7 @@ public class CandidateService {
     // __________________________________ Register Api for Candidate__________________________________________//
 
 
-    private String UPLOAD_DIR = "D://EBench V1//EBENCH//src//main//resources//Static//file";
+    private String UPLOAD_DIR = "D://EBENCH-AUGUST//EBENCH//src//main//resources//Static//file";
 
     public CandidateReqDto register(CandidateReqDto candidateReqDto) {
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
@@ -87,30 +88,32 @@ public class CandidateService {
                 .matcher(candidateReqDto.getEmail())
                 .matches();
         System.out.println((emailValidation));
-        String PASSWORD_PATTERN = "^(?=(?:[a-zA-Z0-9]*[a-zA-Z]){2})(?=(?:[a-zA-Z0-9]*\\d){2})[a-zA-Z0-9]{8,}$";
-        boolean pattern = Pattern.compile(PASSWORD_PATTERN)
-                .matcher(candidateReqDto.getPassword())
-                .matches();
-        System.out.println((pattern));
+
+
+
+
+            String PASSWORD_PATTERN = "^(?=(?:[a-zA-Z0-9]*[a-zA-Z]){2})(?=(?:[a-zA-Z0-9]*\\d){2})[a-zA-Z0-9]{8,}$";
+         boolean pattern = Pattern.compile(PASSWORD_PATTERN)
+                    .matcher(candidateReqDto.getPassword())
+                    .matches();
+            System.out.println((pattern));
 
         if (emailAlreadyExist(candidateReqDto.getEmail())) {
             logger.error("This Email already used please insert new email");
             throw new BadReqException(ApiMessage.EMAIL_ALREADY_USED);
         }
         try {
-//            StringBuilder fileName = new StringBuilder();
-//            Path fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + file.getOriginalFilename());
-//            fileName.append(file.getOriginalFilename());
-//            Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
-//
-//            String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
-//
-//            System.out.println("file uploaded successfully  " + fileNameAndPath);
-//            System.out.println(candidateReqDto);
-
             Candidate candidate = new Candidate();
-            candidate.setFirstName(candidateReqDto.getFirstName());
-            candidate.setLastName(candidateReqDto.getLastName());
+            if(candidateReqDto.getFirstName().isEmpty()||candidateReqDto.getFirstName()==null)
+            {
+                throw new BadReqException(ApiMessage.ENTER_FIRST_NAME);
+            }else {
+                candidate.setFirstName(candidateReqDto.getFirstName());
+            }if(candidateReqDto.getLastName().isEmpty()){
+                throw new BadReqException(ApiMessage.ENTER_LAST_NAME);
+            }else {
+                candidate.setLastName(candidateReqDto.getLastName());
+            }
             candidate.setKeyExperience(candidateReqDto.getKeyExperience());
             candidate.setSkills(candidateReqDto.getSkills());
             candidate.setAddress(candidateReqDto.getAddress());
@@ -120,6 +123,7 @@ public class CandidateService {
             candidate.setState(candidateReqDto.getState());
             candidate.setCity(candidateReqDto.getCity());
             candidate.setHobbies(candidateReqDto.getHobbies());
+
             if (!emailValidation) {
                 logger.error("emailvalidation: Email is in not proper format");
                 throw new BadReqException(ApiMessage.Email_Not_In_Proper_Format);
@@ -134,8 +138,11 @@ public class CandidateService {
                 candidate.setMobile(candidateReqDto.getMobile());
             }
             candidate.setAvailableForWork(candidateReqDto.isAvailableForWork());
+            if(candidateReqDto.getPassword().isEmpty())
+            {
+                throw new BadReqException(ApiMessage.ENTER_PASSWORD);
+            }
             if (pattern != true) {
-                //  logger.error("Password validation:password not in proper format");
                 throw new BadReqException(ApiMessage.Password_Not_Proper_Format);
             } else {
                 candidate.setPassword(candidateReqDto.getPassword());
@@ -317,7 +324,7 @@ public class CandidateService {
             candidate = candidate1.get();
         } else {
             logger.error("deleting candidate by soft delete but candidate not found ");
-            throw new UserNotFoundException("Candidate Not Found");
+            throw new BadReqException(ApiMessage.CANDIDATE_NOT_FOUND);
         }
         candidate.setDeleted(true);
         candidateRepository.save(candidate);
@@ -336,7 +343,7 @@ public class CandidateService {
                 .matches();
 
         if (email.isEmpty() || !emailValidation) {
-            logger.info("Please Ente valid email");
+            logger.info("Please Enter valid email");
             throw new BadReqException(ApiMessage.ENTER_EMAIL);
         }
         if (password.isEmpty() || password.length() < 4) {
@@ -345,6 +352,7 @@ public class CandidateService {
         }
         String token="";
 
+
         if(userType==UserType.CANDIDATE) {
             System.out.println("Yes Candidate");
             Candidate candidate1 = candidateRepository.findByEmailAndPassword(email, password);
@@ -352,6 +360,11 @@ public class CandidateService {
                 logger.info("Invalid credentials in login candidate");
                 throw new BadReqException(ApiMessage.INVALID_credential);
             }
+            if(!email.equals(candidate1.getEmail()))
+            {
+               throw new BadReqException(ApiMessage.Enter_VALID_EMAIL);
+            }
+
             authenticate(email, password);
                 /*final UserDetails userDetails = jwtInMemoryUserDetailsService
                         .loadUserByUsername(email);*/
@@ -425,6 +438,7 @@ public class CandidateService {
         System.out.println(bySkillAndExperience);
         return bySkillAndExperience;
     }
+
 
     // __________________________________Register api for candidate________________________________________________________
     public CandidateReqDto registerCandidate(CandidateReqDto candidateReqDto, MultipartFile file, String siteURL) {

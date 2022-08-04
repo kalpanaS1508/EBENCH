@@ -1,12 +1,15 @@
 package com.ebench.service;
 
 import com.ebench.Apimessage.ApiMessage;
+import com.ebench.entity.JobFilter;
 import com.ebench.entity.Jobs;
 import com.ebench.exception.BadReqException;
 import com.ebench.repository.JobsRepository;
+import com.ebench.responses.JobResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,12 +32,15 @@ public class JobService {
       jobs1.setJobLocation(jobs.getJobLocation());
       jobs1.setJobStatus(jobs.isJobStatus());
       jobs1.setCompanyName(jobs.getCompanyName());
+      jobs1.setExperience(jobs.getExperience());
+      jobs1.setSkills(jobs.getSkills());
       jobs1.setTotalJobs(jobs.getTotalJobs());
       jobs1.setTotalCandidate(jobs.getTotalCandidate());
       jobs1.setNoOfPosition(jobs.getNoOfPosition());
       jobs1.setPostedDate(jobs.getPostedDate());
       jobs1.setResumeReceived(jobs.getResumeReceived());
       jobs1.setInterviewMode(jobs.isInterviewMode());
+      jobs1.setJobFilter(jobs.getJobFilter());
 
       jobsRepository.save(jobs1);
 
@@ -103,6 +109,8 @@ public class JobService {
       return status;
     }
 
+
+
     public Jobs activeDeactiveStatus(Long jobId , boolean jobStatus){
       Jobs job = jobsRepository.findById(jobId).get();
       job.setJobStatus(jobStatus
@@ -114,7 +122,17 @@ public class JobService {
       return job;
     }
 
+//__________For candidate get job on the basis of location and designation_________________________________________________
+
+  public List<Jobs> getJobs_on_location_and_designation(String jobTitle, String jobLocation,JobFilter jobFilter)
+  {
+    List<Jobs> latestjobs =jobsRepository.findByJobTitleAndJobLocationAndJobFilter(jobTitle,jobLocation,jobFilter);
+    return latestjobs;
+  }
+
+
 
 
   }
+
 

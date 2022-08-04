@@ -20,7 +20,7 @@ public class Jobs {
 
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-        @Column(name = "job_id")
+        @Column(name="jobId")
         public Long jobId;
 
         @Column(name = "candidate_id")
@@ -32,11 +32,24 @@ public class Jobs {
         @Column(name = "company_id")
         public Long companyId;
 
+
+
+
         @Column(name = "job_title")
         public String jobTitle;
 
+        @Column(name="candidateExperience")
+        public String experience;
+
         @Column(name = "client_name")
         public String clientName;
+
+        @Column(name="skills")
+        public String skills;
+
+
+        @Enumerated(EnumType.STRING)
+        public JobFilter jobFilter;
 
         @Column(name = "client_location")
         public String clientLocation;

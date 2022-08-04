@@ -47,7 +47,7 @@ public class VendorService {
     @Autowired
     public JavaMailSender javaMailSender;
 
-    private String UPLOAD_DIR = "D://EBench V1//EBENCH//target//classes//Static//file";
+    private String UPLOAD_DIR = "D://EBENCH-AUGUST//EBENCH//src//main//resources//Static//file";
 
     public Vendor Register(Vendor vendor, MultipartFile file) {
 
