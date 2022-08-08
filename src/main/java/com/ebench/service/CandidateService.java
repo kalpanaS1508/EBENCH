@@ -13,7 +13,6 @@ import com.ebench.exception.UserNotFoundException;
 import com.ebench.repository.CandidateRepository;
 import com.ebench.repository.VendorRepository;
 import com.ebench.utils.Common;
-import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 import com.ebench.utils.GlobalResources;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +31,10 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.util.StringUtils;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.*;
 import java.nio.file.Files;
@@ -47,6 +48,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 @Service
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CandidateService {
 
     @Value("${spring.mail.username}")
@@ -209,8 +211,8 @@ public class CandidateService {
     // ____________________________________Update Api for candidate Registration _______________________________________//
 
     public CandidateReqDto updateCandidate(CandidateReqDto candidateReqDto) {
-        logger.info("In updatecandidate method : fetching details from candidate by id" + candidateReqDto.getId());
-        Optional<Candidate> candidate = candidateRepository.findById(candidateReqDto.getId());
+        logger.info("In updatecandidate method : fetching details from candidate by id" + candidateReqDto.getCandidateId());
+        Optional<Candidate> candidate = candidateRepository.findById(candidateReqDto.getCandidateId());
         Candidate candidate1 = null;
         candidate1 = candidate.get();
         try {
@@ -292,6 +294,8 @@ public class CandidateService {
                     candidate1.setCollegeName(candidateReqDto.getCollegeName());
                     candidate1.setUniversityName(candidateReqDto.getUniversityName());
                     candidate1.setSchoolName(candidateReqDto.getSchoolName());
+                    candidate1.setIsCandidate(candidateReqDto.isCandidate());
+                    candidate1.setDeleted(candidateReqDto.isDeleted());
                     candidateRepository.save(candidate1);
                 } catch (BadReqException e) {
                     logger.error("candidate not updating _______________>_________________");
@@ -585,7 +589,7 @@ public class CandidateService {
     }
 
     public Candidate updateCandidate1(CandidateReqDto candidateReqDto, MultipartFile file, String siteURL) {
-        Optional<Candidate> candidate = candidateRepository.findById(candidateReqDto.getId());
+        Optional<Candidate> candidate = candidateRepository.findById(candidateReqDto.getCandidateId());
         Candidate candidate1 = null;
 
         if (candidate.isPresent()) {

@@ -37,11 +37,13 @@ public class Task {
     @Column(name="taskName")
     public String taskName;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Column(name="taskStartDate")
-    public Date taskStartDate;
+    @Column(name="task_start_date")
+    public String taskStartDate;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Column(name="taskDueDate")
-    public Date taskDueDate;
+    @Column(name="task_due_date")
+    public String taskDueDate;
+
     @Column(name="taskStatus")
     public boolean taskStatus;
     @Column(name="changeTaskStatus")
@@ -67,7 +69,7 @@ public class Task {
     public Task() {
     }
 
-    public Task(String projectName, String taskName, Date taskDueDate, ChangeTaskStatus changeTaskStatus) {
+    public Task(String projectName, String taskName, String taskDueDate, ChangeTaskStatus changeTaskStatus) {
         this.projectName = projectName;
         this.taskName = taskName;
         this.taskDueDate = taskDueDate;

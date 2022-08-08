@@ -3,7 +3,6 @@ package com.ebench.service;
 import java.util.ArrayList;
 
 import com.ebench.entity.Candidate;
-import com.ebench.entity.UserType;
 import com.ebench.entity.Vendor;
 import com.ebench.repository.CandidateRepository;
 import com.ebench.repository.VendorRepository;

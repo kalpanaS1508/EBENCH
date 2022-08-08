@@ -105,16 +105,12 @@ public class JobService {
 
     public Jobs activeDeactiveStatus(Long jobId , boolean jobStatus){
       Jobs job = jobsRepository.findById(jobId).get();
-      job.setJobStatus(jobStatus
-      );
+      job.setJobStatus(jobStatus);
       jobsRepository.save(job);
 
-      //Jobs activeAndDeactive = jobsRepository.findActiveAndDeactive(jobId, jobStatus);
 
       return job;
     }
-
-
 
   }
 

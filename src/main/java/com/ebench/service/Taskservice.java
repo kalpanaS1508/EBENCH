@@ -14,10 +14,11 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.format.TextStyle;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class Taskservice {
@@ -47,9 +48,15 @@ public class Taskservice {
     }
 
     //_______________________________________________getalltaskslist_________________________________________________________________
-    public List<String> getTask(Long candidateId) {
+    public List<String> getTask(Long candidateId ,String taskStartDate) {
+        LocalDate date = LocalDate.parse(taskStartDate);
 
-        List<String> tasks = taskRepository.findAllTasks(candidateId);
+        DayOfWeek day = date.getDayOfWeek();
+
+        System.out.println(day);
+
+        List<String> tasks = taskRepository.findAllTasks(candidateId,taskStartDate);
+
         if (tasks.size() < 1) {
             throw new BadReqException(ApiMessage.Task_Not_Found);
         }

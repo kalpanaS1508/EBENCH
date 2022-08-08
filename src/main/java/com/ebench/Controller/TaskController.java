@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Date;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -30,8 +31,8 @@ public class TaskController {
 
     }
     @RequestMapping(value = "/get_Task", method = RequestMethod.GET)
-    public ResponseEntity getTask(@RequestParam("id") Long candidateId ) throws JsonProcessingException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, taskservice.getTask(candidateId), ApiMessage.Api_Message);
+    public ResponseEntity getTask(@RequestParam("id") Long candidateId ,@RequestParam String taskStartDate) throws JsonProcessingException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, taskservice.getTask(candidateId,taskStartDate ), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 
