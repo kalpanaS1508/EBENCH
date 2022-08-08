@@ -6,6 +6,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -32,9 +33,13 @@ public class Jobs {
         @Column(name = "company_id")
         public Long companyId;
 
+        @Size(max=6000)
+        @Column(name="jobDescription")
+        public String jobDescription;
 
-
-
+       @Size(max=6000)
+        @Column(name="aboutCompany")
+        public String aboutCompany;
         @Column(name = "job_title")
         public String jobTitle;
 
@@ -47,6 +52,11 @@ public class Jobs {
         @Column(name="skills")
         public String skills;
 
+        @Column(name ="minimumQualification")
+        public  String minimumQualification;
+
+        @Column(name="preferredQualification")
+        public String preferredQualification;
 
         @Enumerated(EnumType.STRING)
         public JobFilter jobFilter;
@@ -75,8 +85,14 @@ public class Jobs {
         @Column(name = "posted_date")
         public Date postedDate;
 
+        @Column(name ="jobAcceptanceorRejectionStatus")
+        public boolean jobAcceptanceorRejectionStatus;
+
         @Column(name = "resume_received")
         public Integer resumeReceived;
+
+        @Column(name="shiftTime")
+        public String shiftTime;
 
         @Column(name = "interview_mode")
         public boolean interviewMode;
@@ -85,11 +101,21 @@ public class Jobs {
     }
 
 
+
+
     public Jobs(Long jobId, String jobTitle, boolean jobStatus, Date postedDate) {
         this.jobId = jobId;
         this.jobTitle = jobTitle;
         this.jobStatus = jobStatus;
         this.postedDate = postedDate;
+    }
+
+    public Jobs(String jobTitle, String clientName, String skills, String jobLocation, String shiftTime) {
+        this.jobTitle = jobTitle;
+        this.clientName = clientName;
+        this.skills = skills;
+        this.jobLocation = jobLocation;
+        this.shiftTime = shiftTime;
     }
 
     public Jobs(Long jobId, Long candidateId, Long vendorId, Long companyId, String jobTitle, String clientName, String clientLocation,

@@ -1,6 +1,7 @@
 package com.ebench.service;
 
 import com.ebench.Apimessage.ApiMessage;
+import com.ebench.entity.Candidate;
 import com.ebench.entity.JobFilter;
 import com.ebench.entity.Jobs;
 import com.ebench.exception.BadReqException;
@@ -41,7 +42,12 @@ public class JobService {
       jobs1.setResumeReceived(jobs.getResumeReceived());
       jobs1.setInterviewMode(jobs.isInterviewMode());
       jobs1.setJobFilter(jobs.getJobFilter());
-
+      jobs1.setJobDescription(jobs.getJobDescription());
+      jobs1.setAboutCompany(jobs.getAboutCompany());
+      jobs1.setMinimumQualification(jobs.getMinimumQualification());
+      jobs1.setPreferredQualification(jobs.getPreferredQualification());
+      jobs1.setJobAcceptanceorRejectionStatus(jobs.isJobAcceptanceorRejectionStatus());
+      jobs1.setShiftTime(jobs.getShiftTime());
       jobsRepository.save(jobs1);
 
     } catch (Exception e) {
@@ -81,7 +87,7 @@ public class JobService {
         throw new BadReqException(ApiMessage.JOB_NOT_PRESENT);
       }
     }
-    if(!jobId.isPresent()){
+    if (!jobId.isPresent()) {
       throw new BadReqException(ApiMessage.JOB_NOT_PRESENT);
     }
     return jobs;
@@ -89,50 +95,80 @@ public class JobService {
 
 //------------------------------- JOB DELETE API------------------------------------------------
 
-     public Jobs deleteJob(Long jobId) {
-     Optional<Jobs> id = jobsRepository.findById(jobId);
-       if(!id.isPresent()){
+  public Jobs deleteJob(Long jobId) {
+    Optional<Jobs> id = jobsRepository.findById(jobId);
+    if (!id.isPresent()) {
       throw new BadReqException(ApiMessage.JOB_NOT_PRESENT);
-     }
-     else{
-       id.isPresent();
+    } else {
+      id.isPresent();
       Jobs jobs = id.get();
-       jobsRepository.deleteById(jobs.getJobId());
+      jobsRepository.deleteById(jobs.getJobId());
     }
-       return null;
-     }
+    return null;
+  }
 
 //----------------------------------- GET JOBS ID ---------------------------------------------------------------
 
-    public List<Jobs> getJobStatus(Long vendorId){
-      List<Jobs> status = jobsRepository.findByJobStatus(vendorId);
-      return status;
-    }
+  public List<Jobs> getJobStatus(Long vendorId) {
+    List<Jobs> status = jobsRepository.findByJobStatus(vendorId);
+    return status;
+  }
 
 
+  public Jobs activeDeactiveStatus(Long jobId, boolean jobStatus) {
+    Jobs job = jobsRepository.findById(jobId).get();
+    job.setJobStatus(jobStatus
+    );
+    jobsRepository.save(job);
 
-    public Jobs activeDeactiveStatus(Long jobId , boolean jobStatus){
-      Jobs job = jobsRepository.findById(jobId).get();
-      job.setJobStatus(jobStatus
-      );
-      jobsRepository.save(job);
+    //Jobs activeAndDeactive = jobsRepository.findActiveAndDeactive(jobId, jobStatus);
 
-      //Jobs activeAndDeactive = jobsRepository.findActiveAndDeactive(jobId, jobStatus);
-
-      return job;
-    }
+    return job;
+  }
 
 //__________For candidate get job on the basis of location and designation_________________________________________________
 
-  public List<Jobs> getJobs_on_location_and_designation(String jobTitle, String jobLocation,JobFilter jobFilter)
-  {
-    List<Jobs> latestjobs =jobsRepository.findByJobTitleAndJobLocationAndJobFilter(jobTitle,jobLocation,jobFilter);
+  public List<Jobs> getJobs_on_location_and_designation(String jobTitle, String jobLocation, JobFilter jobFilter) {
+    List<Jobs> latestjobs = jobsRepository.findByJobTitleAndJobLocationAndJobFilter(jobTitle, jobLocation, jobFilter);
     return latestjobs;
   }
 
+  //______________Get candidate job description _____________________________________________________________________________
 
-
-
+  public Jobs getJobDescription(Long jobId) {
+    try {
+      Jobs jobDescription = jobsRepository.findById(jobId).get();
+      return jobDescription;
+    } catch (Exception e) {
+      throw new BadReqException(ApiMessage.JOB_DESCRIPTION_NOT_FOUND);
+    }
   }
 
+//____________________Get latest job request by candidate _________________________________________________________________
+
+    public List<Jobs> getLatestJob(String clientName,String jobLocation, String jobTitle, String skills,String shiftTime) {
+
+      if(clientName.isEmpty()) {
+        clientName=null;
+      }
+      if(jobLocation.isEmpty()) {
+        jobLocation = null;
+      }
+
+      if(jobTitle.isEmpty()) {
+      jobTitle=null;
+      }
+
+      if(skills.isEmpty()) {
+        skills=null;
+      }
+      if(shiftTime.isEmpty()) {
+        shiftTime = null;
+      }
+   List<Jobs> getLatestJobs = jobsRepository.findByJobSearches(clientName,jobLocation,jobTitle,skills,shiftTime);
+
+      return getLatestJobs;
+
+    }
+    }
 

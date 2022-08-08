@@ -61,6 +61,23 @@ public class JobsController {
     }
 
 
+    //__________________Get api for candidate to get jobDescription provide by vendor_______________________________________
+    @GetMapping(value = "/get_jobDescription")
+    public ResponseEntity getjobDescription(@RequestParam Long jobId )
+            throws IOException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.getJobDescription(jobId), Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+
+    @GetMapping(value = "/get_Listoflatestjobs")
+    public ResponseEntity getListofLatestJobs(@RequestParam  String clientName,@RequestParam String jobLocation,@RequestParam String jobTitle, @RequestParam String skills,@RequestParam String shiftTime )
+            throws IOException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.getLatestJob(clientName,jobLocation,jobTitle,skills,shiftTime), Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+
+
+
     @PutMapping(value = "/get_active_deactive_status")
     public ResponseEntity getJobs(@RequestParam("id") Long jobId , @RequestParam("status") boolean jobStatus)
             throws IOException {

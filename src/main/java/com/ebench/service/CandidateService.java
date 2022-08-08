@@ -5,7 +5,6 @@ import com.ebench.Config.JwtTokenUtil;
 import com.ebench.dto.CandidateReqDto;
 import com.ebench.dto.loginDto.LoginResponseDto;
 import com.ebench.entity.Candidate;
-import com.ebench.entity.Jobs;
 import com.ebench.entity.UserType;
 import com.ebench.entity.Vendor;
 import com.ebench.exception.BadReqException;
@@ -124,6 +123,7 @@ public class CandidateService {
             candidate.setCity(candidateReqDto.getCity());
             candidate.setHobbies(candidateReqDto.getHobbies());
 
+
             if (!emailValidation) {
                 logger.error("emailvalidation: Email is in not proper format");
                 throw new BadReqException(ApiMessage.Email_Not_In_Proper_Format);
@@ -168,6 +168,7 @@ public class CandidateService {
             candidate.setUniversityName(candidateReqDto.getUniversityName());
             candidate.setSchoolName(candidateReqDto.getSchoolName());
             candidate.setIsCandidate(candidateReqDto.isCandidate());
+
             candidateRepository.save(candidate);
         } catch (BadReqException e) {
             logger.error("candidate not saved____________________>-_____________");
@@ -544,6 +545,7 @@ public class CandidateService {
             throw new BadReqException(e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
+
         } catch (MessagingException e) {
             e.printStackTrace();
         }
@@ -587,7 +589,7 @@ public class CandidateService {
                     + "Have a nice day,<br>"
                     + "The Ebench Team";
             MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setTo(toAddress);
             helper.setSubject(subject);
             helper.setText(content, true);

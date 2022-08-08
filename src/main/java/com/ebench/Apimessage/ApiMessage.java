@@ -26,6 +26,7 @@ public class ApiMessage {
     public static final String ENTER_PROJECT_NAME = "Please Enter project name " ;
     public static final String ENTER_FIRST_NAME = "Please fill your first name !!!!";
     public static final String ENTER_LAST_NAME = " Please fill your last name !!!! " ;
+    public static final String JOB_DESCRIPTION_NOT_FOUND ="Please enter valid JobId to fetch job decription!!!!!!" ;
     public static String INVALID_credential="Please give the correct email and password here !!!";
     public static String Task_Not_Found="No any task assigned to this candidate";
     public static String Email_Verified="Your Email verified sucessfully";
