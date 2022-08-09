@@ -24,17 +24,12 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import org.springframework.util.StringUtils;
 
 import org.springframework.web.multipart.MultipartFile;
-import responses.JwtRequest;
 
-import javax.mail.Authenticator;
-import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 import java.io.*;
 import java.nio.file.Files;
@@ -44,7 +39,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Properties;
 import java.util.regex.Pattern;
 
 @Service
@@ -161,6 +155,7 @@ public class CandidateService {
             candidate.setCollegeName(candidateReqDto.getCollegeName());
             candidate.setUniversityName(candidateReqDto.getUniversityName());
             candidate.setSchoolName(candidateReqDto.getSchoolName());
+            candidate.setIsCandidate(candidateReqDto.isCandidate());
             candidateRepository.save(candidate);
         } catch (BadReqException e) {
             logger.error("candidate not saved____________________>-_____________");
@@ -292,6 +287,7 @@ public class CandidateService {
                     candidate1.setCollegeName(candidateReqDto.getCollegeName());
                     candidate1.setUniversityName(candidateReqDto.getUniversityName());
                     candidate1.setSchoolName(candidateReqDto.getSchoolName());
+                    candidate1.setIsCandidate(candidateReqDto.isCandidate());
                     candidateRepository.save(candidate1);
                 } catch (BadReqException e) {
                     logger.error("candidate not updating _______________>_________________");
@@ -648,7 +644,7 @@ public class CandidateService {
                 Candidate candidate2 = candidateRepository.save(candidate1);
                 sendVerificationEmail(candidate2, siteURL);
             } catch (BadReqException e) {
-                logger.error("version 2 of register api not saving sucessfully_____________________>------");
+                logger.error("version 2 of register api not saving successfully_____________________>------");
                 throw new BadReqException(e.getMessage());
             } catch (IOException e) {
                 e.printStackTrace();

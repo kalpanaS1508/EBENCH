@@ -74,6 +74,7 @@ public class CandidateReqDto {
     public String emailVerifyCode;
     public boolean emailVerified;
     public String role;
+    public boolean isCandidate;
 
 
 

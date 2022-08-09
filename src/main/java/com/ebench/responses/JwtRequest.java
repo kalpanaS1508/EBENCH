@@ -1,4 +1,4 @@
-package responses;
+package com.ebench.responses;
 
 import java.io.Serializable;
 

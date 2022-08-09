@@ -18,10 +18,8 @@ import java.io.IOException;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
+@RequestMapping(value = "/candidate")
 public class CandidateController {
-
-    @Autowired
-    CandidateRepository candidateRepository;
 
     @Autowired
     CandidateService candidateService;
