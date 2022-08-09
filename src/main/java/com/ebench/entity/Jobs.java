@@ -2,6 +2,7 @@ package com.ebench.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -10,21 +11,17 @@ import java.util.Date;
 
 @Entity
 @Data
-@Valid
 @Table(name = "jobs")
-@JsonInclude(value = JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties(ignoreUnknown = true)
-
+@AllArgsConstructor
 public class Jobs {
-
 
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
         @Column(name = "job_id")
         public Long jobId;
 
-        @Column(name = "candidate_id")
-        public Long candidateId;
+//        @Column(name = "candidate_id")
+//        public Long candidateId;
 
         @Column(name = "vendor_id")
         public Long vendorId;
@@ -79,24 +76,4 @@ public class Jobs {
         this.postedDate = postedDate;
     }
 
-    public Jobs(Long jobId, Long candidateId, Long vendorId, Long companyId, String jobTitle, String clientName, String clientLocation,
-                String jobLocation, boolean jobStatus, String companyName, Integer totalJobs, Integer totalCandidate,
-                Integer noOfPosition, Date postedDate, Integer resumeReceived, boolean interviewMode) {
-        this.jobId = jobId;
-        this.candidateId = candidateId;
-        this.vendorId = vendorId;
-        this.companyId = companyId;
-        this.jobTitle = jobTitle;
-        this.clientName = clientName;
-        this.clientLocation = clientLocation;
-        this.jobLocation = jobLocation;
-        this.jobStatus = jobStatus;
-        this.companyName = companyName;
-        this.totalJobs = totalJobs;
-        this.totalCandidate = totalCandidate;
-        this.noOfPosition = noOfPosition;
-        this.postedDate = postedDate;
-        this.resumeReceived = resumeReceived;
-        this.interviewMode = interviewMode;
-    }
 }

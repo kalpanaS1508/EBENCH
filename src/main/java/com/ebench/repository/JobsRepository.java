@@ -1,12 +1,10 @@
 package com.ebench.repository;
 
+import com.ebench.dto.jobResponseDto.JobResponseDto;
 import com.ebench.entity.Jobs;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 @Repository
@@ -15,7 +13,8 @@ import java.util.List;
   @Query(value = "select j.job_id ,j.vendor_id ,j.job_title ,j.posted_date ,j.job_status from jobs j where j.vendor_id=?1 " , nativeQuery = true)
   List<Jobs> findByJobStatus(Long vendorId);
 
-//  Jobs findActiveAndDeactive(Long jobId , boolean jobStatus);
+  @Query("select new com.ebench.dto.jobResponseDto.JobResponseDto(j.jobId, j.jobTitle, j.jobStatus, j.postedDate)from Jobs j where jobStatus = ?1")
+  List<JobResponseDto> findByStatus(boolean jobStatus);
 
 
  }

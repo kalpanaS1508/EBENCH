@@ -1,6 +1,7 @@
 package com.ebench.service;
 
 import com.ebench.Apimessage.ApiMessage;
+import com.ebench.dto.jobResponseDto.JobResponseDto;
 import com.ebench.entity.Jobs;
 import com.ebench.exception.BadReqException;
 import com.ebench.repository.JobsRepository;
@@ -20,7 +21,7 @@ public class JobService {
 
     Jobs jobs1 = new Jobs();
     try {
-      jobs1.setCandidateId(jobs.getCandidateId());
+//      jobs1.setCandidateId(jobs.getCandidateId());
       jobs1.setVendorId(jobs.getVendorId());
       jobs1.setCompanyId(jobs.getCompanyId());
       jobs1.setJobTitle(jobs.getJobTitle());
@@ -53,7 +54,7 @@ public class JobService {
 
       Jobs jobs1 = jobId.get();
       try {
-        jobs1.setCandidateId(jobs.getCandidateId());
+//        jobs1.setCandidateId(jobs.getCandidateId());
         jobs1.setVendorId(jobs.getVendorId());
         jobs1.setCompanyId(jobs.getCompanyId());
         jobs1.setJobTitle(jobs.getJobTitle());
@@ -105,15 +106,15 @@ public class JobService {
 
     public Jobs activeDeactiveStatus(Long jobId , boolean jobStatus){
       Jobs job = jobsRepository.findById(jobId).get();
-      job.setJobStatus(jobStatus
-      );
+      job.setJobStatus(jobStatus);
       jobsRepository.save(job);
-
-      //Jobs activeAndDeactive = jobsRepository.findActiveAndDeactive(jobId, jobStatus);
-
       return job;
     }
 
+    public List<JobResponseDto> manageJobHistory(boolean jobStatus){
+      List<JobResponseDto> byStatus = jobsRepository.findByStatus(jobStatus);
+      return byStatus;
+    }
 
 
   }

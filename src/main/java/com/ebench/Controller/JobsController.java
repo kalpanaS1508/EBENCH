@@ -53,5 +53,14 @@ public class JobsController {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.activeDeactiveStatus(jobId, jobStatus), Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
+
+//    ------------------------------- GET JOB HISTORY BY JOB STATUS-----------------------------------------------------
+
+    @GetMapping(value = "/get_job_history")
+    public ResponseEntity getJobHistory(@RequestParam("status") boolean jobStatus)
+            throws IOException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.manageJobHistory(jobStatus), Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
 }
 
