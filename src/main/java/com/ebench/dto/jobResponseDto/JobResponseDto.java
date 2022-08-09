@@ -27,11 +27,11 @@ public class JobResponseDto {
     public Integer totalJobs;
     public Integer totalCandidate;
     public Integer noOfPosition;
-    public Date postedDate;
+    public String postedDate;
     public Integer resumeReceived;
     public boolean interviewMode;
 
-    public JobResponseDto(Long jobId, String jobTitle, boolean jobStatus, Date postedDate) {
+    public JobResponseDto(Long jobId, String jobTitle, boolean jobStatus, String postedDate) {
         this.jobId = jobId;
         this.jobTitle = jobTitle;
         this.jobStatus = jobStatus;

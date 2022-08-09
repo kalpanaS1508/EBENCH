@@ -21,7 +21,7 @@ public class JobService {
 
     Jobs jobs1 = new Jobs();
     try {
-//      jobs1.setCandidateId(jobs.getCandidateId());
+      jobs1.setCandidateId(jobs.getCandidateId());
       jobs1.setVendorId(jobs.getVendorId());
       jobs1.setCompanyId(jobs.getCompanyId());
       jobs1.setJobTitle(jobs.getJobTitle());
@@ -34,8 +34,13 @@ public class JobService {
       jobs1.setTotalCandidate(jobs.getTotalCandidate());
       jobs1.setNoOfPosition(jobs.getNoOfPosition());
       jobs1.setPostedDate(jobs.getPostedDate());
+      jobs1.setExpiredDate(jobs.getExpiredDate());
       jobs1.setResumeReceived(jobs.getResumeReceived());
       jobs1.setInterviewMode(jobs.isInterviewMode());
+      jobs1.setPrefferedQualification(jobs.getPrefferedQualification());
+      jobs1.setMinimumQualification(jobs.getMinimumQualification());
+      jobs1.setAboutJob(jobs.getAboutJob());
+      jobs1.setCandidateSelection(jobs.isCandidateSelection());  // true = selected , false = not selected (by default)
 
       jobsRepository.save(jobs1);
 
@@ -54,7 +59,7 @@ public class JobService {
 
       Jobs jobs1 = jobId.get();
       try {
-//        jobs1.setCandidateId(jobs.getCandidateId());
+        jobs1.setCandidateId(jobs.getCandidateId());
         jobs1.setVendorId(jobs.getVendorId());
         jobs1.setCompanyId(jobs.getCompanyId());
         jobs1.setJobTitle(jobs.getJobTitle());
@@ -67,8 +72,13 @@ public class JobService {
         jobs1.setTotalCandidate(jobs.getTotalCandidate());
         jobs1.setNoOfPosition(jobs.getNoOfPosition());
         jobs1.setPostedDate(jobs.getPostedDate());
+        jobs1.setExpiredDate(jobs.getExpiredDate());
         jobs1.setResumeReceived(jobs.getResumeReceived());
         jobs1.setInterviewMode(jobs.isInterviewMode());
+        jobs1.setPrefferedQualification(jobs.getPrefferedQualification());
+        jobs1.setMinimumQualification(jobs.getMinimumQualification());
+        jobs1.setAboutJob(jobs.getAboutJob());
+        jobs1.setCandidateSelection(jobs.isCandidateSelection());  // true = selected , false = not selected (by default)
 
         jobsRepository.save(jobs);
 
@@ -82,7 +92,7 @@ public class JobService {
     return jobs;
   }
 
-//------------------------------- JOB DELETE API------------------------------------------------
+//------------------------------- JOB DELETE API (SOFT DELETE)------------------------------------------------
 
      public Jobs deleteJob(Long jobId) {
      Optional<Jobs> id = jobsRepository.findById(jobId);
@@ -97,12 +107,14 @@ public class JobService {
        return null;
      }
 
-//----------------------------------- GET JOBS ID ---------------------------------------------------------------
+//  --------------------------------- GET LIST OF JOBS BY VENDOR ID ----------------------------------------------------
 
     public List<Jobs> getJobStatus(Long vendorId){
       List<Jobs> status = jobsRepository.findByJobStatus(vendorId);
       return status;
     }
+
+//  ------------------------ JOB STATUS ACTIVE OR NOT ACTIVE BY JOB ID -------------------------------------------------
 
     public Jobs activeDeactiveStatus(Long jobId , boolean jobStatus){
       Jobs job = jobsRepository.findById(jobId).get();
@@ -110,6 +122,8 @@ public class JobService {
       jobsRepository.save(job);
       return job;
     }
+
+//  -------------------------GET A LIST OF JOB HISTORY BY JOB STATUS----------------------------------------------------
 
     public List<JobResponseDto> manageJobHistory(boolean jobStatus){
       List<JobResponseDto> byStatus = jobsRepository.findByStatus(jobStatus);

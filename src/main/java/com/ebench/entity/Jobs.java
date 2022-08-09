@@ -20,8 +20,8 @@ public class Jobs {
         @Column(name = "job_id")
         public Long jobId;
 
-//        @Column(name = "candidate_id")
-//        public Long candidateId;
+        @Column(name = "candidate_id")
+        public Long candidateId;
 
         @Column(name = "vendor_id")
         public Long vendorId;
@@ -57,7 +57,10 @@ public class Jobs {
         public Integer noOfPosition;
 
         @Column(name = "posted_date")
-        public Date postedDate;
+        public String postedDate;
+
+        @Column(name = "expired_date")
+        public String expiredDate;
 
         @Column(name = "resume_received")
         public Integer resumeReceived;
@@ -65,15 +68,28 @@ public class Jobs {
         @Column(name = "interview_mode")
         public boolean interviewMode;
 
+        @Column(name = "minimum_qualification")
+        public String minimumQualification;
+
+        @Column(name = "preffered_qualification")
+        public String prefferedQualification;
+
+        @Column(name = "candidate_selection")
+        public boolean candidateSelection;
+
+        @Column(name = "about_job")
+        public String aboutJob;
+
+
     public Jobs() {
     }
 
-
-    public Jobs(Long jobId, String jobTitle, boolean jobStatus, Date postedDate) {
-        this.jobId = jobId;
-        this.jobTitle = jobTitle;
-        this.jobStatus = jobStatus;
-        this.postedDate = postedDate;
-    }
+//
+//    public Jobs(Long jobId, String jobTitle, boolean jobStatus, Date postedDate) {
+//        this.jobId = jobId;
+//        this.jobTitle = jobTitle;
+//        this.jobStatus = jobStatus;
+//        this.postedDate = postedDate;
+//    }
 
 }
