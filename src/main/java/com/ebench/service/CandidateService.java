@@ -262,7 +262,7 @@ public class CandidateService {
  }
 
 
-// ------------------------------- GET CANDIDATE------------------------------
+// ------------------------------- GET CANDIDATE------------------------------------------------------------------------
 
     public List<Candidate> getCandidate(String keyExperience, String skills, String city ,String mobile) {
 
