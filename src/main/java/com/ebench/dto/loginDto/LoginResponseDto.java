@@ -17,8 +17,10 @@ public class LoginResponseDto {
     public String mobile;
     public String token;
 
-    public LoginResponseDto(String token) {
+    public LoginResponseDto(String token , Long id) {
+
         this.token = token;
+        this.id = id;
     }
 
     public LoginResponseDto(Long id, String firstName, String lastName, String email, String mobile, String token) {

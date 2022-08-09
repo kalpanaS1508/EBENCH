@@ -353,7 +353,7 @@ public class CandidateService {
 
         final String token = jwtTokenUtil.generateToken(userDetails);
 
-        LoginResponseDto loginResponseDto = new LoginResponseDto(token);
+        LoginResponseDto loginResponseDto = new LoginResponseDto(token , candidate1.getId());
 
         logger.info("candidate login sucessfully");
 
@@ -396,7 +396,8 @@ public class CandidateService {
         return bySkillAndExperience;
     }
 
-    // __________________________________Register api for candidate________________________________________________________
+    // __________________________________Register api for candidate_____________________________________________________
+
     public CandidateReqDto registerCandidate(CandidateReqDto candidateReqDto, MultipartFile file, String siteURL) {
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
