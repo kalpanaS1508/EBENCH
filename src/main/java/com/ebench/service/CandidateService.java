@@ -491,6 +491,7 @@ public class CandidateService {
                 candidate.setSchoolName(candidateReqDto.getSchoolName());
                 candidate.setEmailVerifyCode(Common.getRandomNumberString());
                 candidate.setEmailVerified(false);
+                candidate.setIsCandidate(candidateReqDto.isCandidate());
                 Candidate candidate1 = candidateRepository.save(candidate);
                 sendVerificationEmail(candidate1, siteURL);
             }
