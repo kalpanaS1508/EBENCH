@@ -126,10 +126,25 @@ public class JobService {
 //  -------------------------GET A LIST OF JOB HISTORY BY JOB STATUS----------------------------------------------------
 
     public List<JobResponseDto> manageJobHistory(boolean jobStatus){
+
       List<JobResponseDto> byStatus = jobsRepository.findByStatus(jobStatus);
       return byStatus;
     }
 
+//    ------------------GET A LIST OF POSTED JOBS BY JOB STATUS , CANDIDATE SELECTION  AND POSTED DATE -----------------
+
+  public List<Jobs> postedJobs(boolean candidateSelection ,String jobTitle ,String postedDate){
+
+    if (jobTitle.isEmpty()) {
+      jobTitle = null;
+    }
+    if (postedDate.isEmpty()) {
+      postedDate = null;
+    }
+
+    List<Jobs> jobs = jobsRepository.postedJobs(candidateSelection, jobTitle, postedDate);
+    return jobs;
+  }
 
   }
 

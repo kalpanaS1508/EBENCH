@@ -1,5 +1,6 @@
 package com.ebench.Controller;
 
+import com.ebench.Apimessage.ApiMessage;
 import com.ebench.entity.Jobs;
 import com.ebench.service.JobService;
 import com.ebench.utils.ApiResponse;
@@ -60,6 +61,12 @@ public class JobsController {
     public ResponseEntity getJobHistory(@RequestParam("status") boolean jobStatus)
             throws IOException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.manageJobHistory(jobStatus), Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+
+    @GetMapping(value = "/get_posted_job_details")
+    public ResponseEntity getCandidate(@RequestParam("candidate selection") boolean candidateSelection , @RequestParam("job title") String jobTitle , @RequestParam("posted date") String postedDate) throws IOException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, jobService.postedJobs(candidateSelection, jobTitle, postedDate), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 }
