@@ -133,7 +133,7 @@ public class JobService {
 
 //    ------------------GET A LIST OF POSTED JOBS BY JOB STATUS , CANDIDATE SELECTION  AND POSTED DATE -----------------
 
-  public List<Jobs> postedJobs(boolean candidateSelection ,String jobTitle ,String postedDate){
+  public List<JobResponseDto> postedJobs(boolean candidateSelection ,String jobTitle , String postedDate){
 
     if (jobTitle.isEmpty()) {
       jobTitle = null;
@@ -142,8 +142,8 @@ public class JobService {
       postedDate = null;
     }
 
-    List<Jobs> jobs = jobsRepository.postedJobs(candidateSelection, jobTitle, postedDate);
-    return jobs;
+    List<JobResponseDto> postedJobs = jobsRepository.postedJobs(candidateSelection, jobTitle, postedDate);
+    return postedJobs;
   }
 
   }

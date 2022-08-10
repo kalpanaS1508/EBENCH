@@ -65,7 +65,7 @@ public class JobsController {
     }
 
     @GetMapping(value = "/get_posted_job_details")
-    public ResponseEntity getCandidate(@RequestParam("candidate selection") boolean candidateSelection , @RequestParam("job title") String jobTitle , @RequestParam("posted date") String postedDate) throws IOException {
+    public ResponseEntity getCandidate(@RequestParam ("selection")  boolean candidateSelection , @RequestParam ("title") String jobTitle , @RequestParam ("date") String postedDate) throws IOException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, jobService.postedJobs(candidateSelection, jobTitle, postedDate), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }

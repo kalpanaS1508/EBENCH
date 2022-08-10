@@ -16,8 +16,8 @@ import java.util.List;
   @Query("select new com.ebench.dto.jobResponseDto.JobResponseDto(j.jobId, j.jobTitle, j.jobStatus, j.postedDate)from Jobs j where jobStatus = ?1")
   List<JobResponseDto> findByStatus(boolean jobStatus);
 
-  @Query("select new com.ebench.dto.jobResponseDto.JobResponseDto( j.jobId ,j.jobTitle ,j.postedDate ,j.jobStatus , j.candidateSelection) from Jobs j where j.candidateSelection = ifnull(?1 ,j.candidateSelection) and j.jobTitle =ifnull(?2 , j.jobTitle) and j.postedDate =ifnull(?3 ,j.postedDate)")
-  List<Jobs> postedJobs(boolean candidateSelection ,String jobTitle ,String postedDate);
+  @Query("select new com.ebench.dto.jobResponseDto.JobResponseDto( j.jobId ,j.jobTitle ,j.postedDate ,j.jobStatus , j.candidateSelection) from Jobs j where j.candidateSelection = ifnull(?1,j.candidateSelection) and j.jobTitle =ifnull(?2, j.jobTitle) and j.postedDate =ifnull(?3,j.postedDate)")
+  List<JobResponseDto> postedJobs(boolean candidateSelection ,String jobTitle ,String postedDate);
 
 
  }
