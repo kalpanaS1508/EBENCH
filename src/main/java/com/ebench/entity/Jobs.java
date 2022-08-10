@@ -63,10 +63,15 @@ public class Jobs {
         public Date postedDate;
 
         @Column(name = "resume_received")
-        public Integer resumeReceived;
+        public Long resumeReceived;
+
+        @Column(name = "no_of_candidates")
+        public Long noOfCandidates;
 
         @Column(name = "interview_mode")
         public boolean interviewMode;
+
+
 
     public Jobs() {
     }
@@ -81,7 +86,7 @@ public class Jobs {
 
     public Jobs(Long jobId, Long candidateId, Long vendorId, Long companyId, String jobTitle, String clientName, String clientLocation,
                 String jobLocation, boolean jobStatus, String companyName, Integer totalJobs, Integer totalCandidate,
-                Integer noOfPosition, Date postedDate, Integer resumeReceived, boolean interviewMode) {
+                Integer noOfPosition, Date postedDate, Long resumeReceived, boolean interviewMode) {
         this.jobId = jobId;
         this.candidateId = candidateId;
         this.vendorId = vendorId;

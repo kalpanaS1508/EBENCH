@@ -41,7 +41,7 @@ public class LoginController {
     private UserDetailsService jwtInMemoryUserDetailsService;
 
 
-    @GetMapping(value = "/loginCandidate")
+    @PostMapping(value = "/loginCandidate")
     public ResponseEntity login(@RequestParam String email,String password)
             throws Exception {
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
