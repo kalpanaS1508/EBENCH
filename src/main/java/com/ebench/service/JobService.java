@@ -146,5 +146,15 @@ public class JobService {
     return postedJobs;
   }
 
+//  ---------------------------UPDATE THE RESUME RECEIVED BY CANDIDATE ID ----------------------------------------------
+  
+  public Jobs updateResumeReceived(Jobs jobs){
+    Jobs jobs1 = jobsRepository.findById(jobs.candidateId).get();
+    jobs1.setResumeReceived(jobs.getResumeReceived()+1);
+    Jobs jobs2 = jobsRepository.save(jobs);
+
+    return jobs2;
+  }
+  
   }
 
