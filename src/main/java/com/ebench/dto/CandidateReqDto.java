@@ -65,7 +65,7 @@ public class CandidateReqDto {
     public Date joiningDateInCompany;
     @Enumerated(EnumType.STRING)
     public UserType userType;
-    public boolean isCandidate;
+    public String isCandidate;
     public String specialization;
     public String yearOfPassing;
     public BigDecimal percentage;

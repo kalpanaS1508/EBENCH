@@ -133,6 +133,11 @@ public class JobService {
     return latestjobs;
   }
 
+
+
+
+
+
   //______________Get candidate job description _____________________________________________________________________________
 
   public Jobs getJobDescription(Long jobId) {
@@ -168,7 +173,15 @@ public class JobService {
    List<Jobs> getLatestJobs = jobsRepository.findByJobSearches(clientName,jobLocation,jobTitle,skills,shiftTime);
 
       return getLatestJobs;
+    }
+
+
+
+
+
+
 
     }
-    }
+
+
 

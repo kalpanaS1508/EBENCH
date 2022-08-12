@@ -167,7 +167,7 @@ public class CandidateService {
             candidate.setCollegeName(candidateReqDto.getCollegeName());
             candidate.setUniversityName(candidateReqDto.getUniversityName());
             candidate.setSchoolName(candidateReqDto.getSchoolName());
-            candidate.setIsCandidate(candidateReqDto.isCandidate());
+           candidate.setIsCandidate(candidateReqDto.getIsCandidate());
 
             candidateRepository.save(candidate);
         } catch (BadReqException e) {
@@ -534,7 +534,7 @@ public class CandidateService {
                 candidate.setUniversityName(candidateReqDto.getUniversityName());
                 candidate.setSchoolName(candidateReqDto.getSchoolName());
                 candidate.setEmailVerifyCode(Common.getRandomNumberString());
-                candidate.setIsCandidate(candidateReqDto.isCandidate());
+               candidate.setIsCandidate(candidateReqDto.getIsCandidate());
                 candidate.setEmailVerified(false);
                 Candidate candidate1 = candidateRepository.save(candidate);
                 sendVerificationEmail(candidate1, siteURL);

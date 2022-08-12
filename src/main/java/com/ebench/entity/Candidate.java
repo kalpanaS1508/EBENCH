@@ -136,7 +136,7 @@ public class Candidate {
     public Date joiningDateInCompany;
 
     @Column(name = "is_candidate")
-    public Boolean isCandidate;
+    public String isCandidate;
 
     @Column(name = "user_type")
     @Enumerated(EnumType.STRING)
