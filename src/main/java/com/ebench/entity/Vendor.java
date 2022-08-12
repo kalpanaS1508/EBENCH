@@ -3,7 +3,10 @@ package com.ebench.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import javax.validation.Valid;
 import java.util.Date;
@@ -15,7 +18,8 @@ import java.util.Date;
 @Table(name = "vendor", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-
+@AllArgsConstructor
+@NoArgsConstructor
 public class Vendor {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -80,31 +84,7 @@ public class Vendor {
     @Column(name = "experience")
     public String experience;
 
-    public Vendor() {
-    }
+    @Column(name = "verification_code" , updatable = true)
+    public String verificationCode;
 
-    public Vendor(Long vendorId, String name, String address, String email, String password, String designation, String city,
-                  String country, boolean status, String lastSeen, String contactNo, String recentActivities,
-                  Date recentDateActivities, String dailyActivities, Integer skypeId, Integer twitterId, String vendorProfileImageUrl,
-                  AvailabilityType availability, String experience) {
-        this.vendorId = vendorId;
-        this.name = name;
-        this.address = address;
-        this.email = email;
-        this.password = password;
-        this.designation = designation;
-        this.city = city;
-        this.country = country;
-        this.status = status;
-        this.lastSeen = lastSeen;
-        this.contactNo = contactNo;
-        this.recentActivities = recentActivities;
-        this.recentDateActivities = recentDateActivities;
-        this.dailyActivities = dailyActivities;
-        this.skypeId = skypeId;
-        this.twitterId = twitterId;
-        this.vendorProfileImageUrl = vendorProfileImageUrl;
-        this.availability = availability;
-        this.experience = experience;
-    }
 }

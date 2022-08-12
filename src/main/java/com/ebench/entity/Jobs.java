@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -13,6 +14,7 @@ import java.util.Date;
 @Data
 @Table(name = "jobs")
 @AllArgsConstructor
+@NoArgsConstructor
 public class Jobs {
 
         @Id
@@ -62,8 +64,11 @@ public class Jobs {
         @Column(name = "expired_date")
         public String expiredDate;
 
-        @Column(name = "interview_mode")
-        public boolean interviewMode;
+        @Column(name = "resume_received")
+        public Long resumeReceived;
+
+        @Column(name = "no_of_candidates")
+        public Long noOfCandidates;
 
         @Column(name = "minimum_qualification")
         public String minimumQualification;
@@ -77,9 +82,8 @@ public class Jobs {
         @Column(name = "about_job")
         public String aboutJob;
 
-
-    public Jobs() {
-    }
+        @Column(name = "interview_mode")
+        public boolean interviewMode;
 
 
 }
