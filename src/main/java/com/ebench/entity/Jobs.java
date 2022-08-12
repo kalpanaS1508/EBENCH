@@ -62,9 +62,6 @@ public class Jobs {
         @Column(name = "expired_date")
         public String expiredDate;
 
-        @Column(name = "resume_received")
-        public Integer resumeReceived;
-
         @Column(name = "interview_mode")
         public boolean interviewMode;
 
@@ -84,12 +81,5 @@ public class Jobs {
     public Jobs() {
     }
 
-//
-//    public Jobs(Long jobId, String jobTitle, boolean jobStatus, Date postedDate) {
-//        this.jobId = jobId;
-//        this.jobTitle = jobTitle;
-//        this.jobStatus = jobStatus;
-//        this.postedDate = postedDate;
-//    }
 
 }

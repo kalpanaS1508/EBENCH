@@ -70,12 +70,7 @@ public class JobsController {
         return apiResponse.getResponse(apiResponse);
     }
 
-    @PutMapping(value = "/update_resume")
-    public ResponseEntity updateResume( @RequestBody Jobs jobs)
-            throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.updateResumeReceived(jobs), Api_Message);
-        return apiResponse.getResponse(apiResponse);
-    }
+
 
 }
 

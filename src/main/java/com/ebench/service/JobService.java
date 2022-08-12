@@ -35,7 +35,6 @@ public class JobService {
       jobs1.setNoOfPosition(jobs.getNoOfPosition());
       jobs1.setPostedDate(jobs.getPostedDate());
       jobs1.setExpiredDate(jobs.getExpiredDate());
-      jobs1.setResumeReceived(jobs.getResumeReceived());
       jobs1.setInterviewMode(jobs.isInterviewMode());
       jobs1.setPrefferedQualification(jobs.getPrefferedQualification());
       jobs1.setMinimumQualification(jobs.getMinimumQualification());
@@ -73,7 +72,6 @@ public class JobService {
         jobs1.setNoOfPosition(jobs.getNoOfPosition());
         jobs1.setPostedDate(jobs.getPostedDate());
         jobs1.setExpiredDate(jobs.getExpiredDate());
-        jobs1.setResumeReceived(jobs.getResumeReceived());
         jobs1.setInterviewMode(jobs.isInterviewMode());
         jobs1.setPrefferedQualification(jobs.getPrefferedQualification());
         jobs1.setMinimumQualification(jobs.getMinimumQualification());
@@ -148,13 +146,13 @@ public class JobService {
 
 //  ---------------------------UPDATE THE RESUME RECEIVED BY CANDIDATE ID ----------------------------------------------
   
-  public Jobs updateResumeReceived(Jobs jobs){
-    Jobs jobs1 = jobsRepository.findById(jobs.candidateId).get();
-    jobs1.setResumeReceived(jobs.getResumeReceived()+1);
-    Jobs jobs2 = jobsRepository.save(jobs);
-
-    return jobs2;
-  }
-  
+//  public Jobs updateResumeReceived(Jobs jobs){
+//    Jobs jobs1 = jobsRepository.findById(jobs.candidateId).get();
+//    jobs1.setResumeReceived(jobs.getResumeReceived()+1);
+//    Jobs jobs2 = jobsRepository.save(jobs);
+//
+//    return jobs2;
+//  }
+//
   }
 
