@@ -1,8 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.ebench.EbenchApplicationTests
 -------------------------------------------------------------------------------
-<<<<<<< HEAD
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.016 s - in com.ebench.EbenchApplicationTests
-=======
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.167 s - in com.ebench.EbenchApplicationTests
->>>>>>> d5ca8fe57b521202e97c594f2019ea4a239a14cf
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.587 s - in com.ebench.EbenchApplicationTests

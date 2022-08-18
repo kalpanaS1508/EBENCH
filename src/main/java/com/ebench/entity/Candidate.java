@@ -1,44 +1,41 @@
 package com.ebench.entity;
 
+import com.ebench.Enums.UserType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
-import java.sql.Clob;
 import java.sql.Time;
-import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Data
 @Valid
 @Table(name = "Candidate", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 @AllArgsConstructor
-@JsonInclude(value = JsonInclude.Include.NON_NULL)
+@NoArgsConstructor
+//@JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Candidate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    public Long id;
+    public Long candidateId;
+
+    @Column(name = "interview_id")
+    public Long interviewId;
 
     @Column(name = "first_name")
     public String firstName;
@@ -112,27 +109,30 @@ public class Candidate {
     @Column(name = "lastSeen")
     public Time lastSeen;
 
-    @Column(name = "currentDesignation")
+    @Column(name="current_Designation")
     public String currentDesignation;
 
-    @Column(name = "jobProfile")
+    @Column(name="job_Profile")
     public String jobProfile;
+
+    @Column(name="role_In_Hiring")
+    public String roleInHiring;
+
+    @Column(name="rating")
+    public Integer rating;
 
     @Lob
     @Column(name = "overview")
     public String overview;
 
-    @Column(name = "currentlyWorkingCompanyName")
-    public String CurrentlyWorkingCompanyName;
-
-    @Column(name = "roleInHiring")
-    public String roleInHiring;
+    @Column(name = "currently_Working_Company_Name")
+    public String currentlyWorkingCompanyName;
 
     @Column(name = "joiningDateInCompany")
     @JsonFormat(pattern = "yyyy-MM-dd")
     public Date joiningDateInCompany;
 
-    @Column(name = "isCandidate", nullable = false)
+    @Column(name = "is_candidate")
     public Boolean isCandidate;
 
     @Column(name = "user_type")
@@ -168,19 +168,4 @@ public class Candidate {
     public String role;
 
 
-    public Candidate(Long id, String firstName, String lastName, String keyExperience,
-                     String skills, String address, String whatsapp, String city, String email) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.keyExperience = keyExperience;
-        this.skills = skills;
-        this.address = address;
-        this.whatsapp = whatsapp;
-        this.city = city;
-        this.email = email;
-    }
-
-    public Candidate() {
-    }
 }

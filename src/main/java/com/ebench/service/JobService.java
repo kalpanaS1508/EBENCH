@@ -2,6 +2,7 @@ package com.ebench.service;
 
 import com.ebench.Apimessage.ApiMessage;
 import com.ebench.dto.jobResponseDto.JobResponseDto;
+import com.ebench.Enums.JobFilter;
 import com.ebench.entity.Jobs;
 import com.ebench.exception.BadReqException;
 import com.ebench.repository.JobsRepository;
@@ -123,6 +124,7 @@ public class JobService {
 
 //  -------------------------GET A LIST OF JOB HISTORY BY JOB STATUS----------------------------------------------------
 
+
     public List<JobResponseDto> manageJobHistory(boolean jobStatus){
 
       List<JobResponseDto> byStatus = jobsRepository.findByStatus(jobStatus);
@@ -144,15 +146,57 @@ public class JobService {
     return postedJobs;
   }
 
-//  ---------------------------UPDATE THE RESUME RECEIVED BY CANDIDATE ID ----------------------------------------------
-  
-//  public Jobs updateResumeReceived(Jobs jobs){
-//    Jobs jobs1 = jobsRepository.findById(jobs.candidateId).get();
-//    jobs1.setResumeReceived(jobs.getResumeReceived()+1);
-//    Jobs jobs2 = jobsRepository.save(jobs);
-//
-//    return jobs2;
-//  }
-//
+  //__________For candidate get job on the basis of location and designation_________________________________________________
+
+  public List<Jobs> getJobs_on_location_and_designation(String jobTitle, String jobLocation, JobFilter jobFilter) {
+    List<Jobs> latestjobs;
+    latestjobs = jobsRepository.findByJobTitleAndJobLocationAndJobFilter(jobTitle, jobLocation, jobFilter);
+    return latestjobs;
   }
+
+
+
+
+
+
+  //______________Get candidate job description _____________________________________________________________________________
+
+  public Jobs getJobDescription(Long jobId) {
+    try {
+      Jobs jobDescription = jobsRepository.findById(jobId).get();
+      return jobDescription;
+    } catch (Exception e) {
+      throw new BadReqException(ApiMessage.JOB_DESCRIPTION_NOT_FOUND);
+    }
+  }
+
+//____________________Get latest job request by candidate _________________________________________________________________
+
+  public List<Jobs> getLatestJob(String clientName,String jobLocation, String jobTitle, String skills,String shiftTime) {
+
+    if(clientName.isEmpty()) {
+      clientName=null;
+    }
+    if(jobLocation.isEmpty()) {
+      jobLocation = null;
+    }
+
+    if(jobTitle.isEmpty()) {
+      jobTitle=null;
+    }
+
+    if(skills.isEmpty()) {
+      skills=null;
+    }
+    if(shiftTime.isEmpty()) {
+      shiftTime = null;
+    }
+    List<Jobs> getLatestJobs = jobsRepository.findByJobSearches(clientName,jobLocation,jobTitle,skills,shiftTime);
+
+    return getLatestJobs;
+  }
+
+}
+
+
 

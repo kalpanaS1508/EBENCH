@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
+@RequestMapping(value = "/candidate")
 public class ProjectController {
 
     @Autowired
@@ -26,21 +27,21 @@ public class ProjectController {
     }
 
     @PutMapping(value = "/update_Project")
-    public ResponseEntity updateProject( @RequestBody Project project,@RequestParam("id") Long id) throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,projectService.updateProject(project,id), ApiMessage.Api_Message);
+    public ResponseEntity updateProject( @RequestBody Project project,@RequestParam("id") Long projectId) throws IOException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,projectService.updateProject(project,projectId), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 
     @RequestMapping(value = "/get_Project", method = RequestMethod.GET)
-    public ResponseEntity getProject(@RequestParam("id") Long id) throws JsonProcessingException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, projectService.getProject(id), ApiMessage.Api_Message);
+    public ResponseEntity getProject(@RequestParam("id") Long projectId) throws JsonProcessingException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, projectService.getProject(projectId), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 
 
     @RequestMapping(value = "/delete_Project" , method=RequestMethod.DELETE)
-    public ResponseEntity deleteProject(@RequestParam("id") Long id) throws JsonProcessingException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,projectService.deleteProject(id), ApiMessage.Api_Message);
+    public ResponseEntity deleteProject(@RequestParam("id") Long projectId) throws JsonProcessingException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,projectService.deleteProject(projectId), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 }

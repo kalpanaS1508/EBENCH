@@ -1,10 +1,8 @@
 package com.ebench.repository;
 
-import com.ebench.dto.CandidateReqDto;
+import com.ebench.dto.CandidateResDto;
 import com.ebench.entity.Candidate;
-import org.hibernate.validator.constraints.URL;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -33,6 +31,12 @@ public interface CandidateRepository extends JpaRepository<Candidate,Long> {
 
     @Query(value = "select c.email from candidate c where id = ?1",nativeQuery = true)
     Optional<Candidate> findByCandidateId(Long id);
+
+    @Query("select new com.ebench.dto.CandidateResDto (email,keyExperience,city,mobile) from Candidate where candidateId= ?1")
+    CandidateResDto findByCandidateIds(Long candidateId);
+
+    @Query("select new com.ebench.dto.CandidateResDto (linkedIn,skypeId,twitterId) from Candidate where candidateId= ?1")
+    CandidateResDto findByCandidateSocialIds(Long candidateId);
 }
 
 

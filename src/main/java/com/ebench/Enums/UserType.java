@@ -1,4 +1,4 @@
-package com.ebench.entity;
+package com.ebench.Enums;
 
 public enum UserType {
     CANDIDATE,

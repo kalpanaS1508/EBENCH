@@ -25,6 +25,7 @@ public class ApiMessage {
     public static final String ENTER_PASSWORD = "Please enter the password!!";
     public static final String INVALID_CREDENTIAL = "Email and Password is not present!!";
 
+    public static final String JOB_DESCRIPTION_NOT_FOUND ="Please enter valid JobId to fetch job decription!!!!!!" ;
 
     //    public static final String ENTER_EMAIL = "Please Enter the email in valid format";
 //    public static final String ENTER_PASSWORD = "Please Enter the password ";
@@ -49,5 +50,7 @@ public class ApiMessage {
     public static String PROVIDE_VALID_TASK_ID = "Task is not available, Please provide valid task id.";
     public static String TASK_ID_NULL = "Task id must not be null";
     public static String Enter_VALID_EMAIL="Please enter the valid email";
+
+    public static String INTERVIEW_NOT_PRESENT="Candidate interview's data is not present by this interview Id";
 
 }

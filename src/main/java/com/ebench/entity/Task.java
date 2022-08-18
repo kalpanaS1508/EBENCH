@@ -1,17 +1,19 @@
 package com.ebench.entity;
 
+import com.ebench.Enums.ChangeTaskStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 @Entity
 @Data
 @AllArgsConstructor
 @Table(name = "taskmanagement")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Task {
 // dekh le
     @Id
@@ -37,11 +39,13 @@ public class Task {
     @Column(name="taskName")
     public String taskName;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Column(name="taskStartDate")
-    public Date taskStartDate;
+    @Column(name="task_start_date")
+    public String taskStartDate;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Column(name="taskDueDate")
-    public Date taskDueDate;
+    @Column(name="task_due_date")
+    public String taskDueDate;
+
     @Column(name="taskStatus")
     public boolean taskStatus;
     @Column(name="changeTaskStatus")
@@ -67,7 +71,7 @@ public class Task {
     public Task() {
     }
 
-    public Task(String projectName, String taskName, Date taskDueDate, ChangeTaskStatus changeTaskStatus) {
+    public Task(String projectName, String taskName, String taskDueDate, ChangeTaskStatus changeTaskStatus) {
         this.projectName = projectName;
         this.taskName = taskName;
         this.taskDueDate = taskDueDate;

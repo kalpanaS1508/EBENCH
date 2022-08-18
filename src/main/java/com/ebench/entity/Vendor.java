@@ -1,11 +1,13 @@
 package com.ebench.entity;
 
+import com.ebench.Enums.AvailabilityType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -16,11 +18,13 @@ import java.util.Date;
 @Data
 @Valid
 @Table(name = "vendor", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
-@JsonInclude(value = JsonInclude.Include.NON_NULL)
+//@JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @AllArgsConstructor
 @NoArgsConstructor
+@RequestMapping(value = "/vendor")
 public class Vendor {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")

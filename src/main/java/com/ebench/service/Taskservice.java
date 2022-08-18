@@ -14,9 +14,11 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.*;
 
 @Service
 public class Taskservice {
@@ -35,6 +37,7 @@ public class Taskservice {
     VendorRepository vendorRepository;
 
     //_______________________________________GetProjects___________________________________________________________________________
+
     public Set<String> getProjectList(Long candidateId) {
         logger.info("fetching data from project repo by candidate id");
         Set<String> projectList = projectRepository.findByCandidateId(candidateId);
@@ -46,9 +49,15 @@ public class Taskservice {
     }
 
     //_______________________________________________getalltaskslist_________________________________________________________________
-    public List<String> getTask(Long candidateId) {
+    public List<String> getTask(Long candidateId ,String taskStartDate) {
+        LocalDate date = LocalDate.parse(taskStartDate);
 
-        List<String> tasks = taskRepository.findAllTasks(candidateId);
+        DayOfWeek day = date.getDayOfWeek();
+
+        System.out.println(day);
+
+        List<String> tasks = taskRepository.findAllTasks(candidateId,taskStartDate);
+
         if (tasks.size() < 1) {
             throw new BadReqException(ApiMessage.Task_Not_Found);
         }
@@ -80,7 +89,9 @@ public class Taskservice {
             throw new BadReqException(ApiMessage.PROJECT_NOT_FOUND);
             }
         logger.info("Task created sucessfullly");
-        return taskRepository.save(taskmanagement);
+
+        Task task = taskRepository.save(taskmanagement);
+        return task;
     }
 
 
@@ -141,7 +152,8 @@ public class Taskservice {
     }
 //_________________________________PendingTaskForm___________________________________________________________________________________
 
-    public Task pendingTaskForm(Task task,Long candidateId) {
+    public Task pendingTaskForm(Long candidateId) {
+        Task task = new Task();
         Task task1= taskRepository.findByTaskOwnerId(candidateId);
         if(task1!=null) {
             task1.setAnyDependency(task.getAnyDependency());

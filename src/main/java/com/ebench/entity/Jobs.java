@@ -1,20 +1,19 @@
 package com.ebench.entity;
 
+import com.ebench.Enums.JobFilter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.Valid;
-import java.util.Date;
 
 @Entity
 @Data
 @Table(name = "jobs")
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Jobs {
 
         @Id
@@ -84,6 +83,15 @@ public class Jobs {
 
         @Column(name = "interview_mode")
         public boolean interviewMode;
+
+        @Enumerated(EnumType.STRING)
+        public JobFilter jobFilter;
+
+        @Column(name="shiftTime")
+        public String shiftTime;
+
+        @Column(name ="jobAcceptanceorRejectionStatus")
+        public boolean jobAcceptanceorRejectionStatus;
 
 
 }

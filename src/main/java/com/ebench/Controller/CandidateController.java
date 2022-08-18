@@ -53,8 +53,8 @@ public class CandidateController {
 //___________________________________Get Api for candidate_______________________________________________________________________________
 
     @RequestMapping(value = "/get_Candidate", method = RequestMethod.GET)
-    public ResponseEntity getCandidate(@RequestParam("id") Long id) throws JsonProcessingException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.getCandidate(id), ApiMessage.Api_Message);
+    public ResponseEntity getCandidate(@RequestParam("id") Long candidateId) throws JsonProcessingException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.getCandidate(candidateId), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 
@@ -72,8 +72,8 @@ public class CandidateController {
 
 
     @RequestMapping(value = "/delete_Candidate", method = RequestMethod.DELETE)
-    public ResponseEntity deletecandidate(@RequestParam("id") Long id) throws JsonProcessingException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.deletecandidate(id),
+    public ResponseEntity deletecandidate(@RequestParam("id") Long candidateId) throws JsonProcessingException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.deletecandidate(candidateId),
                 ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
@@ -107,4 +107,16 @@ public class CandidateController {
         String siteURL = request.getRequestURL().toString();
         return siteURL.replace(request.getServletPath(), "");
     }
+
+//    @RequestMapping(value = "/get_candidate_information", method = RequestMethod.GET)
+//    public ResponseEntity getContactInformation(@RequestParam("candidate_id") Long candidateId) throws JsonProcessingException {
+//        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.getContactInformation(candidateId), ApiMessage.Api_Message);
+//        return apiResponse.getResponse(apiResponse);
+//    }
+//
+//    @RequestMapping(value = "/get_social_ids_information", method = RequestMethod.GET)
+//    public ResponseEntity getSocialIds(@RequestParam("candidate_id") Long candidateId) throws JsonProcessingException {
+//        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.findMeHere(candidateId), ApiMessage.Api_Message);
+//        return apiResponse.getResponse(apiResponse);
+//    }
 }

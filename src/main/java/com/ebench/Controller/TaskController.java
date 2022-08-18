@@ -2,7 +2,7 @@ package com.ebench.Controller;
 
 import com.ebench.Apimessage.ApiMessage;
 import com.ebench.utils.ApiResponse;
-//import com.ebench.entity.ChangeTaskStatus;
+//import com.ebench.Enums.ChangeTaskStatus;
 import com.ebench.entity.Task;
 import com.ebench.exception.ResourceNotFoundException;
 import com.ebench.service.Taskservice;
@@ -13,9 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Date;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
+@RequestMapping(value = "/candidate")
 public class TaskController {
     @Autowired
     Taskservice taskservice;
@@ -29,8 +31,8 @@ public class TaskController {
 
     }
     @RequestMapping(value = "/get_Task", method = RequestMethod.GET)
-    public ResponseEntity getTask(@RequestParam("id") Long candidateId ) throws JsonProcessingException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, taskservice.getTask(candidateId), ApiMessage.Api_Message);
+    public ResponseEntity getTask(@RequestParam("id") Long candidateId ,@RequestParam String taskStartDate) throws JsonProcessingException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, taskservice.getTask(candidateId,taskStartDate ), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 
@@ -51,7 +53,7 @@ public class TaskController {
         return apiResponse.getResponse(apiResponse);
     }
     @RequestMapping(value = "/get_task_History", method = RequestMethod.GET)
-    public ResponseEntity taskHistory(@RequestParam("candidate id") Long candidateId ) throws IOException, ResourceNotFoundException {
+    public ResponseEntity taskHistory(@RequestParam("candidateId") Long candidateId ) throws IOException, ResourceNotFoundException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,taskservice.getTaskHistory(candidateId), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
@@ -62,9 +64,10 @@ public class TaskController {
         return apiResponse.getResponse(apiResponse);
     }
 
+//    ------------------------doubt on this-----------------------------
     @PostMapping(value = "/pendingFormtask")
-    public ResponseEntity pendingFormTask(@RequestBody Task task,@RequestParam  Long candidateId) throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, taskservice.pendingTaskForm(task,candidateId), ApiMessage.Api_Message);
+    public ResponseEntity pendingFormTask(@RequestParam  Long candidateId) throws IOException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, taskservice.pendingTaskForm(candidateId), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 

@@ -1,14 +1,11 @@
 package com.ebench.dto;
 
-import com.ebench.entity.UserType;
+import com.ebench.Enums.UserType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
-import org.springframework.format.annotation.DateTimeFormat;
 
 
 import javax.persistence.*;
@@ -23,10 +20,10 @@ import java.util.Date;
 @Valid
 @AllArgsConstructor
 @Table(uniqueConstraints =@UniqueConstraint(columnNames = {"email"}))
-@JsonInclude(value = JsonInclude.Include.NON_NULL)
+//@JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties
 public class CandidateReqDto {
-    public Long id;
+    public Long candidateId;
     public String firstName;
     public String lastName;
     public String keyExperience;
@@ -41,7 +38,7 @@ public class CandidateReqDto {
     @Column(unique = true)
     @Valid
     @NotNull(message = "Email Already Present")
-    private String email;
+    public String email;
     public String interest;
     public String mobile;
     public boolean deleted;
@@ -59,12 +56,17 @@ public class CandidateReqDto {
     public  String jobProfile;
     @Lob
     public String overview;
-    public String CurrentlyWorkingCompanyName;
+    public String currentlyWorkingCompanyName;
     public String roleInHiring;
+    public Integer rating;
+
     @JsonFormat(pattern="yyyy-MM-dd")
     public Date joiningDateInCompany;
+
     @Enumerated(EnumType.STRING)
     public UserType userType;
+
+    public boolean isCandidate;
     public String specialization;
     public String yearOfPassing;
     public BigDecimal percentage;
@@ -74,11 +76,10 @@ public class CandidateReqDto {
     public String emailVerifyCode;
     public boolean emailVerified;
     public String role;
-    public boolean isCandidate;
+    public Long interviewId;
 
 
 
     public CandidateReqDto() {
     }
 }
-

@@ -14,9 +14,11 @@ public interface TaskRepository extends JpaRepository<Task,Long> {
     @Query(value = "select p.project_name from project p where candidate_id =?1",nativeQuery = true)
     public Set<String> findByCandidateId(Long candidateId);
 
-    @Query(value="select t.task_name from taskmanagement t join\n" +
-            "candidate c on c.id =t.candidate_id where candidate_id =?1",nativeQuery = true)
-    public List<String>findAllTasks(Long candidateId);
+    @Query(value="select t.task_name from taskmanagement t where t.candidate_id =?1 and t.task_start_date = ?2",nativeQuery = true)
+    public List<String>findAllTasks(Long candidateId,String taskStartDate);
+
+//    @Query(value ="select * from taskmanagement t where t.candidate_id =?1 and t.task_start_date Like ")
+//    public List<String>findTask(Long candidateId ,String taskStartDate);
 
      @Query(value="select * from taskmanagement t\n" +
              "join candidate c on c.id =t.candidate_id where t.candidate_id =?1",nativeQuery = true)
