@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface InterviewRepository extends JpaRepository<Interview, Long> {
+
+    Interview findByInterviewId(Long interviewId);
+
 }

@@ -24,6 +24,9 @@ public class Jobs {
         @Column(name = "candidate_id")
         public Long candidateId;
 
+        @Column(name = "interview_id")
+        public Long interviewId;
+
         @Column(name = "vendor_id")
         public Long vendorId;
 

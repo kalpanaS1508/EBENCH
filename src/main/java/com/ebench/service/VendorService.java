@@ -136,11 +136,12 @@ public class VendorService {
             vendor1.setVendorProfileImageUrl((fileNameAndPath == null) ? "" : fileNameAndPath.toString());
             vendor1.setAvailability(vendor.getAvailability());
             vendor1.setExperience(vendor.getExperience());
+            vendor1.setUserType(vendor.getUserType());
+            vendor1.setWhatsApp(vendor.getWhatsApp());
+            vendor1.setTelegram(vendor.getTelegram());
             vendor1.setVerificationCode(VerificationCode.getRandomNumberString());
 
             logger.info("vendor details " + vendor1);
-            // vendorRepository.save(vendor1);
-
             vendorRepository.save(vendor1);
             sendVerificationEmail(vendor1);
 
@@ -202,35 +203,30 @@ public class VendorService {
 
     public Vendor updateVendor(Vendor vendor, MultipartFile file) throws Exception {
 
-        String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
-                + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-        boolean emailValidation = Pattern.compile(regexPattern)
-                .matcher(vendor.getEmail())
-                .matches();
-        System.out.println((emailValidation));
-
-        String PASSWORD_PATTERN = "^(?=(?:[a-zA-Z0-9]*[a-zA-Z]){2})(?=(?:[a-zA-Z0-9]*\\d){2})[a-zA-Z0-9]{8,}$";
-        boolean pattern = Pattern.compile(PASSWORD_PATTERN)
-                .matcher(vendor.getPassword())
-                .matches();
-
-
+        Optional<Vendor> id = vendorRepository.findById(vendor.getVendorId());
         Vendor vendor1 = null;
+
+        if(vendor.getEmail() != null) {
+            String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+                    + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+            boolean emailValidation = Pattern.compile(regexPattern)
+                    .matcher(vendor.getEmail())
+                    .matches();
+            if (!emailValidation) {
+                throw new BadReqException(ApiMessage.Email_Not_In_Proper_Format);
+            }
+            System.out.println((emailValidation));
+        }
+
+        if(vendor.getPassword() !=null) {
+            String PASSWORD_PATTERN = "^(?=(?:[a-zA-Z0-9]*[a-zA-Z]){2})(?=(?:[a-zA-Z0-9]*\\d){2})[a-zA-Z0-9]{8,}$";
+            boolean pattern = Pattern.compile(PASSWORD_PATTERN)
+                    .matcher(vendor.getPassword())
+                    .matches();
+        }
+
         try {
-            Optional<Vendor> id = vendorRepository.findById(vendor.getVendorId());
-
-            vendor1 = null;
-
-            if (!id.isPresent()) {
-                logger.info("id is not present firstly you have to register yourself");
-                throw new BadReqException(ApiMessage.VENDOR_NOT_PRESENT);
-            } else {
-                if (emailAlreadyExist(vendor.getEmail())) {
-                    logger.info("vendor will get the email and check it is present or not " + vendor.getEmail());
-                    throw new BadReqException(ApiMessage.EMAIL_ALREADY_USED);
-                }
-
-                id.isPresent();
+            if (id.isPresent()) {
                 vendor1 = id.get();
 
                 Path fileNameAndPath = null;
@@ -256,48 +252,108 @@ public class VendorService {
 
                     System.out.println("file uploaded successfully  " + fileNameAndPath);
                 }
-//---------------------------------------------------------------------------------------------------------------------
 
-                vendor1.setName(vendor.getName());
+                if (vendor.getName() != null) {
+                    vendor1.setName(vendor.getName());
+                }
 
-                if (!emailValidation) {
-                    throw new BadReqException(ApiMessage.Email_Not_In_Proper_Format);
-                } else {
+                if (vendor.getEmail() != null) {
                     vendor1.setEmail(vendor.getEmail());
                 }
-                vendor1.setVendorId(vendor.getVendorId());
-                vendor1.setAddress(vendor.getAddress());
-                vendor1.setPassword(vendor.getPassword());
-                vendor1.setDesignation(vendor.getDesignation());
-                vendor1.setCity(vendor.getCity());
-                vendor1.setCountry(vendor.getCountry());
+
+                if (vendor.getVendorId() != null) {
+                    vendor1.setVendorId(vendor.getVendorId());
+                }
+
+                if (vendor.getAddress() != null) {
+                    vendor1.setAddress(vendor.getAddress());
+                }
+
+                if (vendor.getPassword() != null) {
+                    vendor1.setPassword(vendor.getPassword());
+                }
+
+                if (vendor.getDesignation() != null) {
+                    vendor1.setDesignation(vendor.getDesignation());
+                }
+
+                if (vendor.getCity() != null) {
+                    vendor1.setCity(vendor.getCity());
+                }
+
+                if (vendor.getCountry() != null) {
+                    vendor1.setCountry(vendor.getCountry());
+                }
+
                 vendor1.setStatus(vendor.isStatus());
-                vendor1.setTwitterId(vendor.getTwitterId());
-                vendor1.setSkypeId(vendor.getSkypeId());
-                vendor1.setLastSeen(vendor.getLastSeen());
+
+
+                if (vendor.getTwitterId() != null) {
+                    vendor1.setTwitterId(vendor.getTwitterId());
+                }
+
+                if (vendor.getSkypeId() != null) {
+                    vendor1.setSkypeId(vendor.getSkypeId());
+                }
+
+                if (vendor.getLastSeen() != null) {
+                    vendor1.setLastSeen(vendor.getLastSeen());
+                }
 
                 if (vendor.getContactNo().isEmpty() || vendor.getContactNo().length() != 10) {
                     throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
-                } else {
+                } else if (vendor.getContactNo() != null) {
                     vendor1.setContactNo(vendor.getContactNo());
                 }
 
-                vendor1.setRecentActivities(vendor.getRecentActivities());
-                vendor1.setRecentDateActivities(vendor.getRecentDateActivities());
-                vendor1.setDailyActivities(vendor.getDailyActivities());
+                if (vendor.getRecentActivities() != null) {
+                    vendor1.setRecentActivities(vendor.getRecentActivities());
+                }
+
+                if (vendor.getRecentDateActivities() != null) {
+                    vendor1.setRecentDateActivities(vendor.getRecentDateActivities());
+                }
+
+                if (vendor.getDailyActivities() != null) {
+                    vendor1.setDailyActivities(vendor.getDailyActivities());
+                }
+
                 vendor1.setVendorProfileImageUrl((fileNameAndPath == null) ? "" : fileNameAndPath.toString());
-                vendor1.setExperience(vendor.getExperience());
-                vendor1.setAvailability(vendor.getAvailability());
+
+                if (vendor.getExperience() != null) {
+                    vendor1.setExperience(vendor.getExperience());
+                }
+
+                if (vendor.getAvailability() != null) {
+                    vendor1.setAvailability(vendor.getAvailability());
+                }
+
+                if (vendor.getUserType() != null) {
+                    vendor1.setUserType(vendor.getUserType());
+                }
+
+                if (vendor.getWhatsApp() != null) {
+                    vendor1.setWhatsApp(vendor.getWhatsApp());
+                }
+
+                if (vendor.getTelegram() != null) {
+                    vendor1.setTelegram(vendor.getTelegram());
+                }
+
                 vendor1.setVerificationCode(VerificationCode.getRandomNumberString());
 
                 logger.info("vendor details are updated by this Id !! " + vendor.getVendorId());
 
-                Vendor save = vendorRepository.save(vendor1);
-                sendVerificationEmail(save);
+                Vendor vendor2 = vendorRepository.save(vendor1);
+                sendVerificationEmail(vendor2);
 
+                logger.info("vendor details are updated " + vendor1);
+                return vendor2;
             }
-            logger.info("vendor details are updated " + vendor1);
-            return vendor1;
+
+            else{
+                throw new BadReqException(ApiMessage.VENDOR_NOT_PRESENT);
+            }
 
         } catch (BadReqException e) {
             e.printStackTrace();

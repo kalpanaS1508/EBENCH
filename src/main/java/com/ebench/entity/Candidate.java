@@ -3,7 +3,6 @@ package com.ebench.entity;
 import com.ebench.Enums.UserType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,12 +11,10 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Data
@@ -166,6 +163,9 @@ public class Candidate {
     public boolean emailVerified;
     @Column(name = "role")
     public String role;
+
+    @Column(name = "verification_code" , updatable = true)
+    public String verificationCode;
 
 
 }

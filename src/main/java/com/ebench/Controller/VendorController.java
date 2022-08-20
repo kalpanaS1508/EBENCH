@@ -27,11 +27,9 @@ public class VendorController {
 
 //   ---------------------------VENDOR REGISTRATION-----------------------------------------
 
-    @PostMapping(value = "/registervendor", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity Register(@RequestPart(value = "vendor", required = true) Vendor vendor, @RequestPart("file") MultipartFile file, HttpServletRequest request)
+    @PostMapping(value = "/register_vendor", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity Register(@RequestPart("vendor") Vendor vendor, @RequestPart("file") MultipartFile file)
             throws IOException {
-//        Vendor vendor1= new ObjectMapper().readValue(vendor,Vendor.class);
-
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.Register(vendor, file), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
@@ -41,10 +39,7 @@ public class VendorController {
         return siteURL.replace(request.getServletPath(), "");
     }
 
-    @PostMapping(value = "/sample")
-    public String TestApi(@RequestParam("name") String name) {
-        return String.format("%s", name);
-    }
+
 
 //    --------------------------------VENDOR GET API-----------------------------------------------
 

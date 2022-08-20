@@ -2,6 +2,7 @@ package com.ebench.Controller;
 
 import com.ebench.Apimessage.ApiMessage;
 import com.ebench.dto.CandidateReqDto;
+import com.ebench.entity.Candidate;
 import com.ebench.exception.ResourceNotFoundException;
 import com.ebench.repository.CandidateRepository;
 import com.ebench.service.CandidateService;
@@ -9,6 +10,7 @@ import com.ebench.utils.ApiResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,29 +25,21 @@ public class CandidateController {
 
     @Autowired
     CandidateService candidateService;
-//_____________________________________Register api for candidate__________________________________________________________________________
 
 
-    //    @PostMapping(value = "/register_Candidate")
-//    public ResponseEntity register(@RequestBody CandidateReqDto candidateReqDto )
-//            throws IOException {
-////        CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
-//        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.register(candidateReqDto), ApiMessage.Api_Message);
-//        return apiResponse.getResponse(apiResponse);
-//    }
-//_________________________________________Register Candidate________________________________________________________________
+//_________________________________________REGISTER CANDIDATE________________________________________________________________
+
     @PostMapping(value = "/register_Candidate")
     public ResponseEntity register(@RequestBody CandidateReqDto candidateReqDto)
             throws Exception {
-//        CandidateReqDto candidateReqDto1 = new ObjectMapper().readValue(candidateReqDto, CandidateReqDto.class);
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.register(candidateReqDto), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 
-    @PostMapping(value = "/register_Candidate1")
-    public ResponseEntity registerCandidate(@RequestPart CandidateReqDto candidateReqDto, @RequestPart MultipartFile file, HttpServletRequest request)
+    @PostMapping(value = "/register_Candidate1" ,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity registerCandidate(@RequestPart("candidate") CandidateReqDto candidateReqDto, @RequestPart("file") MultipartFile file)
             throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.registerCandidate(candidateReqDto, file, getSiteURL(request)), ApiMessage.Api_Message);
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.registerCandidate(candidateReqDto, file), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 
@@ -73,7 +67,7 @@ public class CandidateController {
 
     @RequestMapping(value = "/delete_Candidate", method = RequestMethod.DELETE)
     public ResponseEntity deletecandidate(@RequestParam("id") Long candidateId) throws JsonProcessingException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.deletecandidate(candidateId),
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.deleteCandidate(candidateId),
                 ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
@@ -90,9 +84,9 @@ public class CandidateController {
     //_________________________________Update api for candidate_____________________________________________________________
 
     @PutMapping(value = "/update_Candidate1")
-    public ResponseEntity updatecandidate1(@RequestPart CandidateReqDto candidateReqDto, @RequestPart MultipartFile file, HttpServletRequest request)
+    public ResponseEntity updatecandidate1(@RequestPart("candidate") CandidateReqDto candidateReqDto, @RequestPart("file") MultipartFile file)
             throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.updateCandidate1(candidateReqDto, file, getSiteURL(request)), ApiMessage.Api_Message);
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.updateCandidate1(candidateReqDto, file), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 
@@ -108,15 +102,4 @@ public class CandidateController {
         return siteURL.replace(request.getServletPath(), "");
     }
 
-//    @RequestMapping(value = "/get_candidate_information", method = RequestMethod.GET)
-//    public ResponseEntity getContactInformation(@RequestParam("candidate_id") Long candidateId) throws JsonProcessingException {
-//        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.getContactInformation(candidateId), ApiMessage.Api_Message);
-//        return apiResponse.getResponse(apiResponse);
-//    }
-//
-//    @RequestMapping(value = "/get_social_ids_information", method = RequestMethod.GET)
-//    public ResponseEntity getSocialIds(@RequestParam("candidate_id") Long candidateId) throws JsonProcessingException {
-//        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.findMeHere(candidateId), ApiMessage.Api_Message);
-//        return apiResponse.getResponse(apiResponse);
-//    }
 }

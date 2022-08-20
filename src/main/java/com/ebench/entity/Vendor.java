@@ -1,6 +1,7 @@
 package com.ebench.entity;
 
 import com.ebench.Enums.AvailabilityType;
+import com.ebench.Enums.UserType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -88,7 +89,16 @@ public class Vendor {
     @Column(name = "experience")
     public String experience;
 
+    @Column(name = "whatsapp")
+    public String whatsApp;
+
+    @Column(name = "telegram")
+    public String telegram;
+
     @Column(name = "verification_code" , updatable = true)
     public String verificationCode;
 
+    @Column(name = "user_type")
+    @Enumerated(EnumType.STRING)
+    public UserType userType;
 }

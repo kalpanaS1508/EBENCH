@@ -41,7 +41,7 @@ public class LoginController {
     @Autowired
     private UserDetailsService jwtInMemoryUserDetailsService;
 
-    @PostMapping(value = "/loginCandidate")
+    @PostMapping(value = "/login")
     public ResponseEntity login(@RequestParam String email, String password, UserType userType)
 
             throws Exception {

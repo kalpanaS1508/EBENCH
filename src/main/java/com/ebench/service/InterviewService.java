@@ -35,8 +35,10 @@ public class InterviewService {
     }
 
     public Interview updateInterview(Interview interview){
+
         Optional<Interview> interviewerId = interviewRepository.findById(interview.getInterviewId());
         Interview interview1;
+
         if(interviewerId.isPresent()){
             interview1 = interviewerId.get();
             interview1.setInterviewerId(interview.getInterviewerId());
@@ -57,4 +59,8 @@ public class InterviewService {
         }
     }
 
+    public Interview getInterviewHistory(Long interviewId){
+
+        return null;
+    }
 }
