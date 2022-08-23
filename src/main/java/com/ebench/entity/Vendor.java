@@ -60,8 +60,8 @@ public class Vendor {
     @JsonFormat(pattern = "HH:mm:ss")
     public String lastSeen;
 
-    @Column(name = "contact_no")
-    public String contactNo;
+    @Column(name = "mobile")
+    public String mobile;
 
     @Column(name = "recent_activities")
     public String recentActivities;

@@ -27,10 +27,10 @@ public class VendorController {
 
 //   ---------------------------VENDOR REGISTRATION-----------------------------------------
 
-    @PostMapping(value = "/register_vendor", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity Register(@RequestPart("vendor") Vendor vendor, @RequestPart("file") MultipartFile file)
+    @PostMapping(value = "/register_vendor" )
+    public ResponseEntity Register(@RequestBody  Vendor vendor)
             throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.Register(vendor, file), ApiMessage.Api_Message);
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.Register(vendor), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 

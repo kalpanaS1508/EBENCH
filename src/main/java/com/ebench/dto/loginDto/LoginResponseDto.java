@@ -1,5 +1,6 @@
 package com.ebench.dto.loginDto;
 
+import com.ebench.Enums.UserType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
@@ -15,21 +16,24 @@ public class LoginResponseDto {
     private String email;
     public String mobile;
     public String token;
+    public UserType userType;
 
-    public LoginResponseDto(String token , Long candidateId) {
+    public LoginResponseDto(String token , Long candidateId , UserType userType) {
 
         this.token = token;
         this.candidateId = candidateId;
+        this.userType = userType;
 
     }
 
-    public LoginResponseDto(Long candidateId, String firstName, String lastName, String email, String mobile, String token) {
+    public LoginResponseDto(Long candidateId, String firstName, String lastName, String email, String mobile, String token , UserType userType) {
         this.candidateId = candidateId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.mobile = mobile;
         this.token = token;
+        this.userType = userType;
     }
 }
 

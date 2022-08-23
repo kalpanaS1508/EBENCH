@@ -75,7 +75,7 @@ public class JobsController {
     //_________________Get api for candidate on the basis of job location and job title_______________________________
 
 
-    @GetMapping(value = "/get_latestjobs")
+    @GetMapping(value = "/get_latest_jobs")
     public ResponseEntity getLatestJobs(@RequestParam  String jobTitle, @RequestParam String jobLocation,@RequestParam JobFilter jobFilter)
             throws IOException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.getJobs_on_location_and_designation(jobTitle,jobLocation,jobFilter), Api_Message);
@@ -84,15 +84,16 @@ public class JobsController {
 
 
     //__________________Get api for candidate to get jobDescription provide by vendor_______________________________________
-    @GetMapping(value = "/get_jobDescription")
+
+    @GetMapping(value = "/get_job_description")
     public ResponseEntity getjobDescription(@RequestParam Long jobId )
             throws IOException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.getJobDescription(jobId), Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 
-    @GetMapping(value = "/get_Listoflatestjobs")
-    public ResponseEntity getListofLatestJobs(@RequestParam  String clientName,@RequestParam String jobLocation,@RequestParam String jobTitle, @RequestParam String skills,@RequestParam String shiftTime )
+    @GetMapping(value = "/get_List_Of_latest_jobs")
+    public ResponseEntity getListOfLatestJobs(@RequestParam  String clientName,@RequestParam String jobLocation,@RequestParam String jobTitle, @RequestParam String skills,@RequestParam String shiftTime )
             throws IOException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.getLatestJob(clientName,jobLocation,jobTitle,skills,shiftTime), Api_Message);
         return apiResponse.getResponse(apiResponse);

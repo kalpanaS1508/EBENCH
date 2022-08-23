@@ -140,6 +140,7 @@ public class Taskservice {
 
     //______________________________________GetTaskHistory________________________________________________________________________________
     //I have to do some chnge in it by (apply chnage tast sttaus as parameter
+
     public List<Task> getTaskHistory(Long candidateId) throws ResourceNotFoundException {
 
         List<Task> taskHistory = taskRepository.findTaskHistory(candidateId);

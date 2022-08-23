@@ -1,8 +1,9 @@
-package com.ebench.entity;
+package com.ebench.dto;
 
 import com.ebench.Enums.HiringStatus;
 import com.ebench.Enums.InteviewMode;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,17 +11,12 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Data
-@Entity
-@Table(name = "interview")
-@AllArgsConstructor
-@NoArgsConstructor
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Interview {
+@NoArgsConstructor
+public class InterviewResDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public Long interviewId;
-
     public Long candidateId;
     public Long jobId;
     public String interviewerName;
@@ -31,13 +27,29 @@ public class Interview {
     public String hiringManagerStatus;
     public boolean reschedule;
 
-    @Column(name = "hiring_status", columnDefinition = "enum('SELECTED','NOT_SELECTED','HIRING_IN_PROCESS','NEXT_ROUND_SCHEDULE')")
+    public String firstName;
+    public String jobTitle;
+
     @Enumerated(EnumType.STRING)
     public HiringStatus hiringStatus;
-
     public Integer rating;
 
     @Enumerated(EnumType.STRING)
     public InteviewMode inteviewMode;
+
+
+    public InterviewResDto(Long interviewId, String interviewSlot , HiringStatus hiringStatus, Integer rating ,String firstName,
+                           Long candidateId, String jobTitle)
+    {
+        this.interviewId = interviewId;
+        this.interviewSlot = interviewSlot;
+        this.hiringStatus = hiringStatus;
+        this.rating = rating;
+        this.firstName = firstName;
+        this.candidateId = candidateId;
+        this.jobTitle = jobTitle;
+
+    }
+
 
 }

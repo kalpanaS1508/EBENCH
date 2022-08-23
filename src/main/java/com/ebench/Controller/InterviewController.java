@@ -1,10 +1,12 @@
 package com.ebench.Controller;
 
 import com.ebench.Apimessage.ApiMessage;
+import com.ebench.Enums.HiringStatus;
 import com.ebench.dto.CandidateReqDto;
 import com.ebench.entity.Interview;
 import com.ebench.service.InterviewService;
 import com.ebench.utils.ApiResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,13 @@ public class InterviewController {
     public ResponseEntity updateInterview(@RequestBody Interview interview)
             throws Exception {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, interviewService.updateInterview(interview), ApiMessage.Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+
+    @GetMapping(value = "/get_interview")
+    public ResponseEntity getInterviewHistory(@RequestParam ("status") HiringStatus hiringStatus)
+            throws JsonProcessingException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, interviewService.getInterviewHistory(hiringStatus), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 

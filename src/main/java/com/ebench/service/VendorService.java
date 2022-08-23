@@ -49,7 +49,7 @@ public class VendorService {
 
     private String UPLOAD_DIR = "D://EBench V1//EBENCH//target//classes//Static//file";
 
-    public Vendor Register(Vendor vendor, MultipartFile file) {
+    public Vendor Register(Vendor vendor) {
 
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
@@ -69,38 +69,11 @@ public class VendorService {
             throw new BadReqException(ApiMessage.EMAIL_IS_PRESENT);
         }
 
-        Path fileNameAndPath = null;
-        if (!file.isEmpty()) {
-            try {
-                StringBuilder fileName = new StringBuilder();
 
-                String filename = file.getOriginalFilename();
-
-                String[] str = filename.split("[.]", 2);
-                for (String i : str) {
-                    System.out.println(i);
-                }
-
-                String fileNameWithTime = str[0] + "_" + System.currentTimeMillis() + "." + str[1];
-
-                fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + fileNameWithTime);
-
-                fileName.append(file.getOriginalFilename());
-
-                Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
-
-                String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
-
-                logger.info("file uploaded successfully  " + fileNameAndPath);
-
-            } catch (Exception e) {
-                System.out.println("Exception occured");
-            }
-
-        }
-
-        Vendor vendor1 = new Vendor();
+        Vendor vendor2 = null;
         try {
+            Vendor vendor1 = new Vendor();
+
             vendor1.setName(vendor.getName());
 
             if (!emailValidation) {
@@ -122,18 +95,17 @@ public class VendorService {
             vendor1.setStatus(vendor.isStatus());
             vendor1.setLastSeen(vendor.getLastSeen());
 
-            if (vendor.getContactNo().isEmpty() || vendor.getContactNo().length() != 10) {
+            if (vendor.getMobile().isEmpty() || vendor.getMobile().length() != 10) {
                 throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
 
             } else {
-                vendor1.setContactNo(vendor.getContactNo());
+                vendor1.setMobile(vendor.getMobile());
             }
             vendor1.setRecentActivities(vendor.getRecentActivities());
             vendor1.setRecentDateActivities(vendor.getRecentDateActivities());
             vendor1.setDailyActivities(vendor.getDailyActivities());
             vendor1.setSkypeId(vendor.getSkypeId());
             vendor1.setTwitterId(vendor.getTwitterId());
-            vendor1.setVendorProfileImageUrl((fileNameAndPath == null) ? "" : fileNameAndPath.toString());
             vendor1.setAvailability(vendor.getAvailability());
             vendor1.setExperience(vendor.getExperience());
             vendor1.setUserType(vendor.getUserType());
@@ -142,20 +114,21 @@ public class VendorService {
             vendor1.setVerificationCode(VerificationCode.getRandomNumberString());
 
             logger.info("vendor details " + vendor1);
-            vendorRepository.save(vendor1);
-            sendVerificationEmail(vendor1);
+            vendor2 = vendorRepository.save(vendor1);
+
+            sendVerificationEmail(vendor2);
+            return vendor2;
 
         } catch (BadReqException e) {
             throw new BadReqException(e.getMessage());
 
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
-        logger.info("vendor register yourself successfully" + vendor1);
-        return vendor1;
+        return vendor2;
     }
 
 //-------------------------Email verification code-----------------------------------------------------
@@ -300,10 +273,10 @@ public class VendorService {
                     vendor1.setLastSeen(vendor.getLastSeen());
                 }
 
-                if (vendor.getContactNo().isEmpty() || vendor.getContactNo().length() != 10) {
+                if (vendor.getMobile().isEmpty() || vendor.getMobile().length() != 10) {
                     throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
-                } else if (vendor.getContactNo() != null) {
-                    vendor1.setContactNo(vendor.getContactNo());
+                } else if (vendor.getMobile() != null) {
+                    vendor1.setMobile(vendor.getMobile());
                 }
 
                 if (vendor.getRecentActivities() != null) {
@@ -318,7 +291,9 @@ public class VendorService {
                     vendor1.setDailyActivities(vendor.getDailyActivities());
                 }
 
-                vendor1.setVendorProfileImageUrl((fileNameAndPath == null) ? "" : fileNameAndPath.toString());
+                if(fileNameAndPath != null) {
+                    vendor1.setVendorProfileImageUrl((fileNameAndPath == null) ? "" : fileNameAndPath.toString());
+                }
 
                 if (vendor.getExperience() != null) {
                     vendor1.setExperience(vendor.getExperience());
