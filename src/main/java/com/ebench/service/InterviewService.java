@@ -1,7 +1,6 @@
 package com.ebench.service;
 
 import com.ebench.Apimessage.ApiMessage;
-import com.ebench.Enums.HiringStatus;
 import com.ebench.dto.InterviewResDto;
 import com.ebench.entity.Interview;
 import com.ebench.exception.BadReqException;
@@ -9,7 +8,6 @@ import com.ebench.repository.InterviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,16 +66,11 @@ public class InterviewService {
         return interview1;
     }
 
-    public List<InterviewResDto> getInterviewHistory(HiringStatus hiringStatus) {
+    public List<InterviewResDto> getInterviewHistory(String hiringStatus) {
 
-        try {
+        List<InterviewResDto> hiringStatus1 = interviewRepository.findByHiringStatus(hiringStatus);
 
-            List<InterviewResDto> interviewResDto = interviewRepository.findByInterviewId(hiringStatus.name());
-            return interviewResDto;
-        }
-        catch (Exception e) {
-            System.out.printf("error" +e);
-            throw new BadReqException(ApiMessage.INTERVIEW_NOT_PRESENT);
-        }
+        System.out.println(hiringStatus1);
+        return hiringStatus1;
     }
 }

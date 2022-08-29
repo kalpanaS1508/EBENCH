@@ -1,6 +1,5 @@
 package com.ebench.entity;
 
-import com.ebench.Enums.HiringStatus;
 import com.ebench.Enums.InteviewMode;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -31,9 +30,8 @@ public class Interview {
     public String hiringManagerStatus;
     public boolean reschedule;
 
-    @Column(name = "hiring_status", columnDefinition = "enum('SELECTED','NOT_SELECTED','HIRING_IN_PROCESS','NEXT_ROUND_SCHEDULE')")
-    @Enumerated(EnumType.STRING)
-    public HiringStatus hiringStatus;
+
+    public String hiringStatus;
 
     public Integer rating;
 

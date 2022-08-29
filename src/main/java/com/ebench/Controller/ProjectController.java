@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-@RequestMapping(value = "/candidate")
+@RequestMapping(value = "/ebench")
 public class ProjectController {
 
     @Autowired

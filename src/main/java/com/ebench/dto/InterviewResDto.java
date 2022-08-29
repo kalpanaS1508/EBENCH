@@ -1,10 +1,8 @@
 package com.ebench.dto;
 
-import com.ebench.Enums.HiringStatus;
 import com.ebench.Enums.InteviewMode;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -30,15 +28,14 @@ public class InterviewResDto {
     public String firstName;
     public String jobTitle;
 
-    @Enumerated(EnumType.STRING)
-    public HiringStatus hiringStatus;
+    public String hiringStatus;
     public Integer rating;
 
     @Enumerated(EnumType.STRING)
     public InteviewMode inteviewMode;
 
 
-    public InterviewResDto(Long interviewId, String interviewSlot , HiringStatus hiringStatus, Integer rating ,String firstName,
+    public InterviewResDto(Long interviewId, String interviewSlot , String hiringStatus, Integer rating ,String firstName,
                            Long candidateId, String jobTitle)
     {
         this.interviewId = interviewId;

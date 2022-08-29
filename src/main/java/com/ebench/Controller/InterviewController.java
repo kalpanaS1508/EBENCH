@@ -1,8 +1,6 @@
 package com.ebench.Controller;
 
 import com.ebench.Apimessage.ApiMessage;
-import com.ebench.Enums.HiringStatus;
-import com.ebench.dto.CandidateReqDto;
 import com.ebench.entity.Interview;
 import com.ebench.service.InterviewService;
 import com.ebench.utils.ApiResponse;
@@ -13,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/interview")
+@RequestMapping(value = "/ebench")
 public class InterviewController {
 
     @Autowired
@@ -34,7 +32,7 @@ public class InterviewController {
     }
 
     @GetMapping(value = "/get_interview")
-    public ResponseEntity getInterviewHistory(@RequestParam ("status") HiringStatus hiringStatus)
+    public ResponseEntity getInterviewHistory(@RequestParam ("status") String hiringStatus)
             throws JsonProcessingException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, interviewService.getInterviewHistory(hiringStatus), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);

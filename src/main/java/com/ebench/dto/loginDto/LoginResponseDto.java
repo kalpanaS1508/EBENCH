@@ -11,6 +11,7 @@ import lombok.Data;
 public class LoginResponseDto {
 
    public Long candidateId;
+   public Long vendorId;
    public String firstName;
     public String lastName;
     private String email;
@@ -26,8 +27,15 @@ public class LoginResponseDto {
 
     }
 
-    public LoginResponseDto(Long candidateId, String firstName, String lastName, String email, String mobile, String token , UserType userType) {
+    public LoginResponseDto(Long vendorId, String token, UserType userType) {
+        this.vendorId = vendorId;
+        this.token = token;
+        this.userType = userType;
+    }
+
+    public LoginResponseDto(Long candidateId, Long vendorId, String firstName, String lastName, String email, String mobile, String token , UserType userType) {
         this.candidateId = candidateId;
+        this.vendorId = vendorId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

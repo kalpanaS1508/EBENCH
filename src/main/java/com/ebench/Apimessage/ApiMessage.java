@@ -53,4 +53,6 @@ public class ApiMessage {
 
     public static String INTERVIEW_NOT_PRESENT="Candidate interview's data is not present by this interview Id";
 
+    public static String WORK_ORDER_IS_NOT_PRESENT = "work order is not present";
+
 }

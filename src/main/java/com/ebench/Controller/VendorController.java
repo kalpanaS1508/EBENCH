@@ -17,7 +17,7 @@ import java.io.IOException;
 
 
 @RestController
-@RequestMapping(value = "/vendor")
+@RequestMapping(value = "/ebench")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class VendorController {
 
@@ -53,10 +53,10 @@ public class VendorController {
 //    --------------------------------VENDOR UPDATE API-----------------------------------------------
 
 
-    @PutMapping(value = "/update_vendor", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity updateVendor(@RequestPart(value = "vendor", required = true) Vendor vendor, @RequestPart("file") MultipartFile file, HttpServletRequest request)
-            throws Exception {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.updateVendor(vendor, file), ApiMessage.Api_Message);
+    @PutMapping(value = "/update_vendor")
+    public ResponseEntity updateVendor(@RequestBody Vendor vendor)
+            throws JsonProcessingException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, vendorService.updateVendor(vendor), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 

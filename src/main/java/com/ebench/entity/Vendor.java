@@ -31,8 +31,12 @@ public class Vendor {
     @Column(name = "id")
     public Long vendorId;
 
-    @Column(name = "name")
-    public String name;
+
+    @Column(name = "first_name")
+    public String firstName;
+
+    @Column(name = "last_name")
+    public String lastName;
 
     @Column(name = "address")
     public String address;
@@ -46,6 +50,9 @@ public class Vendor {
 
     @Column(name = "designation")
     public String designation;
+
+    @Column(name = "company")
+    public String company;
 
     @Column(name = "city")
     public String city;

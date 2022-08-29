@@ -36,12 +36,20 @@ public class JobResponseDto {
     public String prefferedQualification;
     public boolean candidateSelection;
     public String aboutJob;
+    public String requiredSkills;
+    public String requiredExperience;
 
-    public JobResponseDto(Long jobId, String jobTitle, boolean jobStatus, String postedDate) {
-        this.jobId = jobId;
+
+    public JobResponseDto(String jobTitle, boolean jobStatus ,String postedDate,
+                          String requiredSkills, String requiredExperience ,String jobLocation,String companyName) {
+
         this.jobTitle = jobTitle;
         this.jobStatus = jobStatus;
         this.postedDate = postedDate;
+        this.requiredSkills = requiredSkills;
+        this.requiredExperience = requiredExperience;
+        this.jobLocation = jobLocation;
+        this.companyName = companyName;
     }
 
     public JobResponseDto(Long jobId, String jobTitle, String postedDate, boolean jobStatus, boolean candidateSelection) {

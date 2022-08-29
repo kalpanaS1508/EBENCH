@@ -1,6 +1,8 @@
 package com.ebench.entity;
 
+import com.ebench.Enums.InteviewMode;
 import com.ebench.Enums.JobFilter;
+import com.ebench.Enums.Rounds;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +23,9 @@ public class Jobs {
         @Column(name = "job_id")
         public Long jobId;
 
+        @Column(name = "job_name_and_id")
+        public String jobNameAndID;
+
         @Column(name = "candidate_id")
         public Long candidateId;
 
@@ -39,6 +44,9 @@ public class Jobs {
         @Column(name = "client_name")
         public String clientName;
 
+        @Column(name = "required_experience")
+        public String requiredExperience;
+
         @Column(name = "client_location")
         public String clientLocation;
 
@@ -46,7 +54,7 @@ public class Jobs {
         public String jobLocation;
 
         @Column(name = "job_status")
-        public boolean jobStatus;
+        public boolean jobStatus = true ;       // job status is about job is active or in active.
 
         @Column(name = "company_name")
         public String companyName;
@@ -85,7 +93,8 @@ public class Jobs {
         public String aboutJob;
 
         @Column(name = "interview_mode")
-        public boolean interviewMode;
+        @Enumerated(EnumType.STRING)
+        public InteviewMode interviewMode;
 
         @Enumerated(EnumType.STRING)
         public JobFilter jobFilter;
@@ -96,5 +105,20 @@ public class Jobs {
         @Column(name ="jobAcceptanceorRejectionStatus")
         public boolean jobAcceptanceorRejectionStatus;
 
+        @Column(name = "required_skills")
+        public String requiredSkills;
+
+        @Column(name = "round_1")
+        @Enumerated(EnumType.STRING)
+        public Rounds round1;
+
+        @Column(name = "round_2")
+        @Enumerated(EnumType.STRING)
+        public Rounds round2;
+
+
+        @Column(name = "round_3")
+        @Enumerated(EnumType.STRING)
+        public Rounds round3;
 
 }

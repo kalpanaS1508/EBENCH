@@ -16,7 +16,7 @@ import static com.ebench.Apimessage.ApiMessage.Api_Message;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping(value = "/appliedJobs")
+@RequestMapping(value = "/ebench")
 public class AppliedJobsController {
 
     @Autowired

@@ -16,7 +16,7 @@ import static com.ebench.Apimessage.ApiMessage.Api_Message;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping(value = "/candidate")
+@RequestMapping(value = "/ebench")
 public class JobsController {
 
     @Autowired
@@ -43,17 +43,24 @@ public class JobsController {
         return apiResponse.getResponse(apiResponse);
     }
 
-    @GetMapping(value = "/get_status")
-    public ResponseEntity getJobs(@RequestParam("id") Long vendorId)
-             throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.getJobStatus(vendorId), Api_Message);
+    @GetMapping(value = "/get_job_details")
+    public ResponseEntity getJobsDetails(@RequestParam("id") Long jobId)
+            throws IOException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.getJobs(jobId), Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 
-    @PutMapping(value = "/get_active_deactive_status")
-    public ResponseEntity getJobs(@RequestParam("id") Long jobId , @RequestParam("status") boolean jobStatus)
+    @GetMapping(value = "/get_status")
+    public ResponseEntity getJobs(@RequestParam("job_status") boolean jobStatus)
+             throws IOException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.getJobDetails(jobStatus), Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+
+    @PutMapping(value = "/update_active_deactive_status")
+    public ResponseEntity getJobs(@RequestParam("id") Long jobId)
             throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.activeDeactiveStatus(jobId, jobStatus), Api_Message);
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.activeDeactiveStatus(jobId), Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 
@@ -66,11 +73,13 @@ public class JobsController {
         return apiResponse.getResponse(apiResponse);
     }
 
+
     @GetMapping(value = "/get_posted_job_details")
     public ResponseEntity getCandidate(@RequestParam ("selection")  boolean candidateSelection , @RequestParam ("title") String jobTitle , @RequestParam ("date") String postedDate) throws IOException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, jobService.postedJobs(candidateSelection, jobTitle, postedDate), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
+
 
     //_________________Get api for candidate on the basis of job location and job title_______________________________
 

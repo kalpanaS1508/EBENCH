@@ -20,7 +20,7 @@ import java.io.IOException;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping(value = "/candidate")
+@RequestMapping(value = "/ebench")
 public class CandidateController {
 
     @Autowired

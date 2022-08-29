@@ -17,7 +17,7 @@ import java.util.Date;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping(value = "/candidate")
+@RequestMapping(value = "/ebench")
 public class TaskController {
     @Autowired
     Taskservice taskservice;

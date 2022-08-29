@@ -69,10 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // dont authenticate this particular request
                 .authorizeRequests().antMatchers("/authenticate").permitAll().
                 antMatchers("/login").permitAll().
-                antMatchers("/candidate/**").permitAll().
-                antMatchers("/vendor/**").permitAll().
-                antMatchers("/appliedJobs/**").permitAll().
-                antMatchers("/interview/**").permitAll().
+                antMatchers("/ebench/**").permitAll().
                 antMatchers(AUTH_WHITELIST).permitAll().
 
 

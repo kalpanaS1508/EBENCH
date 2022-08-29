@@ -74,7 +74,8 @@ public class VendorService {
         try {
             Vendor vendor1 = new Vendor();
 
-            vendor1.setName(vendor.getName());
+            vendor1.setFirstName(vendor.getFirstName());
+            vendor1.setLastName(vendor.getLastName());
 
             if (!emailValidation) {
                 throw new BadReqException(ApiMessage.Email_Not_In_Proper_Format);
@@ -111,6 +112,7 @@ public class VendorService {
             vendor1.setUserType(vendor.getUserType());
             vendor1.setWhatsApp(vendor.getWhatsApp());
             vendor1.setTelegram(vendor.getTelegram());
+            vendor1.setCompany(vendor.getCompany());
             vendor1.setVerificationCode(VerificationCode.getRandomNumberString());
 
             logger.info("vendor details " + vendor1);
@@ -137,9 +139,9 @@ public class VendorService {
             throws MessagingException, UnsupportedEncodingException {
 
         String toAddress = vendor.getEmail();
-        System.out.println( "email address " + toAddress);
+        System.out.println("email address " + toAddress);
         String subject = "Please verify your registration";
-        String content = "Dear " + vendor.getName() + "<br>"
+        String content = "Dear " + vendor.getFirstName() + "<br>"
                 + "Please click the verification code below to verify your registration:<br>"
                 + "<h3>" + vendor.getVerificationCode() + "</h3>"
                 + "Thank you,<br>"
@@ -152,7 +154,7 @@ public class VendorService {
         helper.setTo(toAddress);
         helper.setSubject(subject);
         helper.setText(content, true);
-        message.setContent(content , "text/html");
+        message.setContent(content, "text/html");
         javaMailSender.send(message);
 
     }
@@ -174,12 +176,12 @@ public class VendorService {
 
 //    --------------------------------UPDATE-------------------------------------------
 
-    public Vendor updateVendor(Vendor vendor, MultipartFile file) throws Exception {
+    public Vendor updateVendor(Vendor vendor) throws BadReqException {
 
         Optional<Vendor> id = vendorRepository.findById(vendor.getVendorId());
         Vendor vendor1 = null;
 
-        if(vendor.getEmail() != null) {
+        if (vendor.getEmail() != null) {
             String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                     + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
             boolean emailValidation = Pattern.compile(regexPattern)
@@ -191,7 +193,7 @@ public class VendorService {
             System.out.println((emailValidation));
         }
 
-        if(vendor.getPassword() !=null) {
+        if (vendor.getPassword() != null) {
             String PASSWORD_PATTERN = "^(?=(?:[a-zA-Z0-9]*[a-zA-Z]){2})(?=(?:[a-zA-Z0-9]*\\d){2})[a-zA-Z0-9]{8,}$";
             boolean pattern = Pattern.compile(PASSWORD_PATTERN)
                     .matcher(vendor.getPassword())
@@ -202,32 +204,41 @@ public class VendorService {
             if (id.isPresent()) {
                 vendor1 = id.get();
 
-                Path fileNameAndPath = null;
-                if (!file.isEmpty()) {
+//                Path fileNameAndPath = null;
+//                if (!file.isEmpty()) {
+//
+//                    StringBuilder fileName = new StringBuilder();
+//
+//                    String filename = file.getOriginalFilename();
+//                    String[] str = filename.split("[.]", 2);
+//                    for (String i : str) {
+//                        System.out.println(i);
+//                    }
+//
+//                    String fileNameWithTime = str[0] + "_" + System.currentTimeMillis() + "." + str[1];
+//
+//                    fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + fileNameWithTime);
+//
+//                    fileName.append(file.getOriginalFilename());
+//
+//                    Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
+//
+//                    String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
+//
+//                    System.out.println("file uploaded successfully  " + fileNameAndPath);
+//                }
+                //
 
-                    StringBuilder fileName = new StringBuilder();
-
-                    String filename = file.getOriginalFilename();
-                    String[] str = filename.split("[.]", 2);
-                    for (String i : str) {
-                        System.out.println(i);
-                    }
-
-                    String fileNameWithTime = str[0] + "_" + System.currentTimeMillis() + "." + str[1];
-
-                    fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + fileNameWithTime);
-
-                    fileName.append(file.getOriginalFilename());
-
-                    Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
-
-                    String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
-
-                    System.out.println("file uploaded successfully  " + fileNameAndPath);
+                if (vendor.getFirstName() != null) {
+                    vendor1.setFirstName(vendor.getFirstName());
                 }
 
-                if (vendor.getName() != null) {
-                    vendor1.setName(vendor.getName());
+                if (vendor.getLastName() != null) {
+                    vendor1.setLastName(vendor.getLastName());
+                }
+
+                if (vendor.getCompany() != null) {
+                    vendor1.setCompany(vendor.getCompany());
                 }
 
                 if (vendor.getEmail() != null) {
@@ -273,12 +284,6 @@ public class VendorService {
                     vendor1.setLastSeen(vendor.getLastSeen());
                 }
 
-                if (vendor.getMobile().isEmpty() || vendor.getMobile().length() != 10) {
-                    throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
-                } else if (vendor.getMobile() != null) {
-                    vendor1.setMobile(vendor.getMobile());
-                }
-
                 if (vendor.getRecentActivities() != null) {
                     vendor1.setRecentActivities(vendor.getRecentActivities());
                 }
@@ -291,8 +296,17 @@ public class VendorService {
                     vendor1.setDailyActivities(vendor.getDailyActivities());
                 }
 
-                if(fileNameAndPath != null) {
-                    vendor1.setVendorProfileImageUrl((fileNameAndPath == null) ? "" : fileNameAndPath.toString());
+//                if (fileNameAndPath != null) {
+//                    vendor1.setVendorProfileImageUrl((fileNameAndPath == null) ? "" : fileNameAndPath.toString());
+//                }
+
+                if(vendor.getMobile() !=null) {
+                    if (vendor.getMobile().isEmpty() || vendor.getMobile().length() != 10) {
+                        throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
+                    }
+                }
+                else if (vendor.getMobile() != null){
+                    vendor1.setMobile(vendor.getMobile());
                 }
 
                 if (vendor.getExperience() != null) {
@@ -325,11 +339,9 @@ public class VendorService {
                 logger.info("vendor details are updated " + vendor1);
                 return vendor2;
             }
-
-            else{
+            else {
                 throw new BadReqException(ApiMessage.VENDOR_NOT_PRESENT);
             }
-
         } catch (BadReqException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -342,13 +354,12 @@ public class VendorService {
 
 // ---------------------------------- GET VENDOR ---------------------------------------------------------------
 
-    public Vendor getVendor(Long vendorId){
+    public Vendor getVendor(Long vendorId) {
         Optional<Vendor> id = vendorRepository.findById(vendorId);
-        if(id.isPresent()){
+        if (id.isPresent()) {
             Vendor vendor = id.get();
             return vendor;
-        }
-        else{
+        } else {
             logger.info("Not get vendor details by this id " + vendorId);
             throw new BadReqException(ApiMessage.VENDOR_NOT_PRESENT);
         }
@@ -357,12 +368,12 @@ public class VendorService {
 
 // ---------------------------------- DELETE VENDOR---------------------------------------------------------------
 
-    public Vendor deleteVendor(Long  vendorId){
+    public Vendor deleteVendor(Long vendorId) {
         Optional<Vendor> vendorId1 = vendorRepository.findById(vendorId);
-        if(!vendorId1.isPresent()){
-            logger.info("vendor is not present by this id "  + vendorId);
+        if (!vendorId1.isPresent()) {
+            logger.info("vendor is not present by this id " + vendorId);
             throw new RuntimeException(ApiMessage.VENDOR_NOT_PRESENT);
-        } else{
+        } else {
             vendorId1.isPresent();
             Vendor vendor = vendorId1.get();
             vendorRepository.deleteById(vendor.getVendorId());
@@ -374,48 +385,18 @@ public class VendorService {
 
     public Vendor softDeleteVendor(Long vendorId) {
         Optional<Vendor> candidate1 = vendorRepository.findById(vendorId);
-        Vendor vendor= null;
-        if(candidate1.isPresent())
-        {
+        Vendor vendor = null;
+        if (candidate1.isPresent()) {
             vendor = candidate1.get();
-        }
-        else
-        {
+        } else {
             throw new UserNotFoundException(ApiMessage.VENDOR_NOT_PRESENT);
         }
         vendor.setStatus(true);
 
         vendorRepository.save(vendor);
 
-        return vendor ;
-    }
-
-//    ------------------------- LOGIN VENDOR-----------------------------------------------------------------
-
-    public Vendor login(String email, String password) {
-
-        String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
-                + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-        boolean emailValidation = Pattern.compile(regexPattern)
-                .matcher(email)
-                .matches();
-
-        Vendor vendor = vendorRepository.findByEmailAndPassword(email, password);
-        try {
-            if (email.isEmpty() || !emailValidation) {
-                logger.info("Email is empty");
-                throw new BadReqException(ApiMessage.ENTER_EMAIL);
-            }
-            if (password.isEmpty() || password.length() < 4) {
-                logger.info("password is empty and password length should be greater than 4");
-                throw new BadReqException(ApiMessage.ENTER_PASSWORD);
-            } else if (vendor == null) {
-                throw new BadReqException(ApiMessage.INVALID_CREDENTIAL);
-            }
-        } catch (Exception e) {
-            throw new BadReqException(e.getMessage());
-        }
-        logger.info("vendor details by login " + vendor);
         return vendor;
     }
+
+
 }
