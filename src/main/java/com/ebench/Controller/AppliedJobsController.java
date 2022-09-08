@@ -17,6 +17,7 @@ import static com.ebench.Apimessage.ApiMessage.Api_Message;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(value = "/ebench")
+
 public class AppliedJobsController {
 
     @Autowired
@@ -29,11 +30,13 @@ public class AppliedJobsController {
         return apiResponse.getResponse(apiResponse);
     }
 
-    @GetMapping(value = "/applied_resume")
-    public ResponseEntity getResumeCount(@RequestParam ("job_id") Long jobId)
+
+//    --------------------- LIST OF CANDIDATE WHO APPLIED FOR THE PARTICULAR JOB BY JOB ID----------------------------------------
+
+    @GetMapping(value = "/get_candidate_list_by_applied_job")
+    public ResponseEntity getCandidateByJobId(@RequestParam ("job_id") Long jobId)
             throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,appliedJobsService.getCountResume(jobId), Api_Message);
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,appliedJobsService.getCandidateListAppliedJobs(jobId), Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
-
 }

@@ -23,9 +23,10 @@ public class JobService {
     Jobs jobs1 = new Jobs();
     try {
       jobs1.setCandidateId(jobs.getCandidateId());
-      jobs1.setJobNameAndID(jobs.getJobNameAndID());
+      jobs1.setJobNameAndId(jobs.getJobNameAndId());
       jobs1.setVendorId(jobs.getVendorId());
       jobs1.setCompanyId(jobs.getCompanyId());
+      jobs1.setJobDescription(jobs.getJobDescription());
       jobs1.setJobTitle(jobs.getJobTitle());
       jobs1.setClientName(jobs.getClientName());
       jobs1.setClientLocation(jobs.getClientLocation());
@@ -42,11 +43,15 @@ public class JobService {
       jobs1.setPrefferedQualification(jobs.getPrefferedQualification());
       jobs1.setMinimumQualification(jobs.getMinimumQualification());
       jobs1.setAboutJob(jobs.getAboutJob());
+      jobs1.setAboutCompany(jobs.getAboutCompany());
       jobs1.setRequiredSkills(jobs.getRequiredSkills());
       jobs1.setRequiredSkills(jobs.getRequiredSkills());
+
       jobs1.setRound1(jobs.getRound1());
       jobs1.setRound2(jobs.getRound2());
       jobs1.setRound3(jobs.getRound3());
+      jobs1.setRole(jobs.getRole());
+
 
       jobs1.setCandidateSelection(jobs.isCandidateSelection());// true = selected , false = not selected (by default)
 
@@ -74,9 +79,9 @@ public class JobService {
           jobs1.setJobId(jobs.getJobId());
         }
 
-        if(jobs.getJobNameAndID() != null) {
-          jobs1.setJobNameAndID(jobs.getJobNameAndID());
-        }
+        if(jobs.getJobNameAndId() != null) {
+        jobs1.setJobNameAndId(jobs.getJobNameAndId());
+       }
 
         if(jobs.getCandidateId() !=null) {
           jobs1.setCandidateId(jobs.getCandidateId());
@@ -90,8 +95,8 @@ public class JobService {
           jobs1.setCompanyId(jobs.getCompanyId());
         }
 
-        if(jobs.getJobTitle() !=null) {
-          jobs1.setJobTitle(jobs.getJobTitle());
+        if(jobs.getJobDescription() !=null) {
+          jobs1.setJobDescription(jobs.getJobDescription());
         }
 
         if(jobs.getClientName() !=null) {
@@ -150,6 +155,10 @@ public class JobService {
           jobs1.setPrefferedQualification(jobs.getPrefferedQualification());
         }
 
+        if(jobs.getRole() !=null) {
+            jobs1.setRole(jobs.getRole());
+        }
+
         if(jobs.getMinimumQualification() !=null) {
           jobs1.setMinimumQualification(jobs.getMinimumQualification());
         }
@@ -168,6 +177,14 @@ public class JobService {
 
         if(jobs.getRound3() !=null) {
           jobs1.setRound3(jobs.getRound3());
+        }
+
+        if(jobs.getAboutCompany() != null) {
+            jobs1.setAboutCompany(jobs.getAboutCompany());
+        }
+
+        if(jobs.getJobTitle() !=null) {
+            jobs1.setJobTitle(jobs.getJobTitle());
         }
 
         jobs1.setCandidateSelection(jobs.isCandidateSelection());  // true = selected , false = not selected (by default)
@@ -201,10 +218,21 @@ public class JobService {
      }
 
 //     ----------------------GET DATA BY JOB ID---------------------------------------------
+
       public Jobs getJobs(Long jobId) {
-        Jobs jobs = jobsRepository.findById(jobId).get();
-        return jobs;
+          Optional<Jobs> id = jobsRepository.findById(jobId);
+          Jobs jobs = null;
+          if(id.isPresent()) {
+              jobs = id.get();
+              Long previousJobCount = jobs.getJobView();
+              Long currentJobCount = previousJobCount + 1L;
+              jobs.setJobView(currentJobCount);
+              jobsRepository.save(jobs);
+          }
+          return jobs;
       }
+
+
 
 //  ------------------------  UPDATE JOB STATUS ACTIVE OR NOT ACTIVE BY JOB ID -------------------------------------------------
 
@@ -242,35 +270,16 @@ public class JobService {
       return byStatus;
     }
 
-//    ------------------GET A LIST OF POSTED JOBS BY JOB STATUS , CANDIDATE SELECTION  AND POSTED DATE -----------------
 
-  public List<JobResponseDto> postedJobs(boolean candidateSelection ,String jobTitle , String postedDate){
-
-    if (jobTitle.isEmpty()) {
-      jobTitle = null;
-    }
-    if (postedDate.isEmpty()) {
-      postedDate = null;
-    }
-
-    List<JobResponseDto> postedJobs = jobsRepository.postedJobs(candidateSelection, jobTitle, postedDate);
-    return postedJobs;
-  }
-
-  //__________For candidate get job on the basis of location and designation_________________________________________________
+  //__________ GET JOB ON THE BASIS OF LOCATION AND DESCRIPTION---------------------------------------------------------
 
   public List<Jobs> getJobs_on_location_and_designation(String jobTitle, String jobLocation, JobFilter jobFilter) {
     List<Jobs> latestjobs;
-    latestjobs = jobsRepository.findByJobTitleAndJobLocationAndJobFilter(jobTitle, jobLocation, jobFilter);
+    latestjobs = jobsRepository.findByJobDescriptionAndJobLocationAndJobFilter(jobTitle, jobLocation, jobFilter);
     return latestjobs;
   }
 
-
-
-
-
-
-  //______________Get candidate job description _____________________________________________________________________________
+  //______________GET CANDIDATE JOB DESCRIPTION _____________________________________________________________________________
 
   public Jobs getJobDescription(Long jobId) {
     try {
@@ -281,7 +290,7 @@ public class JobService {
     }
   }
 
-//____________________Get latest job request by candidate _________________________________________________________________
+//____________________GET LATEST JOB REQUEST BY CANDIDATE _________________________________________________________________
 
   public List<Jobs> getLatestJob(String clientName,String jobLocation, String jobTitle, String skills,String shiftTime) {
 

@@ -77,7 +77,17 @@ public class CandidateReqDto {
     public boolean emailVerified;
     public String role;
     public Long interviewId;
+    public Long intermediate;
 
+    public String graduation;
+
+    public String postGraduation;
+
+    public String certification;
+
+    public String chooseIndustry;
+
+    public String skillsCategory;
 
 
     public CandidateReqDto() {

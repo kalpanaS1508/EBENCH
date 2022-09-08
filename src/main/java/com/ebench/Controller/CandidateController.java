@@ -8,6 +8,7 @@ import com.ebench.repository.CandidateRepository;
 import com.ebench.service.CandidateService;
 import com.ebench.utils.ApiResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,7 +17,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -101,5 +106,12 @@ public class CandidateController {
         String siteURL = request.getRequestURL().toString();
         return siteURL.replace(request.getServletPath(), "");
     }
+
+    @GetMapping(value = "/get_progress")
+    public ResponseEntity progressPercentage( @RequestParam("id")  Long candidateId)throws JsonProcessingException, ResourceNotFoundException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateService.profileProgressBar(candidateId), ApiMessage.Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+
 
 }

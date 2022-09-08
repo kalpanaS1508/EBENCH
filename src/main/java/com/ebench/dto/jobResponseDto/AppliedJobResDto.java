@@ -13,18 +13,18 @@ public class AppliedJobResDto {
     public Long appliedJobsId;
     public Long jobId;
     public Long candidateId;
-    public String jobTitle;
     public Long resumeReceived;
-    public Long numberOfResume;
-    public Long numberOfCandidate;
+    public String jobTitle;
+    public String requiredSkills;
+    public String skills;
+    public String firstName;
 
-
-    public AppliedJobResDto( Long numberOfResume, Long numberOfCandidate ,String jobTitle, Long jobId, Long resumeReceived) {
-        this.numberOfResume = numberOfResume;
-        this.numberOfCandidate = numberOfCandidate;
+    public AppliedJobResDto(Long candidateId,String firstName,String jobTitle, String skills,Long resumeReceived ,Long jobId) {
+        this.candidateId = candidateId;
+        this.firstName = firstName;
         this.jobTitle = jobTitle;
-        this.jobId = jobId;
+        this.skills = skills;
         this.resumeReceived = resumeReceived;
-
+        this.jobId = jobId;
     }
 }

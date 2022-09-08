@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -28,7 +29,7 @@ public class Candidate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "candidate_id")
     public Long candidateId;
 
     @Column(name = "interview_id")
@@ -42,9 +43,6 @@ public class Candidate {
 
     @Column(name = "key_experience")
     public String keyExperience;
-
-    @Column(name = "skills")
-    public String skills;
 
     @Column(name = "address")
     public String address;
@@ -81,8 +79,7 @@ public class Candidate {
     public String mobile;
 
     @Column(name = "available_for_work")
-    public boolean availableForWork;
-
+    public boolean availableForWork = false;
 
     @Column(name = "password")
     public String password;
@@ -163,9 +160,29 @@ public class Candidate {
     public boolean emailVerified;
     @Column(name = "role")
     public String role;
+    @Column(name = "skills")
+    public String  skills;
 
     @Column(name = "verification_code" , updatable = true)
     public String verificationCode;
+
+    @Column(name = "intermediate")
+    public Long intermediate;
+
+    @Column(name = "graduation")
+    public String graduation;
+
+    @Column(name = "post_graduation")
+    public String postGraduation;
+
+    @Column(name = "certification")
+    public String certification;
+
+    @Column(name = "choose_industry")
+    public String chooseIndustry;
+
+    @Column(name = "skills_category")
+    public String skillsCategory;       // in UI skills category has number.
 
 
 }

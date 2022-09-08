@@ -25,10 +25,8 @@ public class AppliedJobs {
     @Column(name = "candidate_id")
     public Long candidateId;
 
-    @Column(name = "job_title")
-    public String jobTitle;
-
     @Column(name = "resume_received")
     public Long resumeReceived;
+
 
 }

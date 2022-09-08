@@ -24,7 +24,7 @@ public class Jobs {
         public Long jobId;
 
         @Column(name = "job_name_and_id")
-        public String jobNameAndID;
+        public String jobNameAndId;
 
         @Column(name = "candidate_id")
         public Long candidateId;
@@ -40,6 +40,12 @@ public class Jobs {
 
         @Column(name = "job_title")
         public String jobTitle;
+
+        @Column(name = "job_description")
+        public String jobDescription;
+
+        @Column(name = "role")
+        public String role;
 
         @Column(name = "client_name")
         public String clientName;
@@ -63,7 +69,7 @@ public class Jobs {
         public Integer totalJobs;
 
         @Column(name = "total_candidate")
-        public Integer totalCandidate;
+        public Integer totalCandidate = 0;
 
         @Column(name = "no_of_position")
         public Integer noOfPosition;
@@ -75,7 +81,7 @@ public class Jobs {
         public String expiredDate;
 
         @Column(name = "resume_received")
-        public Long resumeReceived;
+        public Integer resumeReceived = 0;
 
         @Column(name = "no_of_candidates")
         public Long noOfCandidates;
@@ -91,6 +97,12 @@ public class Jobs {
 
         @Column(name = "about_job")
         public String aboutJob;
+
+        @Column(name = "about_company")
+        public String aboutCompany;
+
+        @Column(name = "job_view")
+        public Long jobView = 0L ;
 
         @Column(name = "interview_mode")
         @Enumerated(EnumType.STRING)
@@ -108,6 +120,9 @@ public class Jobs {
         @Column(name = "required_skills")
         public String requiredSkills;
 
+        @Column(name = "job_code")
+        public Integer jobCode;
+
         @Column(name = "round_1")
         @Enumerated(EnumType.STRING)
         public Rounds round1;
@@ -115,7 +130,6 @@ public class Jobs {
         @Column(name = "round_2")
         @Enumerated(EnumType.STRING)
         public Rounds round2;
-
 
         @Column(name = "round_3")
         @Enumerated(EnumType.STRING)

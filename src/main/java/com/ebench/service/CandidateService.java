@@ -3,6 +3,7 @@ package com.ebench.service;
 import com.ebench.Apimessage.ApiMessage;
 import com.ebench.Config.JwtTokenUtil;
 import com.ebench.dto.CandidateReqDto;
+import com.ebench.dto.loginDto.LoginRequestDto;
 import com.ebench.dto.loginDto.LoginResponseDto;
 import com.ebench.entity.Candidate;
 import com.ebench.Enums.UserType;
@@ -31,6 +32,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
@@ -101,9 +103,9 @@ public class CandidateService {
 
             Candidate candidate = new Candidate();
             candidate.setFirstName(candidateReqDto.getFirstName());
+            candidate.setSkills(candidateReqDto.getSkills());
             candidate.setLastName(candidateReqDto.getLastName());
             candidate.setKeyExperience(candidateReqDto.getKeyExperience());
-            candidate.setSkills(candidateReqDto.getSkills());
             candidate.setAddress(candidateReqDto.getAddress());
             candidate.setSkypeId(candidateReqDto.getSkypeId());
             candidate.setWhatsapp(candidateReqDto.getWhatsapp());
@@ -119,12 +121,12 @@ public class CandidateService {
             }
             candidate.setInterest(candidateReqDto.getInterest());
 
-                if (candidateReqDto.getMobile().isEmpty() || candidateReqDto.getMobile().length() != 10) {
-                    logger.error("mobile number validating");
-                    throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
-                } else {
-                    candidate.setMobile(candidateReqDto.getMobile());
-                }
+            if (candidateReqDto.getMobile().isEmpty() || candidateReqDto.getMobile().length() != 10) {
+                logger.error("mobile number validating");
+                throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
+            } else {
+                candidate.setMobile(candidateReqDto.getMobile());
+            }
 //            }
 
 
@@ -132,11 +134,11 @@ public class CandidateService {
 
             if (pattern != true) {
                 throw new BadReqException(ApiMessage.Password_Not_Proper_Format);
-            }
-            else {
+            } else {
                 candidate.setPassword(candidateReqDto.getPassword());
             }
 
+            candidate.setAvailableForWork(candidateReqDto.isAvailableForWork());
             candidate.setUserType(candidateReqDto.getUserType());
             candidate.setDeleted(candidateReqDto.isDeleted());
             candidate.setTwitterId(candidateReqDto.getTwitterId());
@@ -159,8 +161,15 @@ public class CandidateService {
             candidate.setRating(candidateReqDto.getRating());
             candidate.setIsCandidate(candidateReqDto.isCandidate());
             candidate.setInterviewId(candidateReqDto.getInterviewId());
+            candidate.setIntermediate(candidateReqDto.getIntermediate());
+            candidate.setGraduation(candidateReqDto.getGraduation());
+            candidate.setPostGraduation(candidateReqDto.getPostGraduation());
+            candidate.setCertification(candidateReqDto.getCertification());
+            candidate.setChooseIndustry(candidateReqDto.getChooseIndustry());
+            candidate.setSkillsCategory(candidateReqDto.getSkillsCategory());
 
             candidateRepository.save(candidate);
+
         } catch (BadReqException e) {
             logger.error("candidate not saved____________________>-_____________");
             throw new BadReqException(e.getMessage());
@@ -168,6 +177,7 @@ public class CandidateService {
         logger.info("calling method Registration:return whole data of candidate");
         return candidateReqDto;
     }
+
 
     public Boolean emailAlreadyExist(String email) {
         System.out.println("In Email Exist Checking Method");
@@ -213,10 +223,10 @@ public class CandidateService {
 
         Optional<Candidate> candidate = candidateRepository.findById(candidateReqDto.getCandidateId());
 
-        Candidate candidate1=null;
+        Candidate candidate1 = null;
 
         try {
-            if(candidateReqDto.getEmail() !=null) {
+            if (candidateReqDto.getEmail() != null) {
                 String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                         + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
                 boolean emailValidation = Pattern.compile(regexPattern)
@@ -225,7 +235,7 @@ public class CandidateService {
                 System.out.println((emailValidation));
             }
 
-            if(candidateReqDto.getPassword() !=null) {
+            if (candidateReqDto.getPassword() != null) {
                 String PASSWORD_PATTERN = "^(?=(?:[a-zA-Z0-9]*[a-zA-Z]){2})(?=(?:[a-zA-Z0-9]*\\d){2})[a-zA-Z0-9]{8,}$";
                 boolean pattern = Pattern.compile(PASSWORD_PATTERN)
                         .matcher(candidateReqDto.getPassword())
@@ -233,73 +243,99 @@ public class CandidateService {
                 System.out.println((pattern));
             }
 
-            if(candidate.isPresent()) {
+            if (candidate.isPresent()) {
 
                 candidate1 = candidate.get();
 
-                if(candidateReqDto.getFirstName() !=null){
-                candidate1.setFirstName(candidateReqDto.getFirstName());
+                if (candidateReqDto.getFirstName() != null) {
+                    candidate1.setFirstName(candidateReqDto.getFirstName());
                 }
 
-                if(candidateReqDto.getLastName() !=null){
-                candidate1.setLastName(candidateReqDto.getLastName());
+                if (candidateReqDto.getLastName() != null) {
+                    candidate1.setLastName(candidateReqDto.getLastName());
                 }
 
-                if(candidateReqDto.getKeyExperience() !=null) {
+                if (candidateReqDto.getKeyExperience() != null) {
                     candidate1.setKeyExperience(candidateReqDto.getKeyExperience());
                 }
-
-                if(candidateReqDto.getSkills()!=null) {
-                    candidate1.setSkills(candidateReqDto.getSkills());
-                }
-                if(candidateReqDto.getAddress() !=null) {
+//
+//                if (candidateReqDto.getSkills() != null) {
+//                    candidate1.setSkills(candidateReqDto.getSkills());
+//                }
+                if (candidateReqDto.getAddress() != null) {
                     candidate1.setAddress(candidateReqDto.getAddress());
                 }
 
-                if(candidateReqDto.getSkypeId() !=null) {
+                if (candidateReqDto.getSkypeId() != null) {
                     candidate1.setSkypeId(candidateReqDto.getSkypeId());
                 }
 
-                if(candidateReqDto.getWhatsapp() !=null) {
+                if (candidateReqDto.getWhatsapp() != null) {
                     candidate1.setWhatsapp(candidateReqDto.getWhatsapp());
                 }
 
-                if(candidateReqDto.getCountry() !=null) {
+                if (candidateReqDto.getCountry() != null) {
                     candidate1.setCountry(candidateReqDto.getCountry());
                 }
 
-                if(candidateReqDto.getState() !=null) {
+                if (candidateReqDto.getState() != null) {
                     candidate1.setState(candidateReqDto.getState());
                 }
 
-                if(candidateReqDto.getCity() !=null) {
+                if (candidateReqDto.getCity() != null) {
                     candidate1.setCity(candidateReqDto.getCity());
                 }
 
-                if(candidateReqDto.getHobbies() !=null) {
+                if (candidateReqDto.getHobbies() != null) {
                     candidate1.setHobbies(candidateReqDto.getHobbies());
+                }
+
+
+                if (candidateReqDto.getIntermediate() != null) {
+                    candidate1.setIntermediate(candidateReqDto.getIntermediate());
+                }
+
+                if (candidateReqDto.getGraduation() != null) {
+                    candidate1.setGraduation(candidateReqDto.getGraduation());
+                }
+
+                if (candidateReqDto.getPostGraduation() != null) {
+                    candidate1.setPostGraduation(candidateReqDto.getPostGraduation());
+                }
+
+                if (candidateReqDto.getCertification() != null) {
+                    candidate1.setCertification(candidateReqDto.getCertification());
+                }
+
+                if (candidateReqDto.getChooseIndustry() != null) {
+                    candidate1.setChooseIndustry(candidateReqDto.getChooseIndustry());
+                }
+
+                if (candidateReqDto.getSkillsCategory() != null) {
+                    candidate1.setSkillsCategory(candidateReqDto.getSkillsCategory());
                 }
 //                if (!emailValidation) {
 //                    throw new BadReqException(ApiMessage.Email_Not_In_Proper_Format);
 //
 //                } else
-                    if(candidateReqDto.getEmail() !=null) {
+                if (candidateReqDto.getEmail() != null) {
                     candidate1.setEmail(candidateReqDto.getEmail());
                 }
-                 if(candidateReqDto.getInterest() !=null) {
-                     candidate1.setInterest(candidateReqDto.getInterest());
-                 }
-               if(candidateReqDto.getMobile()!=null){
-
-                if (candidateReqDto.getMobile().isEmpty() || candidateReqDto.getMobile().length() != 10) {
-                    throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
+                if (candidateReqDto.getInterest() != null) {
+                    candidate1.setInterest(candidateReqDto.getInterest());
                 }
+                if (candidateReqDto.getMobile() != null) {
 
-                } else if(candidateReqDto.getMobile() !=null) {
+                    if (candidateReqDto.getMobile().isEmpty() || candidateReqDto.getMobile().length() != 10) {
+                        throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
+                    }
+
+                } else if (candidateReqDto.getMobile() != null) {
 
                     candidate1.setMobile(candidateReqDto.getMobile());
                 }
-                    candidate1.setAvailableForWork(candidateReqDto.isAvailableForWork());
+
+                candidate1.setAvailableForWork(candidateReqDto.isAvailableForWork());
 
 //
 //                if (pattern != false) {
@@ -307,83 +343,87 @@ public class CandidateService {
 //                }
 //                else
 
-                    if(candidateReqDto.getPassword() !=null){
+                if (candidateReqDto.getPassword() != null) {
                     candidate1.setPassword(candidateReqDto.getPassword());
                 }
 
-                if(candidateReqDto.getUserType() !=null) {
+                if (candidateReqDto.getUserType() != null) {
                     candidate1.setUserType(candidateReqDto.getUserType());
                 }
 
-                if(candidateReqDto.getTwitterId() !=null) {
+                if (candidateReqDto.getTwitterId() != null) {
                     candidate1.setTwitterId(candidateReqDto.getTwitterId());
                 }
 
-                if(candidateReqDto.getLinkedIn() !=null) {
+                if (candidateReqDto.getLinkedIn() != null) {
                     candidate1.setLinkedIn(candidateReqDto.getLinkedIn());
                 }
 
-                if(candidateReqDto.getPincode() !=null) {
+                if (candidateReqDto.getPincode() != null) {
                     candidate1.setPincode(candidateReqDto.getPincode());
                 }
 
-                    candidate1.setActiveStatus(candidateReqDto.isActiveStatus());
+                candidate1.setActiveStatus(candidateReqDto.isActiveStatus());
 
-                if(candidateReqDto.getLastSeen() !=null) {
+                if (candidateReqDto.getLastSeen() != null) {
                     candidate1.setLastSeen(candidateReqDto.getLastSeen());
                 }
 
-                if(candidateReqDto.getCurrentDesignation() !=null) {
+                if (candidateReqDto.getCurrentDesignation() != null) {
                     candidate1.setCurrentDesignation(candidateReqDto.getCurrentDesignation());
                 }
 
-                if(candidateReqDto.getJobProfile() !=null) {
+                if (candidateReqDto.getJobProfile() != null) {
                     candidate1.setJobProfile(candidateReqDto.getJobProfile());
                 }
 
-                if(candidateReqDto.getOverview() !=null) {
+                if (candidateReqDto.getOverview() != null) {
                     candidate1.setOverview(candidateReqDto.getOverview());
                 }
 
-                if(candidateReqDto.getCurrentlyWorkingCompanyName() !=null) {
+                if (candidateReqDto.getCurrentlyWorkingCompanyName() != null) {
                     candidate1.setCurrentlyWorkingCompanyName(candidateReqDto.getCurrentlyWorkingCompanyName());
                 }
 
-                if(candidateReqDto.getRoleInHiring() !=null) {
+                if (candidateReqDto.getRoleInHiring() != null) {
                     candidate1.setRoleInHiring(candidateReqDto.getRoleInHiring());
                 }
 
-                if(candidateReqDto.getJoiningDateInCompany() !=null) {
+                if (candidateReqDto.getJoiningDateInCompany() != null) {
                     candidate1.setJoiningDateInCompany(candidateReqDto.getJoiningDateInCompany());
                 }
 
-                if(candidateReqDto.getSpecialization() !=null) {
+                if (candidateReqDto.getSpecialization() != null) {
                     candidate1.setSpecialization(candidateReqDto.getSpecialization());
 
                 }
 
-                if(candidateReqDto.getYearOfPassing() !=null) {
+                if (candidateReqDto.getYearOfPassing() != null) {
                     candidate1.setYearOfPassing(candidateReqDto.getYearOfPassing());
                 }
 
-                if(candidateReqDto.getPercentage() !=null) {
+                if (candidateReqDto.getPercentage() != null) {
                     candidate1.setPercentage(candidateReqDto.getPercentage());
                 }
 
-                if(candidateReqDto.getCollegeName() !=null) {
+                if (candidateReqDto.getCollegeName() != null) {
                     candidate1.setCollegeName(candidateReqDto.getCollegeName());
 
                 }
 
-                if(candidateReqDto.getUniversityName() !=null) {
+                if (candidateReqDto.getUniversityName() != null) {
                     candidate1.setUniversityName(candidateReqDto.getUniversityName());
                 }
 
-                if(candidateReqDto.getSchoolName() !=null) {
+                if (candidateReqDto.getSchoolName() != null) {
                     candidate1.setSchoolName(candidateReqDto.getSchoolName());
                 }
 
-                if(candidateReqDto.getRating() !=null) {
+                if(candidateReqDto.getSkills() !=null) {
+                    candidate1.setSkills(candidateReqDto.getSkills());
+                }
+
+                if (candidateReqDto.getRating() != null) {
                     candidate1.setRating(candidateReqDto.getRating());
                 }
 
@@ -391,18 +431,17 @@ public class CandidateService {
 
                 candidate1.setDeleted(candidateReqDto.isDeleted());
 
-                if(candidateReqDto.getInterviewId() !=null) {
+                if (candidateReqDto.getInterviewId() != null) {
                     candidate1.setInterviewId(candidateReqDto.getInterviewId());
                 }
 
-                 candidateRepository.save(candidate1);
+                candidateRepository.save(candidate1);
 
                 System.out.println("candidate update details " + candidate1);
 
             }
             return candidateReqDto;
-        }
-        catch (BadReqException e) {
+        } catch (BadReqException e) {
             e.printStackTrace();
         }
         return candidateReqDto;
@@ -428,7 +467,8 @@ public class CandidateService {
     }
 
     //___________________________________Login for user_________________________________________________________________
-    public LoginResponseDto login(String email, String password, UserType userType) throws Exception {
+
+    public LoginResponseDto login(LoginRequestDto loginRequestDto) throws Exception {
 
         logger.info("The user is candidate");
 
@@ -438,11 +478,11 @@ public class CandidateService {
                 .matcher(email)
                 .matches();
 
-        if (email.isEmpty() || !emailValidation) {
+        if (loginRequestDto.getEmail().isEmpty()|| !emailValidation) {
             logger.info("Please Enter valid email");
             throw new BadReqException(ApiMessage.ENTER_EMAIL);
         }
-        if (password.isEmpty() || password.length() < 4) {
+        if (loginRequestDto.getEmail().isEmpty()|| password.length() < 4) {
             logger.info("please Enter valid password");
             throw new BadReqException(ApiMessage.ENTER_PASSWORD);
         }
@@ -454,54 +494,64 @@ public class CandidateService {
 
         LoginResponseDto loginResponseDto = null;
 
-        if (userType == UserType.CANDIDATE) {
-            System.out.println("Yes Candidate");
-            candidate1 = candidateRepository.findByEmailAndPassword(email, password);
+
+        if (loginRequestDto.getUserType() == UserType.CANDIDATE) {
+
+            System.out.println("-------------- " + loginRequestDto.getUserType());
+
+             candidate1 = candidateRepository.findByEmailAndPassword(loginRequestDto.getEmail(), loginRequestDto.getPassword());
+
             if (candidate1 == null) {
+
                 logger.info("Invalid credentials in login candidate");
+
                 throw new BadReqException(ApiMessage.INVALID_credential);
             }
-            authenticate(email, password);
+            else {
+                authenticate(loginRequestDto.getEmail() , loginRequestDto.getPassword());
 
                 /*final UserDetails userDetails = jwtInMemoryUserDetailsService
                         .loadUserByUsername(email);*/
 
-            final UserDetails userDetails = new User(candidate1.getEmail(), new BCryptPasswordEncoder().encode(candidate1.getPassword()),
-                    new ArrayList<>());
+                final UserDetails userDetails = new User(candidate1.getEmail(), new BCryptPasswordEncoder().encode(candidate1.getPassword()),
+                        new ArrayList<>());
 
-            token = jwtTokenUtil.generateToken(userDetails);
+                token = jwtTokenUtil.generateToken(userDetails);
 
-            loginResponseDto = new LoginResponseDto( token , candidate1.getCandidateId(), candidate1.userType);
+                loginResponseDto = new LoginResponseDto(token, candidate1.getCandidateId(), candidate1.userType);
 
-            System.out.println("Token generated from candidate " + token);
+                System.out.println("Token generated from candidate " + token);
 
-            logger.info("candidate login sucessfully");
+                logger.info("candidate login sucessfully");
+            }
         }
+        if (loginRequestDto.getUserType() == UserType.VENDOR) {
 
-        if(userType == UserType.VENDOR){
-             vendor = vendorRepository.findByEmailAndPassword(email, password);
+            vendor = vendorRepository.findByEmailAndPassword(loginRequestDto.getEmail(), loginRequestDto.getPassword());
+
             if (vendor == null) {
                 throw new BadReqException(ApiMessage.INVALID_CREDENTIAL);
             }
-            logger.info("vendor details by login " + vendor);
 
-            authenticate(email, password);
+          else{
+                authenticate(loginRequestDto.getEmail() , loginRequestDto.getPassword());
 
             /*final UserDetails userDetails = jwtInMemoryUserDetailsService
                     .loadUserByUsername(email);*/
 
 
-            final UserDetails userDetails = new User(vendor.getEmail(), new BCryptPasswordEncoder().encode(vendor.getPassword()),
-                    new ArrayList<>());
+                final UserDetails userDetails = new User(vendor.getEmail(), new BCryptPasswordEncoder().encode(vendor.getPassword()),
+                        new ArrayList<>());
 
-            token = jwtTokenUtil.generateToken(userDetails);
+                token = jwtTokenUtil.generateToken(userDetails);
 
-            logger.info("vendor login sucessfully");
+                logger.info("vendor login sucessfully");
 
-            loginResponseDto = new LoginResponseDto(vendor.getVendorId(), token  , vendor.userType);
+                loginResponseDto = new LoginResponseDto(vendor.getVendorId(), token, vendor.userType);
 
-            System.out.println("token generated by vendor");
+                System.out.println("token generated by vendor");
 
+            }
         }
 
         return loginResponseDto;
@@ -596,79 +646,77 @@ public class CandidateService {
             }
 
         }
-                Candidate candidate = new Candidate();
-        try{
-                candidate.setFirstName(candidateReqDto.getFirstName());
-                candidate.setLastName(candidateReqDto.getLastName());
-                candidate.setKeyExperience(candidateReqDto.getKeyExperience());
-                candidate.setSkills(candidateReqDto.getSkills());
-                candidate.setAddress(candidateReqDto.getAddress());
-                candidate.setSkypeId(candidateReqDto.getSkypeId());
-                candidate.setWhatsapp(candidateReqDto.getWhatsapp());
-                candidate.setCountry(candidateReqDto.getCountry());
-                candidate.setState(candidateReqDto.getState());
-                candidate.setCity(candidateReqDto.getCity());
-                candidate.setRole(candidateReqDto.getRole());
-                candidate.setHobbies(candidateReqDto.getHobbies());
-                if (!emailValidation) {
-                    throw new BadReqException(ApiMessage.Email_Not_In_Proper_Format);
-                } else {
-                    candidate.setEmail(candidateReqDto.getEmail());
-                }
-                candidate.setInterest(candidateReqDto.getInterest());
+        Candidate candidate = new Candidate();
+        try {
+            candidate.setFirstName(candidateReqDto.getFirstName());
+            candidate.setLastName(candidateReqDto.getLastName());
+            candidate.setKeyExperience(candidateReqDto.getKeyExperience());
+            candidate.setAddress(candidateReqDto.getAddress());
+            candidate.setSkypeId(candidateReqDto.getSkypeId());
+            candidate.setWhatsapp(candidateReqDto.getWhatsapp());
+            candidate.setCountry(candidateReqDto.getCountry());
+            candidate.setState(candidateReqDto.getState());
+            candidate.setCity(candidateReqDto.getCity());
+            candidate.setRole(candidateReqDto.getRole());
+            candidate.setHobbies(candidateReqDto.getHobbies());
+            if (!emailValidation) {
+                throw new BadReqException(ApiMessage.Email_Not_In_Proper_Format);
+            } else {
+                candidate.setEmail(candidateReqDto.getEmail());
+            }
+            candidate.setInterest(candidateReqDto.getInterest());
 
-                if (candidateReqDto.getMobile().isEmpty() || candidateReqDto.getMobile().length() != 10) {
-                    throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
-                } else {
-                    candidate.setMobile(candidateReqDto.getMobile());
-                }
-                candidate.setAvailableForWork(candidateReqDto.isAvailableForWork());
-                if (pattern != true) {
-                    throw new BadReqException(ApiMessage.Password_Not_Proper_Format);
-                } else {
-                    candidate.setPassword(candidateReqDto.getPassword());
-                }
-                candidate.setProfileImageUrl(fileNameAndPath.toString());
-                candidate.setUserType(candidateReqDto.getUserType());
-                candidate.setDeleted(candidateReqDto.isDeleted());
-                candidate.setTwitterId(candidateReqDto.getTwitterId());
-                candidate.setLinkedIn(candidateReqDto.getLinkedIn());
-                candidate.setPincode(candidateReqDto.getPincode());
-                candidate.setActiveStatus(candidateReqDto.isActiveStatus());
-                candidate.setLastSeen(candidateReqDto.getLastSeen());
-                candidate.setCurrentDesignation(candidateReqDto.getCurrentDesignation());
-                candidate.setJobProfile(candidateReqDto.getJobProfile());
-                candidate.setOverview(candidateReqDto.getOverview());
-                candidate.setCurrentlyWorkingCompanyName(candidateReqDto.getCurrentlyWorkingCompanyName());
-                candidate.setRoleInHiring(candidateReqDto.getRoleInHiring());
-                candidate.setJoiningDateInCompany(candidateReqDto.getJoiningDateInCompany());
-                candidate.setSpecialization(candidateReqDto.getSpecialization());
-                candidate.setYearOfPassing(candidateReqDto.getYearOfPassing());
-                candidate.setPercentage(candidateReqDto.getPercentage());
-                candidate.setCollegeName(candidateReqDto.getCollegeName());
-                candidate.setUniversityName(candidateReqDto.getUniversityName());
-                candidate.setSchoolName(candidateReqDto.getSchoolName());
-                candidate.setEmailVerifyCode(Common.getRandomNumberString());
-                candidate.setIsCandidate(candidateReqDto.isCandidate());
-                candidate.setEmailVerified(false);
-                candidate.setIsCandidate(candidateReqDto.isCandidate());
-                candidate.setRating(candidateReqDto.getRating());
-                candidate.setInterviewId(candidateReqDto.getInterviewId());
-                candidate.setProfileImageUrl((fileNameAndPath == null) ? "" : fileNameAndPath.toString());
+            if (candidateReqDto.getMobile().isEmpty() || candidateReqDto.getMobile().length() != 10) {
+                throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
+            } else {
+                candidate.setMobile(candidateReqDto.getMobile());
+            }
+            candidate.setAvailableForWork(candidateReqDto.isAvailableForWork());
+            if (pattern != true) {
+                throw new BadReqException(ApiMessage.Password_Not_Proper_Format);
+            } else {
+                candidate.setPassword(candidateReqDto.getPassword());
+            }
+            candidate.setProfileImageUrl(fileNameAndPath.toString());
+            candidate.setUserType(candidateReqDto.getUserType());
+            candidate.setDeleted(candidateReqDto.isDeleted());
+            candidate.setTwitterId(candidateReqDto.getTwitterId());
+            candidate.setLinkedIn(candidateReqDto.getLinkedIn());
+            candidate.setPincode(candidateReqDto.getPincode());
+            candidate.setActiveStatus(candidateReqDto.isActiveStatus());
+            candidate.setLastSeen(candidateReqDto.getLastSeen());
+            candidate.setCurrentDesignation(candidateReqDto.getCurrentDesignation());
+            candidate.setJobProfile(candidateReqDto.getJobProfile());
+            candidate.setOverview(candidateReqDto.getOverview());
+            candidate.setCurrentlyWorkingCompanyName(candidateReqDto.getCurrentlyWorkingCompanyName());
+            candidate.setRoleInHiring(candidateReqDto.getRoleInHiring());
+            candidate.setJoiningDateInCompany(candidateReqDto.getJoiningDateInCompany());
+            candidate.setSpecialization(candidateReqDto.getSpecialization());
+            candidate.setYearOfPassing(candidateReqDto.getYearOfPassing());
+            candidate.setPercentage(candidateReqDto.getPercentage());
+            candidate.setCollegeName(candidateReqDto.getCollegeName());
+            candidate.setUniversityName(candidateReqDto.getUniversityName());
+            candidate.setSchoolName(candidateReqDto.getSchoolName());
+            candidate.setEmailVerifyCode(Common.getRandomNumberString());
+            candidate.setIsCandidate(candidateReqDto.isCandidate());
+            candidate.setEmailVerified(false);
+            candidate.setIsCandidate(candidateReqDto.isCandidate());
+            candidate.setRating(candidateReqDto.getRating());
+            candidate.setInterviewId(candidateReqDto.getInterviewId());
+            candidate.setProfileImageUrl((fileNameAndPath == null) ? "" : fileNameAndPath.toString());
 
-                candidateRepository.save(candidate);
-                sendVerificationEmail(candidate);
-                return candidate;
+            candidateRepository.save(candidate);
+            sendVerificationEmail(candidate);
+            return candidate;
 
-          }
-        catch (BadReqException e) {
-        throw new BadReqException(e.getMessage());
+        } catch (BadReqException e) {
+            throw new BadReqException(e.getMessage());
 
-    } catch (IOException e) {
-        e.printStackTrace();
-    } catch (MessagingException e) {
-        e.printStackTrace();
-    }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
         return candidate;
 
     }
@@ -728,7 +776,7 @@ public class CandidateService {
         Candidate candidate1 = null;
 
 
-        if(candidateReqDto.getEmail() !=null) {
+        if (candidateReqDto.getEmail() != null) {
             String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                     + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
             boolean emailValidation = Pattern.compile(regexPattern)
@@ -736,237 +784,411 @@ public class CandidateService {
                     .matches();
 
             if (!emailValidation) {
-            throw new BadReqException(ApiMessage.Email_Not_In_Proper_Format);
+                throw new BadReqException(ApiMessage.Email_Not_In_Proper_Format);
             }
 
             System.out.println((emailValidation));
         }
 
-        if(candidateReqDto.getPassword() !=null) {
+        if (candidateReqDto.getPassword() != null) {
             String PASSWORD_PATTERN = "^(?=(?:[a-zA-Z0-9]*[a-zA-Z]){2})(?=(?:[a-zA-Z0-9]*\\d){2})[a-zA-Z0-9]{8,}$";
             boolean pattern = Pattern.compile(PASSWORD_PATTERN)
                     .matcher(candidateReqDto.getPassword())
                     .matches();
 
-        if (!pattern ) {
-         throw new BadReqException(ApiMessage.Password_Not_Proper_Format);
-        }
+            if (!pattern) {
+                throw new BadReqException(ApiMessage.Password_Not_Proper_Format);
+            }
 
             System.out.println((pattern));
         }
 
-            try {
-                if(candidate.isPresent()) {
-                     candidate1 = candidate.get();
+        try {
+            if (candidate.isPresent()) {
+                candidate1 = candidate.get();
 
-                    Path fileNameAndPath = null;
+                Path fileNameAndPath = null;
 
-                    if (!file.isEmpty()) {
-                        StringBuilder fileName = new StringBuilder();
-                        String filename = file.getOriginalFilename();
-                        String[] str = filename.split("[.]", 2);
-                        for (String i : str) {
-                            System.out.println(i);
-                        }
-
-                        String fileNameWithTime = str[0] + "_" + System.currentTimeMillis() + "." + str[1];
-                        System.out.println("FIle NAme With TIme : " + fileNameWithTime);
-                        fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + fileNameWithTime);
-                        fileName.append(file.getOriginalFilename());
-                        Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
-
-                        String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
-
-                        System.out.println("file uploaded successfully  " + fileNameAndPath);
-                        System.out.println(candidateReqDto);
-
+                if (!file.isEmpty()) {
+                    StringBuilder fileName = new StringBuilder();
+                    String filename = file.getOriginalFilename();
+                    String[] str = filename.split("[.]", 2);
+                    for (String i : str) {
+                        System.out.println(i);
                     }
 
-                    if (candidateReqDto.getFirstName() != null) {
-                        candidate1.setFirstName(candidateReqDto.getFirstName());
-                    }
+                    String fileNameWithTime = str[0] + "_" + System.currentTimeMillis() + "." + str[1];
+                    System.out.println("FIle NAme With TIme : " + fileNameWithTime);
+                    fileNameAndPath = Paths.get(UPLOAD_DIR, File.separator + fileNameWithTime);
+                    fileName.append(file.getOriginalFilename());
+                    Files.copy(file.getInputStream(), fileNameAndPath, StandardCopyOption.REPLACE_EXISTING);
 
-                    if (candidateReqDto.getLastName() != null) {
-                        candidate1.setLastName(candidateReqDto.getLastName());
-                    }
+                    String fileName2 = StringUtils.cleanPath(String.valueOf(fileNameAndPath.getFileName()));
 
-                    if (candidateReqDto.getKeyExperience() != null) {
-                        candidate1.setKeyExperience(candidateReqDto.getKeyExperience());
-                    }
+                    System.out.println("file uploaded successfully  " + fileNameAndPath);
+                    System.out.println(candidateReqDto);
 
-                    if (candidateReqDto.getSkills() != null) {
-                        candidate1.setSkills(candidateReqDto.getSkills());
-                    }
-                    if (candidateReqDto.getAddress() != null) {
-                        candidate1.setAddress(candidateReqDto.getAddress());
-                    }
-
-                    if (candidateReqDto.getSkypeId() != null) {
-                        candidate1.setSkypeId(candidateReqDto.getSkypeId());
-                    }
-
-                    if (candidateReqDto.getWhatsapp() != null) {
-                        candidate1.setWhatsapp(candidateReqDto.getWhatsapp());
-                    }
-
-                    if (candidateReqDto.getCountry() != null) {
-                        candidate1.setCountry(candidateReqDto.getCountry());
-                    }
-
-                    if (candidateReqDto.getState() != null) {
-                        candidate1.setState(candidateReqDto.getState());
-                    }
-
-                    if (candidateReqDto.getCity() != null) {
-                        candidate1.setCity(candidateReqDto.getCity());
-                    }
-
-                    if (candidateReqDto.getHobbies() != null) {
-                        candidate1.setHobbies(candidateReqDto.getHobbies());
-                    }
-
-                    if (candidateReqDto.getEmail() != null) {
-                        candidate1.setEmail(candidateReqDto.getEmail());
-                    }
-                    if (candidateReqDto.getInterest() != null) {
-                        candidate1.setInterest(candidateReqDto.getInterest());
-                    }
-                    if (candidateReqDto.getMobile() != null) {
-                        if (candidateReqDto.getMobile().isEmpty() || candidateReqDto.getMobile().length() != 10) {
-                            throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
-                        }
-
-                    } else if (candidateReqDto.getMobile() != null) {
-                        candidate1.setMobile(candidateReqDto.getMobile());
-                    }
-
-                    candidate1.setAvailableForWork(candidateReqDto.isAvailableForWork());
-
-                    if (candidateReqDto.getPassword() != null) {
-                        candidate1.setPassword(candidateReqDto.getPassword());
-                    }
-
-                    if(fileNameAndPath != null)
-                        candidate1.setProfileImageUrl(fileNameAndPath.toString());
-
-                    if (candidateReqDto.getUserType() != null) {
-                        candidate1.setUserType(candidateReqDto.getUserType());
-                    }
-
-                    if (candidateReqDto.getTwitterId() != null) {
-                        candidate1.setTwitterId(candidateReqDto.getTwitterId());
-                    }
-
-                    if (candidateReqDto.getLinkedIn() != null) {
-                        candidate1.setLinkedIn(candidateReqDto.getLinkedIn());
-                    }
-
-                    if (candidateReqDto.getPincode() != null) {
-                        candidate1.setPincode(candidateReqDto.getPincode());
-                    }
-
-                    candidate1.setActiveStatus(candidateReqDto.isActiveStatus());
-
-                    if (candidateReqDto.getLastSeen() != null) {
-                        candidate1.setLastSeen(candidateReqDto.getLastSeen());
-                    }
-
-                    if (candidateReqDto.getCurrentDesignation() != null) {
-                        candidate1.setCurrentDesignation(candidateReqDto.getCurrentDesignation());
-                    }
-
-                    if (candidateReqDto.getJobProfile() != null) {
-                        candidate1.setJobProfile(candidateReqDto.getJobProfile());
-                    }
-
-                    if (candidateReqDto.getOverview() != null) {
-                        candidate1.setOverview(candidateReqDto.getOverview());
-                    }
-
-                    if (candidateReqDto.getCurrentlyWorkingCompanyName() != null) {
-                        candidate1.setCurrentlyWorkingCompanyName(candidateReqDto.getCurrentlyWorkingCompanyName());
-                    }
-
-                    if (candidateReqDto.getRoleInHiring() != null) {
-                        candidate1.setRoleInHiring(candidateReqDto.getRoleInHiring());
-                    }
-
-                    if (candidateReqDto.getJoiningDateInCompany() != null) {
-                        candidate1.setJoiningDateInCompany(candidateReqDto.getJoiningDateInCompany());
-                    }
-
-                    if (candidateReqDto.getSpecialization() != null) {
-                        candidate1.setSpecialization(candidateReqDto.getSpecialization());
-
-                    }
-
-                    if (candidateReqDto.getYearOfPassing() != null) {
-                        candidate1.setYearOfPassing(candidateReqDto.getYearOfPassing());
-                    }
-
-                    if (candidateReqDto.getPercentage() != null) {
-                        candidate1.setPercentage(candidateReqDto.getPercentage());
-                    }
-
-                    if (candidateReqDto.getCollegeName() != null) {
-                        candidate1.setCollegeName(candidateReqDto.getCollegeName());
-
-                    }
-
-                    if (candidateReqDto.getUniversityName() != null) {
-                        candidate1.setUniversityName(candidateReqDto.getUniversityName());
-                    }
-
-                    if (candidateReqDto.getSchoolName() != null) {
-                        candidate1.setSchoolName(candidateReqDto.getSchoolName());
-                    }
-
-                    if (candidateReqDto.getRating() != null) {
-                        candidate1.setRating(candidateReqDto.getRating());
-                    }
-
-                    candidate1.setEmailVerifyCode(Common.getRandomNumberString());
-
-                    candidate1.setIsCandidate(candidateReqDto.isCandidate());
-
-                    candidate1.setDeleted(candidateReqDto.isDeleted());
-
-
-                    if (candidateReqDto.getInterviewId() != null) {
-                        candidate1.setInterviewId(candidateReqDto.getInterviewId());
-                    }
-
-                    candidate1.setEmailVerified(false);
-
-                    candidate1.setProfileImageUrl((fileNameAndPath == null) ? "" : fileNameAndPath.toString());
-
-                    candidate1.setVerificationCode(VerificationCode.getRandomNumberString());
-
-                    Candidate candidate2 = candidateRepository.save(candidate1);
-
-                    sendVerificationEmail(candidate2);
-                    return candidate2;
-                }
-                else{
-                    throw new BadReqException(ApiMessage.CANDIDATE_NOT_PRESENT);
                 }
 
-            }
-            catch (BadReqException e) {
-                logger.error("version 2 of register api not saving successfully_____________________>------");
-                throw new BadReqException(e.getMessage());
+                if (candidateReqDto.getFirstName() != null) {
+                    candidate1.setFirstName(candidateReqDto.getFirstName());
+                }
+
+                if (candidateReqDto.getLastName() != null) {
+                    candidate1.setLastName(candidateReqDto.getLastName());
+                }
+
+                if (candidateReqDto.getKeyExperience() != null) {
+                    candidate1.setKeyExperience(candidateReqDto.getKeyExperience());
+                }
+
+                if (candidateReqDto.getAddress() != null) {
+                    candidate1.setAddress(candidateReqDto.getAddress());
+                }
+
+                if (candidateReqDto.getSkypeId() != null) {
+                    candidate1.setSkypeId(candidateReqDto.getSkypeId());
+                }
+
+                if (candidateReqDto.getWhatsapp() != null) {
+                    candidate1.setWhatsapp(candidateReqDto.getWhatsapp());
+                }
+
+                if (candidateReqDto.getCountry() != null) {
+                    candidate1.setCountry(candidateReqDto.getCountry());
+                }
+
+                if (candidateReqDto.getState() != null) {
+                    candidate1.setState(candidateReqDto.getState());
+                }
+
+                if (candidateReqDto.getCity() != null) {
+                    candidate1.setCity(candidateReqDto.getCity());
+                }
+
+                if (candidateReqDto.getHobbies() != null) {
+                    candidate1.setHobbies(candidateReqDto.getHobbies());
+                }
+
+                if (candidateReqDto.getEmail() != null) {
+                    candidate1.setEmail(candidateReqDto.getEmail());
+                }
+                if (candidateReqDto.getInterest() != null) {
+                    candidate1.setInterest(candidateReqDto.getInterest());
+                }
+                if (candidateReqDto.getMobile() != null) {
+                    if (candidateReqDto.getMobile().isEmpty() || candidateReqDto.getMobile().length() != 10) {
+                        throw new BadReqException(ApiMessage.Enter_Valid_Phone_Number);
+                    }
+
+                } else if (candidateReqDto.getMobile() != null) {
+                    candidate1.setMobile(candidateReqDto.getMobile());
+                }
+
+                candidate1.setAvailableForWork(candidateReqDto.isAvailableForWork());
+
+                if (candidateReqDto.getPassword() != null) {
+                    candidate1.setPassword(candidateReqDto.getPassword());
+                }
+
+                if (fileNameAndPath != null)
+                    candidate1.setProfileImageUrl(fileNameAndPath.toString());
+
+                if (candidateReqDto.getUserType() != null) {
+                    candidate1.setUserType(candidateReqDto.getUserType());
+                }
+
+                if (candidateReqDto.getTwitterId() != null) {
+                    candidate1.setTwitterId(candidateReqDto.getTwitterId());
+                }
+
+                if (candidateReqDto.getLinkedIn() != null) {
+                    candidate1.setLinkedIn(candidateReqDto.getLinkedIn());
+                }
+
+                if (candidateReqDto.getPincode() != null) {
+                    candidate1.setPincode(candidateReqDto.getPincode());
+                }
+
+                candidate1.setActiveStatus(candidateReqDto.isActiveStatus());
+
+                if (candidateReqDto.getLastSeen() != null) {
+                    candidate1.setLastSeen(candidateReqDto.getLastSeen());
+                }
+
+                if (candidateReqDto.getCurrentDesignation() != null) {
+                    candidate1.setCurrentDesignation(candidateReqDto.getCurrentDesignation());
+                }
+
+                if (candidateReqDto.getJobProfile() != null) {
+                    candidate1.setJobProfile(candidateReqDto.getJobProfile());
+                }
+
+                if (candidateReqDto.getOverview() != null) {
+                    candidate1.setOverview(candidateReqDto.getOverview());
+                }
+
+                if (candidateReqDto.getCurrentlyWorkingCompanyName() != null) {
+                    candidate1.setCurrentlyWorkingCompanyName(candidateReqDto.getCurrentlyWorkingCompanyName());
+                }
+
+                if (candidateReqDto.getRoleInHiring() != null) {
+                    candidate1.setRoleInHiring(candidateReqDto.getRoleInHiring());
+                }
+
+                if (candidateReqDto.getJoiningDateInCompany() != null) {
+                    candidate1.setJoiningDateInCompany(candidateReqDto.getJoiningDateInCompany());
+                }
+
+                if (candidateReqDto.getSpecialization() != null) {
+                    candidate1.setSpecialization(candidateReqDto.getSpecialization());
+
+                }
+
+                if (candidateReqDto.getYearOfPassing() != null) {
+                    candidate1.setYearOfPassing(candidateReqDto.getYearOfPassing());
+                }
+
+                if (candidateReqDto.getPercentage() != null) {
+                    candidate1.setPercentage(candidateReqDto.getPercentage());
+                }
+
+                if (candidateReqDto.getCollegeName() != null) {
+                    candidate1.setCollegeName(candidateReqDto.getCollegeName());
+
+                }
+
+                if (candidateReqDto.getUniversityName() != null) {
+                    candidate1.setUniversityName(candidateReqDto.getUniversityName());
+                }
+
+                if (candidateReqDto.getSchoolName() != null) {
+                    candidate1.setSchoolName(candidateReqDto.getSchoolName());
+                }
+
+                if (candidateReqDto.getRating() != null) {
+                    candidate1.setRating(candidateReqDto.getRating());
+                }
+
+                candidate1.setEmailVerifyCode(Common.getRandomNumberString());
+
+                candidate1.setIsCandidate(candidateReqDto.isCandidate());
+
+                candidate1.setDeleted(candidateReqDto.isDeleted());
+
+
+                if (candidateReqDto.getInterviewId() != null) {
+                    candidate1.setInterviewId(candidateReqDto.getInterviewId());
+                }
+
+                candidate1.setEmailVerified(false);
+
+                candidate1.setProfileImageUrl((fileNameAndPath == null) ? "" : fileNameAndPath.toString());
+
+                candidate1.setVerificationCode(VerificationCode.getRandomNumberString());
+
+                Candidate candidate2 = candidateRepository.save(candidate1);
+
+                sendVerificationEmail(candidate2);
+                return candidate2;
+            } else {
+                throw new BadReqException(ApiMessage.CANDIDATE_NOT_PRESENT);
             }
 
-            catch (IOException e) {
-                e.printStackTrace();
+        } catch (BadReqException e) {
+            logger.error("version 2 of register api not saving successfully_____________________>------");
+            throw new BadReqException(e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return candidate1;
+    }
+
+//    ----------------------------CANDIDATE PROFILE PROGRESS BAR--------------------------------------------------------
+
+    public Integer profileProgressBar(Long candidateId) {
+        Candidate byId = candidateRepository.findById(candidateId).get();
+
+            int count = 0;
+
+            if (byId.getFirstName() !=null && !byId.getFirstName().equals("")) {
+                count++;
             }
 
-            catch (Exception e) {
-                e.printStackTrace();
+            if (byId.getLastName() != null && !byId.getLastName().equals("")) {
+                count++;
             }
-            return candidate1;
+
+            if (byId.getKeyExperience() != null && !byId.getKeyExperience().equals("")) {
+                count++;
+            }
+
+//            if(byId.getSkills() != null && !byId.getSkills().equals("")) {
+//                count++;
+//            }
+//            else{
+//                System.out.println(" hello");
+//            }
+
+            if (byId.getAddress() != null && !byId.getAddress().equals("")) {
+                count++;
+            }
+
+            if (byId.getSkypeId() != null && !byId.getSkypeId().equals("")) {
+                count++;
+            }
+
+            if (byId.getWhatsapp() != null && !byId.getWhatsapp().equals("")) {
+                count++;
+            }
+
+            if (byId.getCountry() != null && !byId.getCountry().equals("")) {
+                count++;
+            }
+
+            if (byId.getState() != null && !byId.getState().equals("")) {
+                count++;
+            }
+
+            if (byId.getCity() != null && !byId.getCity().equals("")) {
+                count++;
+            }
+
+            if (byId.getHobbies() != null && !byId.getHobbies().equals("")) {
+                count++;
+            }
+
+            if (byId.getEmail() != null && !byId.getEmail().equals("")) {
+                count++;
+            }
+
+            if (byId.getInterest() != null && !byId.getInterest().equals("")) {
+                count++;
+            }
+
+
+            if (byId.getMobile() != null && !byId.getMobile().equals("")) {
+                count++;
+            }
+
+
+            if (byId.getPassword() != null && !byId.getPassword().equals("")) {
+                count++;
+            }
+
+            if (byId.getUserType() != null && !byId.getUserType().equals("")) {
+                count++;
+            }
+
+            if (byId.getTwitterId() != null && !byId.getTwitterId().equals("")) {
+                count++;
+            }
+
+            if (byId.getLinkedIn() != null && !byId.getLinkedIn().equals("")) {
+                count++;
+            }
+
+            if (byId.getPincode() != null && !byId.getPincode().equals("")) {
+                count++;
+            }
+
+
+            if (byId.getCurrentDesignation() != null && !byId.getCurrentDesignation().equals("")) {
+                count++;
+            }
+
+            if (byId.getJobProfile() != null && !byId.getJobProfile().equals("")) {
+                count++;
+            }
+
+            if (byId.getOverview() != null && !byId.getOverview().equals("")) {
+                count++;
+            }
+
+            if (byId.getCurrentlyWorkingCompanyName() != null && !byId.getCurrentlyWorkingCompanyName().equals("")) {
+                count++;
+            }
+
+            if (byId.getRoleInHiring() != null && !byId.getRoleInHiring().equals("")) {
+                count++;
+            }
+
+            if (byId.getJoiningDateInCompany() != null && !byId.getJoiningDateInCompany().equals("")) {
+                count++;
+            }
+
+            if (byId.getSpecialization() != null && !byId.getSpecialization().equals("")) {
+                count++;
+            }
+
+            if (byId.getYearOfPassing() != null && !byId.getYearOfPassing().equals("")) {
+                count++;
+            }
+
+            if (byId.getPercentage() != null && !byId.getPercentage().equals("")) {
+                count++;
+            }
+
+            if (byId.getCollegeName() != null && !byId.getCollegeName().equals("")) {
+                count++;
+            }
+
+            if (byId.getUniversityName() != null && !byId.getUniversityName().equals("")) {
+                count++;
+            }
+
+            if (byId.getSchoolName() != null && !byId.getSchoolName().equals("")) {
+                count++;
+            }
+
+            if (byId.getRating() != null && !byId.getRating().equals("")) {
+                count++;
+            }
+
+            if (byId.getChooseIndustry() != null && !byId.getChooseIndustry().equals("")) {
+                count++;
+            }
+
+          if (byId.getIntermediate() != null && !byId.getIntermediate().equals("")) {
+            count++;
+          }
+
+        if (byId.getGraduation() != null && !byId.getGraduation().equals("")) {
+            count++;
         }
 
+        if (byId.getPostGraduation() != null && !byId.getPostGraduation().equals("")) {
+            count++;
+        }
+
+        if (byId.getCertification() != null && !byId.getCertification().equals("")) {
+            count++;
+        }
+
+        if (byId.getPincode() != null && !byId.getPincode().equals("")) {
+            count++;
+        }
+        if (byId.getSkillsCategory() != null && !byId.getSkillsCategory().equals("")) {
+            count++;
+        }
+        if (byId.getTwitterId() != null && !byId.getTwitterId().equals("")) {
+            count++;
+        }
+        if (byId.getLinkedIn() != null && !byId.getLinkedIn().equals("")) {
+            count++;
+        }
+        if (byId.getSpecialization() != null && !byId.getSpecialization().equals("")) {
+            count++;
+        }
+
+                int percentage = count*100/52;
+
+                System.out.println("progress profile percentage " + percentage);
+
+        return percentage;
     }
+}
 
 

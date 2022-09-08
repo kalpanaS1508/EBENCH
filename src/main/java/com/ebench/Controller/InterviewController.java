@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/ebench")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class InterviewController {
 
     @Autowired

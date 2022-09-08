@@ -22,6 +22,7 @@ com\ebench\Apimessage\ApiMessage.class
 com\ebench\Controller\JwtAuthenticationController.class
 com\ebench\service\ProjectService.class
 com\ebench\service\Taskservice.class
+com\ebench\dto\CandidateSkillsResDto.class
 com\ebench\dto\InterviewResDto.class
 com\ebench\dto\jobResponseDto\MileStoneResDto.class
 com\ebench\dto\jobResponseDto\JobResponseDto.class
@@ -49,6 +50,7 @@ com\ebench\Controller\TaskController.class
 com\ebench\Controller\AppliedJobsController.class
 com\ebench\Controller\MileStoneController.class
 com\ebench\Controller\JobsController.class
+com\ebench\service\CandidateSkillsService.class
 com\ebench\Config\JwtTokenUtil.class
 com\ebench\Config\WebSecurityConfig.class
 com\ebench\Config\JwtAuthenticationEntryPoint.class
@@ -69,6 +71,7 @@ com\ebench\exception\ResourceNotFoundException.class
 com\ebench\utils\VerificationCode.class
 com\ebench\Enums\UserType.class
 com\ebench\entity\Vendor.class
+com\ebench\entity\CandidateSkills.class
 com\ebench\EbenchApplication.class
 com\ebench\repository\JobsRepository.class
 com\ebench\dto\CandidateReqDto.class
@@ -79,3 +82,5 @@ com\ebench\responses\JwtRequest.class
 com\ebench\exception\ProjectNotFoundException.class
 com\ebench\utils\ApiResponse.class
 com\ebench\Config\JwtRequestFilter.class
+com\ebench\Controller\CandidateSkillsController.class
+com\ebench\repository\CandidateSkillsRepository.class

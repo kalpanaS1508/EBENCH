@@ -10,11 +10,11 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LoginResponseDto {
 
-   public Long candidateId;
-   public Long vendorId;
-   public String firstName;
+    public Long candidateId;
+    public Long vendorId;
+    public String firstName;
     public String lastName;
-    private String email;
+    public String email;
     public String mobile;
     public String token;
     public UserType userType;

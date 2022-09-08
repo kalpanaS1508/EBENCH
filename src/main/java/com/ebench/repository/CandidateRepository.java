@@ -1,6 +1,7 @@
 package com.ebench.repository;
 
 import com.ebench.dto.CandidateResDto;
+import com.ebench.dto.loginDto.LoginRequestDto;
 import com.ebench.entity.Candidate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -37,6 +38,7 @@ public interface CandidateRepository extends JpaRepository<Candidate,Long> {
 
     @Query("select new com.ebench.dto.CandidateResDto (linkedIn,skypeId,twitterId) from Candidate where candidateId= ?1")
     CandidateResDto findByCandidateSocialIds(Long candidateId);
+
 }
 
 

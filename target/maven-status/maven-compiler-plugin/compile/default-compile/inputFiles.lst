@@ -1,5 +1,6 @@
 D:\EBench V1\EBENCH\src\main\java\com\ebench\exception\GlobalException.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\repository\JobWorkOrderRepository.java
+D:\EBench V1\EBENCH\src\main\java\com\ebench\dto\CandidateSkillsResDto.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\service\AppliedJobsService.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\Enums\AvailabilityType.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\utils\VerificationCode.java
@@ -19,6 +20,7 @@ D:\EBench V1\EBENCH\src\main\java\com\ebench\exception\ResourceNotFoundException
 D:\EBench V1\EBENCH\src\main\java\com\ebench\utils\ApiResponseSkeleton.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\Config\WebSecurityConfig.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\dto\CandidateReqDto.java
+D:\EBench V1\EBENCH\src\main\java\com\ebench\entity\CandidateSkills.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\Controller\JobWorkOrderController.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\Controller\LoginController.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\service\MileStoneService.java
@@ -29,6 +31,7 @@ D:\EBench V1\EBENCH\src\main\java\com\ebench\dto\jobResponseDto\MileStoneResDto.
 D:\EBench V1\EBENCH\src\main\java\com\ebench\repository\InterviewRepository.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\repository\MileStoneRepository.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\dto\jobResponseDto\AppliedJobResDto.java
+D:\EBench V1\EBENCH\src\main\java\com\ebench\repository\CandidateSkillsRepository.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\entity\Jobs.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\Controller\AppliedJobsController.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\Enums\InteviewMode.java
@@ -58,6 +61,7 @@ D:\EBench V1\EBENCH\src\main\java\com\ebench\exception\ResourceAlreadyExists.jav
 D:\EBench V1\EBENCH\src\main\java\com\ebench\service\ProjectService.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\Controller\InterviewController.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\entity\Interview.java
+D:\EBench V1\EBENCH\src\main\java\com\ebench\Controller\CandidateSkillsController.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\Controller\JobsController.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\dto\loginDto\LoginResponseDto.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\dto\InterviewResDto.java
@@ -77,5 +81,6 @@ D:\EBench V1\EBENCH\src\main\java\com\ebench\Enums\JobFilter.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\service\VendorLoginService.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\responses\JwtRequest.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\exception\UserNotFoundException.java
+D:\EBench V1\EBENCH\src\main\java\com\ebench\service\CandidateSkillsService.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\entity\Client.java
 D:\EBench V1\EBENCH\src\main\java\com\ebench\exception\ExceptionResponse.java

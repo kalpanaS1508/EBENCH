@@ -50,12 +50,15 @@ public class JobsController {
         return apiResponse.getResponse(apiResponse);
     }
 
-    @GetMapping(value = "/get_status")
+//    ---------------------------------GET POSTED JOB RESPONSES -------------------------------------------------------
+
+    @GetMapping(value = "/get_posted_job_responses")
     public ResponseEntity getJobs(@RequestParam("job_status") boolean jobStatus)
              throws IOException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.getJobDetails(jobStatus), Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
+
 
     @PutMapping(value = "/update_active_deactive_status")
     public ResponseEntity getJobs(@RequestParam("id") Long jobId)
@@ -74,20 +77,13 @@ public class JobsController {
     }
 
 
-    @GetMapping(value = "/get_posted_job_details")
-    public ResponseEntity getCandidate(@RequestParam ("selection")  boolean candidateSelection , @RequestParam ("title") String jobTitle , @RequestParam ("date") String postedDate) throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, jobService.postedJobs(candidateSelection, jobTitle, postedDate), ApiMessage.Api_Message);
-        return apiResponse.getResponse(apiResponse);
-    }
-
-
     //_________________Get api for candidate on the basis of job location and job title_______________________________
 
 
     @GetMapping(value = "/get_latest_jobs")
-    public ResponseEntity getLatestJobs(@RequestParam  String jobTitle, @RequestParam String jobLocation,@RequestParam JobFilter jobFilter)
+    public ResponseEntity getLatestJobs(@RequestParam  String jobDescription, @RequestParam String jobLocation,@RequestParam JobFilter jobFilter)
             throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.getJobs_on_location_and_designation(jobTitle,jobLocation,jobFilter), Api_Message);
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.getJobs_on_location_and_designation(jobDescription,jobLocation,jobFilter), Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 
@@ -102,9 +98,9 @@ public class JobsController {
     }
 
     @GetMapping(value = "/get_List_Of_latest_jobs")
-    public ResponseEntity getListOfLatestJobs(@RequestParam  String clientName,@RequestParam String jobLocation,@RequestParam String jobTitle, @RequestParam String skills,@RequestParam String shiftTime )
+    public ResponseEntity getListOfLatestJobs(@RequestParam  String clientName,@RequestParam String jobLocation,@RequestParam String jobDescription, @RequestParam String skills,@RequestParam String shiftTime )
             throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.getLatestJob(clientName,jobLocation,jobTitle,skills,shiftTime), Api_Message);
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.getLatestJob(clientName,jobLocation,jobDescription,skills,shiftTime), Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 
