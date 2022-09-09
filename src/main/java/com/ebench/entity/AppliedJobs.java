@@ -28,5 +28,8 @@ public class AppliedJobs {
     @Column(name = "resume_received")
     public Long resumeReceived;
 
+    @Column(name = "job_accceptance_status")
+    public Boolean jobAcceptanceStatus ;
+
 
 }

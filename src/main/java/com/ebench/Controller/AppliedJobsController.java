@@ -2,6 +2,7 @@ package com.ebench.Controller;
 
 import com.ebench.entity.AppliedJobs;
 import com.ebench.entity.Jobs;
+import com.ebench.entity.Notification;
 import com.ebench.service.AppliedJobsService;
 import com.ebench.service.JobService;
 import com.ebench.utils.ApiResponse;
@@ -39,4 +40,49 @@ public class AppliedJobsController {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,appliedJobsService.getCandidateListAppliedJobs(jobId), Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
+
+
+ //______________________Update_Job_Status_______________________________________________________________________//
+    @PutMapping(value = "/update_job_status")
+    public ResponseEntity updateJobStatus(@RequestParam ("id") Long appliedJobsId )
+            throws IOException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,appliedJobsService.updateStatus(appliedJobsId), Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+
+    //______________________________________createNotification______________________________________________________//
+    @PostMapping(value = "/createNotification")
+    public ResponseEntity createNotification (@RequestBody Notification notification)
+            throws IOException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,appliedJobsService.createNotification(notification), Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+
+    @GetMapping(value = "/getNotification")
+    public ResponseEntity get_Notification_OnRequest_Basis(@RequestParam String requestType)
+            throws IOException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,appliedJobsService.getCandidateOnRequestBasis(requestType), Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+
+    @GetMapping(value = "/getAllNotification")
+    public ResponseEntity getNotificationOnRequestBasis()
+            throws IOException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,appliedJobsService.getAllNotification(), Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
