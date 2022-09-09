@@ -19,45 +19,32 @@ public class JobService {
   public JobsRepository jobsRepository;
 
   public Jobs addJobs(Jobs jobs) {
-
     Jobs jobs1 = new Jobs();
     try {
-      jobs1.setCandidateId(jobs.getCandidateId());
       jobs1.setJobNameAndId(jobs.getJobNameAndId());
-      jobs1.setVendorId(jobs.getVendorId());
-      jobs1.setCompanyId(jobs.getCompanyId());
+      jobs1.setVendorId(jobs.getVendorId());  //must
+      jobs1.setCompanyId(jobs.getCompanyId());  //must
       jobs1.setJobDescription(jobs.getJobDescription());
       jobs1.setJobTitle(jobs.getJobTitle());
-      jobs1.setClientName(jobs.getClientName());
-      jobs1.setClientLocation(jobs.getClientLocation());
       jobs1.setRequiredExperience(jobs.getRequiredExperience());
       jobs1.setJobLocation(jobs.getJobLocation());
       jobs1.setJobStatus(jobs.isJobStatus());
       jobs1.setCompanyName(jobs.getCompanyName());
-      jobs1.setTotalJobs(jobs.getTotalJobs());
-      jobs1.setTotalCandidate(jobs.getTotalCandidate());
       jobs1.setNoOfPosition(jobs.getNoOfPosition());
+      jobs1.setTotalCandidate(jobs.getTotalCandidate());
       jobs1.setPostedDate(jobs.getPostedDate());
-      jobs1.setExpiredDate(jobs.getExpiredDate());
       jobs1.setInterviewMode(jobs.getInterviewMode());
-      jobs1.setPrefferedQualification(jobs.getPrefferedQualification());
-      jobs1.setMinimumQualification(jobs.getMinimumQualification());
       jobs1.setAboutJob(jobs.getAboutJob());
       jobs1.setAboutCompany(jobs.getAboutCompany());
       jobs1.setRequiredSkills(jobs.getRequiredSkills());
-      jobs1.setRequiredSkills(jobs.getRequiredSkills());
-
+      jobs1.setShiftTime(jobs.getShiftTime());
+      jobs1.setInterviewRounds(jobs.getInterviewRounds());
+      jobs1.setRole(jobs.getRole());
       jobs1.setRound1(jobs.getRound1());
       jobs1.setRound2(jobs.getRound2());
       jobs1.setRound3(jobs.getRound3());
-      jobs1.setRole(jobs.getRole());
-
-
-      jobs1.setCandidateSelection(jobs.isCandidateSelection());// true = selected , false = not selected (by default)
-
       Jobs jobs2 = jobsRepository.save(jobs1);
       return jobs2;
-
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -187,6 +174,14 @@ public class JobService {
             jobs1.setJobTitle(jobs.getJobTitle());
         }
 
+        if(jobs.getShiftTime() != null) {
+            jobs1.setShiftTime(jobs.getShiftTime());
+        }
+
+        if(jobs.getInterviewRounds() !=null) {
+            jobs1.setInterviewRounds(jobs.getInterviewRounds());
+        }
+
         jobs1.setCandidateSelection(jobs.isCandidateSelection());  // true = selected , false = not selected (by default)
 
         Jobs jobs2 = jobsRepository.save(jobs1);
@@ -217,9 +212,16 @@ public class JobService {
        return null;
      }
 
-//     ----------------------GET DATA BY JOB ID---------------------------------------------
+//     -----------------------GET CREATED JOB LIST BY VENDOR ID WHICH VENDOR CREATED------------------------------------
 
-      public Jobs getJobs(Long jobId) {
+    public List<JobResponseDto> getJobListByVendor(Long vendorId){
+        List<JobResponseDto> jobListByVendor = jobsRepository.findByVendorId(vendorId);
+        return jobListByVendor;
+    }
+
+//     ----------------------GET JOB VIEW DATA BY JOB ID---------------------------------------------
+
+      public Jobs getJobsView(Long jobId) {
           Optional<Jobs> id = jobsRepository.findById(jobId);
           Jobs jobs = null;
           if(id.isPresent()) {
@@ -255,20 +257,12 @@ public class JobService {
 
 //  --------------------GET LIST OF JOBS BY JOB STATUS------------------------------------------------------------------
 
-    public List<JobResponseDto> getJobDetails(boolean jobStatus){
-      List<JobResponseDto> status = jobsRepository.findByStatus(jobStatus);
+    public List<JobResponseDto> getNumberOfCandidate(boolean jobStatus , Long vendorId){
+      List<JobResponseDto> status = jobsRepository.findByJobStatus(jobStatus , vendorId);
       return status;
 
     }
 
-//  -------------------------GET A LIST OF JOB HISTORY BY JOB STATUS----------------------------------------------------
-
-
-    public List<JobResponseDto> manageJobHistory(boolean jobStatus){
-
-      List<JobResponseDto> byStatus = jobsRepository.findByStatus(jobStatus);
-      return byStatus;
-    }
 
 
   //__________ GET JOB ON THE BASIS OF LOCATION AND DESCRIPTION---------------------------------------------------------
@@ -292,29 +286,29 @@ public class JobService {
 
 //____________________GET LATEST JOB REQUEST BY CANDIDATE _________________________________________________________________
 
-  public List<Jobs> getLatestJob(String clientName,String jobLocation, String jobTitle, String skills,String shiftTime) {
-
-    if(clientName.isEmpty()) {
-      clientName=null;
-    }
-    if(jobLocation.isEmpty()) {
-      jobLocation = null;
-    }
-
-    if(jobTitle.isEmpty()) {
-      jobTitle=null;
-    }
-
-    if(skills.isEmpty()) {
-      skills=null;
-    }
-    if(shiftTime.isEmpty()) {
-      shiftTime = null;
-    }
-    List<Jobs> getLatestJobs = jobsRepository.findByJobSearches(clientName,jobLocation,jobTitle,skills,shiftTime);
-
-    return getLatestJobs;
-  }
+//  public List<Jobs> getLatestJob(String clientName,String jobLocation, String jobTitle, String skills,String shiftTime) {
+//
+//    if(clientName.isEmpty()) {
+//      clientName=null;
+//    }
+//    if(jobLocation.isEmpty()) {
+//      jobLocation = null;
+//    }
+//
+//    if(jobTitle.isEmpty()) {
+//      jobTitle=null;
+//    }
+//
+//    if(skills.isEmpty()) {
+//      skills=null;
+//    }
+//    if(shiftTime.isEmpty()) {
+//      shiftTime = null;
+//    }
+//    List<Jobs> getLatestJobs = jobsRepository.findByJobSearches(clientName,jobLocation,jobTitle,skills,shiftTime);
+//
+//    return getLatestJobs;
+//  }
 
 }
 

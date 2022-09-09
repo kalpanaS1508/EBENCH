@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -22,15 +24,16 @@ public class Interview {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
-
     public Long interviewId;
+    public Long vendorId;
     public String candidateName;
     public Long candidateId;
     public Long jobId;
     public String interviewerName;
     public Long interviewerId;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    public Date interviewDate;
+
+//    @JsonFormat(pattern = "yyyy-MM-dd")
+    public String interviewDate;
 
     @JsonFormat(pattern = "HH:mm:ss")
     public Time interviewStartTime;
@@ -40,7 +43,9 @@ public class Interview {
     public String interviewLink;
     public String candidateStatus;
     public String hiringManagerStatus;
-    public boolean reschedule;
+
+    public Boolean reschedule = false;
+
     public String hiringStatus;
     public Integer rating;
     public String companyName;

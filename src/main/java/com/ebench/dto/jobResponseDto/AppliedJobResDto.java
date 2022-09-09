@@ -8,23 +8,23 @@ import lombok.NoArgsConstructor;
 @Data
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@NoArgsConstructor
 public class AppliedJobResDto {
     public Long appliedJobsId;
     public Long jobId;
     public Long candidateId;
-    public Long resumeReceived;
     public String jobTitle;
     public String requiredSkills;
     public String skills;
     public String firstName;
+    public Boolean jobAcceptanceStatus;
 
-    public AppliedJobResDto(Long candidateId,String firstName,String jobTitle, String skills,Long resumeReceived ,Long jobId) {
+    public AppliedJobResDto(Long candidateId ,String firstName,String jobTitle, String skills , Long jobId , Boolean jobAcceptanceStatus) {
         this.candidateId = candidateId;
         this.firstName = firstName;
         this.jobTitle = jobTitle;
         this.skills = skills;
-        this.resumeReceived = resumeReceived;
         this.jobId = jobId;
+        this.jobAcceptanceStatus = jobAcceptanceStatus;
     }
+
 }

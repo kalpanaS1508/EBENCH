@@ -18,9 +18,6 @@ public class AppliedJobsService {
     @Autowired
     AppliedJobsRepository appliedJobsRepository;
 
-    @Autowired
-    JobsRepository jobsRepository;
-
     public AppliedJobs create(AppliedJobs appliedJobs) {
 
 //        if(candidateAlreadyExist(appliedJobs.getCandidateId())){
@@ -28,29 +25,22 @@ public class AppliedJobsService {
 //        }
 
             AppliedJobs appliedJobs1 = new AppliedJobs();
-            Jobs job = new Jobs();
             appliedJobs1.setJobId(appliedJobs.getJobId());
             appliedJobs1.setCandidateId(appliedJobs.getCandidateId());
-            appliedJobs1.setResumeReceived(appliedJobs.getResumeReceived());
-
-            Integer previousTotalCandidateCount = job.getTotalCandidate();
-            Integer totalCandidateCount = previousTotalCandidateCount +1;
-            job.setTotalCandidate(totalCandidateCount);
-//            jobsRepository.save();
+            appliedJobs1.setJobAcceptanceStatus(appliedJobs.getJobAcceptanceStatus());
 
 
-        AppliedJobs jobs = appliedJobsRepository.save(appliedJobs1);
+            AppliedJobs jobs = appliedJobsRepository.save(appliedJobs1);
 
-
-        return jobs;
-
+            return jobs;
 
     }
-
-    public List<AppliedJobResDto> getCandidateListAppliedJobs(Long jobId) {
-        List<AppliedJobResDto> appliedJobResDto = appliedJobsRepository.findByJobId(jobId);
-        return appliedJobResDto;
+    
+    public List<AppliedJobResDto> getCandidateListAppliedJobs(Long jobId){
+        List<AppliedJobResDto> appliedJob = appliedJobsRepository.findByJobId(jobId);
+        return appliedJob;
     }
+
 
     public Boolean candidateAlreadyExist(Long candidateId) {
         boolean candidate = appliedJobsRepository.existsById(candidateId);

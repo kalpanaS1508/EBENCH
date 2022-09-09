@@ -25,8 +25,8 @@ public class AppliedJobs {
     @Column(name = "candidate_id")
     public Long candidateId;
 
-    @Column(name = "resume_received")
-    public Long resumeReceived;
+    @Column(name = "job_acceptance_status")
+    public Boolean jobAcceptanceStatus = false; // offer is not accepted by default
 
 
 }

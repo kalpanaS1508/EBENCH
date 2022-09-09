@@ -44,24 +44,36 @@ public class JobResponseDto {
     public Long numberOfCandidate;
 
 
-    public JobResponseDto( Long jobId ,String jobTitle, boolean jobStatus ,String postedDate,
-                          String requiredSkills, String requiredExperience ,String jobLocation,String companyName) {
+//    public JobResponseDto( Long jobId ,String jobTitle, boolean jobStatus ,String postedDate,
+//                          String requiredSkills, String requiredExperience ,String jobLocation,String companyName) {
+//
+//        this.jobId = jobId;
+//        this.jobTitle = jobTitle;
+//        this.jobStatus = jobStatus;
+//        this.postedDate = postedDate;
+//        this.requiredSkills = requiredSkills;
+//        this.requiredExperience = requiredExperience;
+//        this.jobLocation = jobLocation;
+//        this.companyName = companyName;
+//    }
 
-        this.jobId = jobId;
-        this.jobTitle = jobTitle;
-        this.jobStatus = jobStatus;
-        this.postedDate = postedDate;
-        this.requiredSkills = requiredSkills;
-        this.requiredExperience = requiredExperience;
-        this.jobLocation = jobLocation;
-        this.companyName = companyName;
-    }
-
-    public JobResponseDto(Long jobId, Long numberOfCandidate , Long numberOfResume,String jobTitle, String requiredSkills) {
+    public JobResponseDto(Long jobId, Long numberOfCandidate ,String jobTitle, String requiredSkills , Long vendorId , String requiredExperience , String jobLocation) {
         this.jobId = jobId;
         this.numberOfCandidate = numberOfCandidate;
-        this.numberOfResume = numberOfResume;
         this.jobTitle = jobTitle;
         this.requiredSkills = requiredSkills;
+        this.vendorId = vendorId;
+        this.requiredExperience= requiredExperience;
+        this.jobLocation = jobLocation;
+    }
+
+    public JobResponseDto(Long jobId, Long vendorId, String jobTitle, String jobLocation, String requiredSkills,Integer totalCandidate, String requiredExperience) {
+        this.jobId = jobId;
+        this.vendorId = vendorId;
+        this.jobTitle = jobTitle;
+        this.jobLocation = jobLocation;
+        this.requiredSkills = requiredSkills;
+        this.totalCandidate = totalCandidate;
+        this.requiredExperience = requiredExperience;
     }
 }

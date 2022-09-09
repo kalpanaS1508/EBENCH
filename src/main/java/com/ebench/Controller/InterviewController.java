@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping(value = "/ebench")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -32,10 +34,17 @@ public class InterviewController {
         return apiResponse.getResponse(apiResponse);
     }
 
-    @GetMapping(value = "/get_interview")
-    public ResponseEntity getInterviewHistory(@RequestParam ("status") String hiringStatus)
+    @GetMapping(value = "/get_interview_planned")
+    public ResponseEntity getInterviewPlanned(@RequestParam String hiringStatus)
             throws JsonProcessingException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, interviewService.getInterviewHistory(hiringStatus), ApiMessage.Api_Message);
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, interviewService.getInterviewPlanned(hiringStatus), ApiMessage.Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+
+    @GetMapping(value = "/get_interview_history")
+    public ResponseEntity getInterviewHistory(@RequestParam("interviewDate") String interviewDate )
+            throws JsonProcessingException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, interviewService.getInterviewHistory(interviewDate), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 

@@ -44,6 +44,9 @@ public class Jobs {
         @Column(name = "job_description")
         public String jobDescription;
 
+        @Column(name = "interview_rounds")
+        public Integer interviewRounds;
+
         @Column(name = "role")
         public String role;
 
@@ -113,9 +116,6 @@ public class Jobs {
 
         @Column(name="shiftTime")
         public String shiftTime;
-
-        @Column(name ="jobAcceptanceorRejectionStatus")
-        public boolean jobAcceptanceorRejectionStatus;
 
         @Column(name = "required_skills")
         public String requiredSkills;

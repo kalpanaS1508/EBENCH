@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -25,8 +27,9 @@ public class InterviewResDto {
     public Long jobId;
     public String interviewerName;
     public Long interviewerId;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    public Date interviewDate;
+
+//    @JsonFormat(pattern = "yyyy-MM-dd")
+    public String interviewDate;
 
     @JsonFormat(pattern = "HH:mm:ss")
     public Time interviewStartTime;
@@ -36,17 +39,18 @@ public class InterviewResDto {
     public String interviewLink;
     public String candidateStatus;
     public String hiringManagerStatus;
-    public boolean reschedule;
+    public Boolean reschedule;
     public String hiringStatus;
     public Integer rating;
     public String companyName;
     public String jobPosition;
+    public Long vendorId;
 
     @Enumerated(EnumType.STRING)
     public InteviewMode inteviewMode;
 
 
-    public InterviewResDto(Long interviewId, Date interviewDate , String hiringStatus, Integer rating ,String candidateName,
+    public InterviewResDto(Long interviewId, String interviewDate , String hiringStatus, Integer rating , String candidateName,
                            Long candidateId)
     {
         this.interviewId = interviewId;
@@ -58,12 +62,14 @@ public class InterviewResDto {
 
     }
 
-    public InterviewResDto(Long interviewId, Date interviewDate, String candidateName, Integer rating, String hiringStatus, String jobPosition) {
+    public InterviewResDto(Long interviewId, String interviewDate, String hiringStatus,Integer rating, String candidateName
+                           , String jobPosition , Long vendorId) {
         this.interviewId = interviewId;
         this.interviewDate = interviewDate;
-        this.candidateName = candidateName;
-        this.rating = rating;
         this.hiringStatus = hiringStatus;
+        this.rating = rating;
+        this.candidateName = candidateName;
         this.jobPosition = jobPosition;
+        this.vendorId = vendorId;
     }
 }

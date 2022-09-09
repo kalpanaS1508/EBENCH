@@ -34,7 +34,7 @@ public class AppliedJobsController {
 //    --------------------- LIST OF CANDIDATE WHO APPLIED FOR THE PARTICULAR JOB BY JOB ID----------------------------------------
 
     @GetMapping(value = "/get_candidate_list_by_applied_job")
-    public ResponseEntity getCandidateByJobId(@RequestParam ("job_id") Long jobId)
+    public ResponseEntity getCandidateByJobId(@RequestParam Long jobId)
             throws IOException {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,appliedJobsService.getCandidateListAppliedJobs(jobId), Api_Message);
         return apiResponse.getResponse(apiResponse);

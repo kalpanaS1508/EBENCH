@@ -8,6 +8,8 @@ import com.ebench.repository.InterviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -18,10 +20,11 @@ public class InterviewService {
     @Autowired
     InterviewRepository interviewRepository;
 
-    public Interview createInterview(Interview interview) {
+    public Interview createInterview(Interview interview){
 
         Interview interview1 = new Interview();
         interview1.setInterviewId(interview.getInterviewId());
+        interview1.setVendorId(interview.getVendorId());
         interview1.setCandidateName(interview.getCandidateName());
         interview1.setCompanyName(interview.getCompanyName());
         interview1.setInterviewerId(interview.getInterviewerId());
@@ -36,6 +39,7 @@ public class InterviewService {
         interview1.setHiringStatus(interview.getHiringStatus());
         interview1.setCandidateId(interview.getCandidateId());
         interview1.setJobId(interview.getJobId());
+        interview1.setReschedule(interview.getReschedule());
 
         Interview interview2 = interviewRepository.save(interview1);
         return interview2;
@@ -51,11 +55,15 @@ public class InterviewService {
 
                 interview1 = interviewerId.get();
                 interview1.setId(interview.getId());
+                interview1.setVendorId(interview.getVendorId());
                 interview1.setInterviewerId(interview.getInterviewerId());
                 interview1.setInterviewerName(interview.getInterviewerName());
                 interview1.setInteviewMode(interview.getInteviewMode());
                 interview1.setInterviewLink(interview.getInterviewLink());
+
+
                 interview1.setInterviewDate(interview.getInterviewDate());
+
                 interview1.setInterviewStartTime(interview.getInterviewStartTime());
                 interview1.setInterviewStartTime(interview.getInterviewStartTime());
                 interview1.setCandidateStatus(interview.getCandidateStatus());
@@ -75,7 +83,7 @@ public class InterviewService {
         return interview1;
     }
 
-    public List<InterviewResDto> getInterviewHistory(String hiringStatus) {
+    public List<InterviewResDto> getInterviewPlanned(String hiringStatus) {
 
         List<InterviewResDto> hiringStatus1 = interviewRepository.findByHiringStatus(hiringStatus);
 
@@ -83,8 +91,7 @@ public class InterviewService {
         return hiringStatus1;
     }
 
-    public List<InterviewResDto> getInterviewPlannedHistory(Date interviewDate){
-
+    public List<InterviewResDto> getInterviewHistory(String interviewDate){
         List<InterviewResDto> date = interviewRepository.findByInterviewDate(interviewDate);
         return date;
     }
