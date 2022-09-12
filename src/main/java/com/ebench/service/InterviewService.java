@@ -95,4 +95,9 @@ public class InterviewService {
         List<InterviewResDto> date = interviewRepository.findByInterviewDate(interviewDate);
         return date;
     }
+
+    public List<InterviewResDto> getInterviewPlannedHistory(String interviewDate){
+        List<InterviewResDto> date = interviewRepository.findByIntDate(interviewDate);
+        return date;
+    }
 }

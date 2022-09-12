@@ -48,4 +48,10 @@ public class InterviewController {
         return apiResponse.getResponse(apiResponse);
     }
 
+    @GetMapping(value = "/get_interview_planned_history")
+    public ResponseEntity getInterviewPlannedHistory(@RequestParam("interviewDate") String interviewDate )
+            throws JsonProcessingException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, interviewService.getInterviewPlannedHistory(interviewDate), ApiMessage.Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
 }

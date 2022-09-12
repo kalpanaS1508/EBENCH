@@ -451,6 +451,7 @@ public class CandidateService {
     //_______________________________Delete api for candidate______________________________________
 
     public Candidate deleteCandidate(Long candidateId) {
+
         logger.info("getting candidate id for soft delete" + "" + candidateId);
         Optional<Candidate> candidate1 = candidateRepository.findById(candidateId);
         Candidate candidate = null;

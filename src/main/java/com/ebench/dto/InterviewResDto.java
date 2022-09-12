@@ -49,6 +49,8 @@ public class InterviewResDto {
     @Enumerated(EnumType.STRING)
     public InteviewMode inteviewMode;
 
+    public LocalDateTime interviewSlot;
+
 
     public InterviewResDto(Long interviewId, String interviewDate , String hiringStatus, Integer rating , String candidateName,
                            Long candidateId)
@@ -63,7 +65,7 @@ public class InterviewResDto {
     }
 
     public InterviewResDto(Long interviewId, String interviewDate, String hiringStatus,Integer rating, String candidateName
-                           , String jobPosition , Long vendorId) {
+                           , String jobPosition , Long vendorId ,LocalDateTime interviewSlot, Boolean reschedule) {
         this.interviewId = interviewId;
         this.interviewDate = interviewDate;
         this.hiringStatus = hiringStatus;
@@ -71,5 +73,7 @@ public class InterviewResDto {
         this.candidateName = candidateName;
         this.jobPosition = jobPosition;
         this.vendorId = vendorId;
+        this.interviewSlot = interviewSlot;
+        this.reschedule = reschedule;
     }
 }

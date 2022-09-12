@@ -20,7 +20,12 @@ public interface InterviewRepository extends JpaRepository<Interview, Long> {
     List<InterviewResDto> findByHiringStatus(String hiringStatus);
 
     @Query("select new com.ebench.dto.InterviewResDto(i.interviewId , i.interviewDate , i.hiringStatus , " +
-            " i.rating , i.candidateName ,i.jobPosition , i.vendorId)" +
+            " i.rating , i.candidateName ,i.jobPosition , i.vendorId , i.interviewSlot , i.reschedule)" +
             " from Interview i where i.interviewDate <= :interviewDate")
     List<InterviewResDto>findByInterviewDate(@Param("interviewDate") String interviewDate);
+
+    @Query("select new com.ebench.dto.InterviewResDto(i.interviewId , i.interviewDate , i.hiringStatus , " +
+            " i.rating , i.candidateName ,i.jobPosition , i.vendorId , i.interviewSlot , i.reschedule)" +
+            " from Interview i where i.interviewDate > :interviewDate")
+    List<InterviewResDto>findByIntDate(@Param("interviewDate") String interviewDate);
 }

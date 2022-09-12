@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Time;
@@ -50,6 +51,8 @@ public class Interview {
     public Integer rating;
     public String companyName;
     public String jobPosition;
+
+    public LocalDateTime interviewSlot;
 
     @Enumerated(EnumType.STRING)
     public InteviewMode inteviewMode;

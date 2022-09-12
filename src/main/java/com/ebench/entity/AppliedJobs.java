@@ -29,4 +29,5 @@ public class AppliedJobs {
     public Boolean jobAcceptanceStatus = false; // offer is not accepted by default
 
 
+
 }
