@@ -21,4 +21,8 @@ public interface InterviewRepository extends JpaRepository<Interview, Long> {
             " i.rating , i.candidateName ,i.jobPosition )" +
             " from Interview i where i.interviewDate = ifnull(?1 , i.interviewDate)")
     List<InterviewResDto>findByInterviewDate(Date interviewDate);
+
+    Interview findByInterviewIdAndCandidateId(Long interviewId, Long candidateId);
+
+    Interview findByInterviewIdAndTeamMemberId(Long interviewId, Long teamMemberId);
 }

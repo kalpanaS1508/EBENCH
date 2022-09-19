@@ -21,5 +21,7 @@ public interface AppliedJobsRepository extends JpaRepository<AppliedJobs, Long> 
             " where aj.jobId = ?1 "  )
     List<AppliedJobResDto> findByJobId(Long jobId);
 
+    AppliedJobs findByAppliedJobsIdAndCandidateId(Long appliedJobsId, Long candidateId);
+
 //   Optional<AppliedJobs> findByCandidateId(Long candidateId);
 }

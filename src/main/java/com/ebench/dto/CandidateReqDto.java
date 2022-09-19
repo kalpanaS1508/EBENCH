@@ -23,6 +23,7 @@ import java.util.Date;
 //@JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties
 public class CandidateReqDto {
+
     public Long candidateId;
     public String firstName;
     public String lastName;

@@ -198,9 +198,9 @@ public class JobService {
     }
     if(!jobId.isPresent()){
       throw new BadReqException(ApiMessage.JOB_NOT_PRESENT);
-    }
+     }
     return jobs;
-  }
+     }
 
 //------------------------------- JOB DELETE API (SOFT DELETE)------------------------------------------------
 

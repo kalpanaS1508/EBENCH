@@ -28,9 +28,10 @@ public class Interview {
     public Long candidateId;
     public Long jobId;
     public String interviewerName;
-    public Long interviewerId;
+    //public Long interviewerId;
+    public Long teamMemberId;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    public Date interviewDate;
+    public String interviewDate;
 
     @JsonFormat(pattern = "HH:mm:ss")
     public Time interviewStartTime;
@@ -40,11 +41,18 @@ public class Interview {
     public String interviewLink;
     public String candidateStatus;
     public String hiringManagerStatus;
-    public boolean reschedule;
+    public Boolean reschedule = false;
     public String hiringStatus;
     public Integer rating;
     public String companyName;
     public String jobPosition;
+    public String attachmentResume;
+    @Column(name="is_Accepted")
+    public Boolean isAcceptedForFirstRound = false;
+    public Boolean isAcceptedByTeammember = false;
+    public Long vendorId;
+    public Long appliedJobsId;
+
 
     @Enumerated(EnumType.STRING)
     public InteviewMode inteviewMode;

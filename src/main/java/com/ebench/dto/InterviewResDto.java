@@ -26,7 +26,7 @@ public class InterviewResDto {
     public String interviewerName;
     public Long interviewerId;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    public Date interviewDate;
+    public String interviewDate;
 
     @JsonFormat(pattern = "HH:mm:ss")
     public Time interviewStartTime;
@@ -46,7 +46,7 @@ public class InterviewResDto {
     public InteviewMode inteviewMode;
 
 
-    public InterviewResDto(Long interviewId, Date interviewDate , String hiringStatus, Integer rating ,String candidateName,
+    public InterviewResDto(Long interviewId, String interviewDate , String hiringStatus, Integer rating ,String candidateName,
                            Long candidateId)
     {
         this.interviewId = interviewId;
@@ -58,7 +58,7 @@ public class InterviewResDto {
 
     }
 
-    public InterviewResDto(Long interviewId, Date interviewDate, String candidateName, Integer rating, String hiringStatus, String jobPosition) {
+    public InterviewResDto(Long interviewId, String interviewDate, String candidateName, Integer rating, String hiringStatus, String jobPosition) {
         this.interviewId = interviewId;
         this.interviewDate = interviewDate;
         this.candidateName = candidateName;

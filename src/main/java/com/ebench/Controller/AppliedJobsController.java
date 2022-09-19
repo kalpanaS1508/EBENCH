@@ -1,5 +1,6 @@
 package com.ebench.Controller;
 
+import com.ebench.dto.EmailrequestDto;
 import com.ebench.entity.AppliedJobs;
 import com.ebench.entity.Jobs;
 import com.ebench.entity.Notification;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 
 import static com.ebench.Apimessage.ApiMessage.Api_Message;
@@ -43,10 +45,10 @@ public class AppliedJobsController {
 
 
  //______________________Update_Job_Status_______________________________________________________________________//
-    @PutMapping(value = "/update_job_status")
-    public ResponseEntity updateJobStatus(@RequestParam ("id") Long appliedJobsId )
+    @GetMapping(value = "/update_job_status")
+    public ResponseEntity updateJobStatus(@RequestParam ("id") Long appliedJobsId,@RequestParam Long candidateId )
             throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,appliedJobsService.updateStatus(appliedJobsId), Api_Message);
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,appliedJobsService.updateStatus(appliedJobsId,candidateId), Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 
@@ -58,19 +60,8 @@ public class AppliedJobsController {
         return apiResponse.getResponse(apiResponse);
     }
 
-    @GetMapping(value = "/getNotification")
-    public ResponseEntity get_Notification_OnRequest_Basis(@RequestParam String requestType)
-            throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,appliedJobsService.getCandidateOnRequestBasis(requestType), Api_Message);
-        return apiResponse.getResponse(apiResponse);
-    }
 
-    @GetMapping(value = "/getAllNotification")
-    public ResponseEntity getNotificationOnRequestBasis()
-            throws IOException {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,appliedJobsService.getAllNotification(), Api_Message);
-        return apiResponse.getResponse(apiResponse);
-    }
+
 
 
 

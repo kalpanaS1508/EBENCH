@@ -39,4 +39,17 @@ public class InterviewController {
         return apiResponse.getResponse(apiResponse);
     }
 
+    @GetMapping(value = "/update_Status")
+    public ResponseEntity updateStatus(@RequestParam Long interviewId,Long candidateId)
+            throws Exception {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, interviewService.updateStatus(interviewId,candidateId), ApiMessage.Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+    @GetMapping(value = "/update_Teammember_status")
+    public ResponseEntity update_Teamamember_Apply_status(@RequestParam Long interviewId,Long teamMemberId )
+            throws Exception {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, interviewService.update_Teamamember_Apply_status(interviewId,teamMemberId), ApiMessage.Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+
 }
