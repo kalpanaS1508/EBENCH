@@ -108,4 +108,8 @@ public class Vendor {
     @Column(name = "user_type")
     @Enumerated(EnumType.STRING)
     public UserType userType;
+
+    @Column(name = "company_id")
+    public Long companyId;
+
 }

@@ -22,12 +22,11 @@ public class CandidateSkillsResDto {
     public Long candidateId;
     public String firstName;
 
-    public CandidateSkillsResDto(Long candidateSkillsId, String skills, Integer rating,String experience, String firstName ,Long candidateId) {
+    public CandidateSkillsResDto(Long candidateSkillsId,String experience,Integer rating,String skills, Long candidateId) {
         this.candidateSkillsId = candidateSkillsId;
-        this.skills = skills;
-        this.rating = rating;
         this.experience = experience;
-        this.firstName = firstName;
+        this.rating = rating;
+        this.skills = skills;
         this.candidateId = candidateId;
     }
 }

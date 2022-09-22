@@ -1,18 +1,17 @@
 package com.ebench.entity;
 
-import com.ebench.Enums.InteviewMode;
+import com.ebench.Enums.InterviewMode;
+import com.ebench.Enums.InteviewType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.sql.Time;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 @Entity
@@ -25,13 +24,20 @@ public class Interview {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
+
+    @Column(unique = true)
     public Long interviewId;
     public Long vendorId;
     public String candidateName;
     public Long candidateId;
+    public Long appliedJobsId;
     public Long jobId;
     public String interviewerName;
-    public Long interviewerId;
+    public Long teamMemberId;
+    @Size(max = 10000)
+    public String candidateResultInText;
+
+    public String attachmentResume;
 
 //    @JsonFormat(pattern = "yyyy-MM-dd")
     public String interviewDate;
@@ -55,6 +61,15 @@ public class Interview {
     public LocalDateTime interviewSlot;
 
     @Enumerated(EnumType.STRING)
-    public InteviewMode inteviewMode;
+    public InteviewType inteviewType;
 
+    @Column(name = "interview_mode")
+    @Enumerated(EnumType.STRING)
+    public InterviewMode interviewMode;
+
+    public Integer round;
+
+    @Column(name="is_Accepted")
+    public Boolean isAcceptedByCandidate = false;
+    public Boolean isAcceptedByTeammember = false;
 }

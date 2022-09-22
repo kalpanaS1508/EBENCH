@@ -18,6 +18,12 @@ import java.util.List;
          "group by aj.jobId ")
  List<JobResponseDto> findByJobStatus(boolean jobStatus, Long vendorId);
 
+
+ @Query("select new com.ebench.dto.jobResponseDto.JobResponseDto(j.jobId ," +
+         "j.jobTitle ,j.requiredSkills,j.jobLocation , j.jobStatus , j.companyName , j.postedDate , j.candidateSelection) from Jobs j " +
+         " where j.jobStatus = ?1 " )
+ List<JobResponseDto> findByJobStatusForNewJobs(boolean jobStatus);
+
  @Query("select new com.ebench.dto.jobResponseDto.JobResponseDto(j.jobId ,j.vendorId,j.jobTitle, j.jobLocation," +
          " j.requiredSkills, j.totalCandidate ,j.requiredExperience) from Jobs j where j.vendorId = ?1")
  List<JobResponseDto> findByVendorId(Long vendorId);

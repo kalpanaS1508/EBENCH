@@ -1,5 +1,6 @@
 package com.ebench.Controller;
 
+import com.ebench.dto.jobResponseDto.EmailRequestDto;
 import com.ebench.entity.AppliedJobs;
 import com.ebench.entity.Jobs;
 import com.ebench.entity.Notification;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 
 import static com.ebench.Apimessage.ApiMessage.Api_Message;
@@ -50,7 +52,9 @@ public class AppliedJobsController {
         return apiResponse.getResponse(apiResponse);
     }
 
-    //______________________________________createNotification______________________________________________________//
+    //______________________________________CREATE NOTIFICATION______________________________________________________//
+
+
     @PostMapping(value = "/createNotification")
     public ResponseEntity createNotification (@RequestBody Notification notification)
             throws IOException {
@@ -72,17 +76,23 @@ public class AppliedJobsController {
         return apiResponse.getResponse(apiResponse);
     }
 
+//    ---------------------------------------- UPDATE JOB STATUS -------------------------------------------------------
+
+    @GetMapping(value = "/update_job_status")
+    public ResponseEntity updateJobStatus(@RequestParam ("id") Long appliedJobsId,@RequestParam Long candidateId )
+            throws IOException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,appliedJobsService.updateStatus(appliedJobsId,candidateId), Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
 
 
+//    --------------------------------------  VENDOR WILL SEND REQUEST BY SEND EMAIL-----------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
+    @PostMapping(value = "/sendEmail")
+    public ResponseEntity sendVerificationEmail(@RequestBody EmailRequestDto emailrequestDto)
+            throws IOException, MessagingException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,appliedJobsService.sendRequestEmail(emailrequestDto), Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
 
 }

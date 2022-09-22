@@ -1,6 +1,6 @@
 package com.ebench.dto;
 
-import com.ebench.Enums.InteviewMode;
+import com.ebench.Enums.InteviewType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Time;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
@@ -47,7 +45,7 @@ public class InterviewResDto {
     public Long vendorId;
 
     @Enumerated(EnumType.STRING)
-    public InteviewMode inteviewMode;
+    public InteviewType inteviewMode;
 
     public LocalDateTime interviewSlot;
 

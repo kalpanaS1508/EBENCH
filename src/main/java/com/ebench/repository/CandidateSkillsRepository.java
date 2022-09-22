@@ -12,6 +12,6 @@ import java.util.List;
 public interface CandidateSkillsRepository extends JpaRepository<CandidateSkills , Long> {
 
     @Query("select new com.ebench.dto.CandidateSkillsResDto(cs.candidateSkillsId , cs.experience , cs.rating , cs.skills , " +
-            " c.firstName , cs.candidateId ) from CandidateSkills cs left join Candidate c on c.candidateId = cs.candidateId where cs.candidateId = ?1 ")
+            " cs.candidateId ) from CandidateSkills cs left join Candidate c on c.candidateId = cs.candidateId where cs.candidateId = ?1 ")
     List<CandidateSkillsResDto> findByCandidateId(Long candidateId);
 }

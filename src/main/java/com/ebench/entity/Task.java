@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 @Table(name = "taskmanagement")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Task {
-// dekh le
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="taskmanagementId")

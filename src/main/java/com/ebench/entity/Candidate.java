@@ -184,5 +184,8 @@ public class Candidate {
     @Column(name = "skills_category")
     public String skillsCategory;       // in UI skills category has number.
 
+    @Column(name="company_id")
+    public Long companyId;
+
 
 }

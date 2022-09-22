@@ -68,4 +68,9 @@ public class CandidateSkillsService {
           throw  new BadReqException(ApiMessage.CANDIDATE_NOT_PRESENT);
         }
     }
+
+    public CandidateSkills deleteCandidateSkills(Long candidateSkillsId){
+        candidateSkillsRepository.deleteById(candidateSkillsId);
+        return null;
+    }
     }

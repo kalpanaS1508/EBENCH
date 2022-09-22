@@ -24,6 +24,7 @@ import java.util.Date;
 @JsonIgnoreProperties
 public class CandidateReqDto {
     public Long candidateId;
+    public Long companyId;
     public String firstName;
     public String lastName;
     public String keyExperience;

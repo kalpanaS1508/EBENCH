@@ -44,18 +44,19 @@ public class JobResponseDto {
     public Long numberOfCandidate;
 
 
-//    public JobResponseDto( Long jobId ,String jobTitle, boolean jobStatus ,String postedDate,
-//                          String requiredSkills, String requiredExperience ,String jobLocation,String companyName) {
-//
-//        this.jobId = jobId;
-//        this.jobTitle = jobTitle;
-//        this.jobStatus = jobStatus;
-//        this.postedDate = postedDate;
-//        this.requiredSkills = requiredSkills;
-//        this.requiredExperience = requiredExperience;
-//        this.jobLocation = jobLocation;
-//        this.companyName = companyName;
-//    }
+    public JobResponseDto( Long jobId ,String jobTitle, String requiredSkills ,String jobLocation ,boolean jobStatus ,String companyName  ,String postedDate
+                          , boolean candidateSelection ) {
+
+        this.jobId = jobId;
+        this.jobTitle = jobTitle;
+        this.requiredSkills = requiredSkills;
+        this.jobLocation = jobLocation;
+        this.jobStatus = jobStatus;
+        this.companyName = companyName;
+        this.postedDate = postedDate;
+        this.candidateSelection = candidateSelection;
+
+    }
 
     public JobResponseDto(Long jobId, Long numberOfCandidate ,String jobTitle, String requiredSkills , Long vendorId , String requiredExperience , String jobLocation) {
         this.jobId = jobId;

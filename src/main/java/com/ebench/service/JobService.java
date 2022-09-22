@@ -33,16 +33,13 @@ public class JobService {
       jobs1.setNoOfPosition(jobs.getNoOfPosition());
       jobs1.setTotalCandidate(jobs.getTotalCandidate());
       jobs1.setPostedDate(jobs.getPostedDate());
-      jobs1.setInterviewMode(jobs.getInterviewMode());
+      jobs1.setExpiredDate(jobs.getExpiredDate());
       jobs1.setAboutJob(jobs.getAboutJob());
       jobs1.setAboutCompany(jobs.getAboutCompany());
       jobs1.setRequiredSkills(jobs.getRequiredSkills());
       jobs1.setShiftTime(jobs.getShiftTime());
       jobs1.setInterviewRounds(jobs.getInterviewRounds());
       jobs1.setRole(jobs.getRole());
-      jobs1.setRound1(jobs.getRound1());
-      jobs1.setRound2(jobs.getRound2());
-      jobs1.setRound3(jobs.getRound3());
       Jobs jobs2 = jobsRepository.save(jobs1);
       return jobs2;
 
@@ -70,9 +67,9 @@ public class JobService {
         jobs1.setJobNameAndId(jobs.getJobNameAndId());
        }
 
-        if(jobs.getCandidateId() !=null) {
-          jobs1.setCandidateId(jobs.getCandidateId());
-        }
+//        if(jobs.getCandidateId() !=null) {
+//          jobs1.setCandidateId(jobs.getCandidateId());
+//        }
 
         if(jobs.getVendorId() !=null) {
           jobs1.setVendorId(jobs.getVendorId());
@@ -130,10 +127,6 @@ public class JobService {
           jobs1.setExpiredDate(jobs.getExpiredDate());
         }
 
-        if(jobs.getInterviewMode() !=null) {
-          jobs1.setInterviewMode(jobs.getInterviewMode());
-        }
-
         if(jobs.getRequiredSkills() !=null) {
           jobs1.setRequiredSkills(jobs1.getRequiredSkills());
         }
@@ -152,18 +145,6 @@ public class JobService {
 
         if(jobs.getAboutJob() !=null) {
           jobs1.setAboutJob(jobs.getAboutJob());
-        }
-
-        if(jobs.getRound1() !=null) {
-          jobs1.setRound1(jobs.getRound1());
-        }
-
-        if(jobs.getRound2() !=null) {
-          jobs1.setRound2(jobs.getRound2());
-        }
-
-        if(jobs.getRound3() !=null) {
-          jobs1.setRound3(jobs.getRound3());
         }
 
         if(jobs.getAboutCompany() != null) {
@@ -254,8 +235,16 @@ public class JobService {
 
        }
 
+//       --------------------------------- GET NUMBER OF LIST OF NEW JOBS ---------------------------------------
 
-//  --------------------GET LIST OF JOBS BY JOB STATUS------------------------------------------------------------------
+
+    public List<JobResponseDto> getNewJobsList(boolean jobStatus){
+        List<JobResponseDto> status = jobsRepository.findByJobStatusForNewJobs(jobStatus);
+        return status;
+
+    }
+
+//  --------------------GET POSTED JOB RESPONSES------------------------------------------------------------------
 
     public List<JobResponseDto> getNumberOfCandidate(boolean jobStatus , Long vendorId){
       List<JobResponseDto> status = jobsRepository.findByJobStatus(jobStatus , vendorId);

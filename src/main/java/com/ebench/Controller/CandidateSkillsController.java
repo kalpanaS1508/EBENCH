@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/ebench")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CandidateSkillsController {
 
     @Autowired
@@ -35,6 +36,14 @@ public class CandidateSkillsController {
     public ResponseEntity getSkills(@RequestParam( "id") Long candidateId)
             throws Exception {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateSkillsService.getCandidateSkillList(candidateId), ApiMessage.Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+
+
+    @DeleteMapping(value = "/delete_skills")
+    public ResponseEntity deleteSkills(@RequestParam("candidateSkills") Long candidateSkillsId )
+            throws Exception {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, candidateSkillsService.deleteCandidateSkills(candidateSkillsId), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
 }

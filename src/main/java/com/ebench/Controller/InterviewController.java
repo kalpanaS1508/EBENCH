@@ -54,4 +54,22 @@ public class InterviewController {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, interviewService.getInterviewPlannedHistory(interviewDate), ApiMessage.Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
+
+//   ------------------------ACCEPTED BY CANDIDATE------------------------------------------------------------------------------
+
+    @GetMapping(value = "/update_Status")
+    public ResponseEntity updateStatus(@RequestParam Long interviewId,Long candidateId)
+            throws Exception {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, interviewService.updateStatus(interviewId,candidateId), ApiMessage.Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+
+//    ----------------------------UPDATE THE STATUS AFTER ACCEPTING THE INTERVIEW SCHEDULING EMAIL --------------------------------------------------------
+
+    @GetMapping(value = "/update_TeamMember_status")
+    public ResponseEntity update_TeamMember_Apply_status(@RequestParam Long interviewId,Long teamMemberId )
+            throws Exception {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true, interviewService.update_TeamMember_Apply_status(interviewId,teamMemberId), ApiMessage.Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
 }

@@ -62,6 +62,21 @@ public class JobsController {
         return apiResponse.getResponse(apiResponse);
     }
 
+
+
+    //    ---------------------------------GET NEW JOBS LIST WHICH SHOWS UP ON CANDIDATE SIDE -------------------------------------------------------
+
+
+    @GetMapping(value = "/get_new_jobs_List")
+    public ResponseEntity getNewJobsList(@RequestParam("job_status") boolean jobStatus )
+            throws IOException {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.getNewJobsList(jobStatus), Api_Message);
+        return apiResponse.getResponse(apiResponse);
+    }
+
+
+
+
 //    ---------------------------------GET POSTED JOB RESPONSES -------------------------------------------------------
 
     @GetMapping(value = "/get_posted_job")
@@ -100,6 +115,7 @@ public class JobsController {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, true,jobService.getJobDescription(jobId), Api_Message);
         return apiResponse.getResponse(apiResponse);
     }
+
 
 //    @GetMapping(value = "/get_List_Of_latest_jobs")
 //    public ResponseEntity getListOfLatestJobs(@RequestParam  String clientName,@RequestParam String jobLocation,@RequestParam String jobDescription, @RequestParam String skills,@RequestParam String shiftTime )

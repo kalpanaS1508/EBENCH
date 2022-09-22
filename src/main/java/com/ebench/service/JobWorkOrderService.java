@@ -31,7 +31,7 @@ public class JobWorkOrderService {
 
     }
 
-    public JobWorkOrder updateWorkOrder(JobWorkOrder jobWorkOrder) throws RuntimeException {
+    public JobWorkOrder  updateWorkOrder(JobWorkOrder jobWorkOrder) throws RuntimeException {
         Optional<JobWorkOrder> id = jobWorkOrderRepository.findById(jobWorkOrder.getJobWorkOrderId());
 
         JobWorkOrder order = null;
@@ -52,7 +52,6 @@ public class JobWorkOrderService {
             throw new BadReqException(ApiMessage.WORK_ORDER_IS_NOT_PRESENT);
         }
     }
-
 
 
     public JobWorkOrder deleteWorkOrder(Long jobWorkOrderId) throws RuntimeException {

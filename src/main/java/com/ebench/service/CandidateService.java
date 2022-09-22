@@ -103,6 +103,7 @@ public class CandidateService {
 
             Candidate candidate = new Candidate();
             candidate.setFirstName(candidateReqDto.getFirstName());
+            candidate.setCompanyId(candidateReqDto.getCompanyId());
             candidate.setSkills(candidateReqDto.getSkills());
             candidate.setLastName(candidateReqDto.getLastName());
             candidate.setKeyExperience(candidateReqDto.getKeyExperience());
@@ -258,10 +259,10 @@ public class CandidateService {
                 if (candidateReqDto.getKeyExperience() != null) {
                     candidate1.setKeyExperience(candidateReqDto.getKeyExperience());
                 }
-//
-//                if (candidateReqDto.getSkills() != null) {
-//                    candidate1.setSkills(candidateReqDto.getSkills());
-//                }
+
+                if (candidateReqDto.getCompanyId() != null) {
+                    candidate1.setCompanyId(candidateReqDto.getCompanyId());
+                }
                 if (candidateReqDto.getAddress() != null) {
                     candidate1.setAddress(candidateReqDto.getAddress());
                 }

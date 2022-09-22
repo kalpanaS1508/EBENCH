@@ -18,13 +18,14 @@ public class AppliedJobResDto {
     public String firstName;
     public Boolean jobAcceptanceStatus;
 
-    public AppliedJobResDto(Long candidateId ,String firstName,String jobTitle, String skills , Long jobId , Boolean jobAcceptanceStatus) {
+    public AppliedJobResDto(Long candidateId ,String firstName,String jobTitle, String skills , Long jobId , Boolean jobAcceptanceStatus , Long appliedJobsId) {
         this.candidateId = candidateId;
         this.firstName = firstName;
         this.jobTitle = jobTitle;
         this.skills = skills;
         this.jobId = jobId;
         this.jobAcceptanceStatus = jobAcceptanceStatus;
+        this.appliedJobsId = appliedJobsId;
     }
 
 }

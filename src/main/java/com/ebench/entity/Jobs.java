@@ -1,8 +1,6 @@
 package com.ebench.entity;
 
-import com.ebench.Enums.InteviewMode;
 import com.ebench.Enums.JobFilter;
-import com.ebench.Enums.Rounds;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,9 +23,6 @@ public class Jobs {
 
         @Column(name = "job_name_and_id")
         public String jobNameAndId;
-
-        @Column(name = "candidate_id")
-        public Long candidateId;
 
         @Column(name = "interview_id")
         public Long interviewId;
@@ -107,9 +102,6 @@ public class Jobs {
         @Column(name = "job_view")
         public Long jobView = 0L ;
 
-        @Column(name = "interview_mode")
-        @Enumerated(EnumType.STRING)
-        public InteviewMode interviewMode;
 
         @Enumerated(EnumType.STRING)
         public JobFilter jobFilter;
@@ -123,16 +115,6 @@ public class Jobs {
         @Column(name = "job_code")
         public Integer jobCode;
 
-        @Column(name = "round_1")
-        @Enumerated(EnumType.STRING)
-        public Rounds round1;
 
-        @Column(name = "round_2")
-        @Enumerated(EnumType.STRING)
-        public Rounds round2;
-
-        @Column(name = "round_3")
-        @Enumerated(EnumType.STRING)
-        public Rounds round3;
 
 }

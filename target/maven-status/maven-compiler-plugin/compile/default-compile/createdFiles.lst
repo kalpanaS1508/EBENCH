@@ -1,5 +1,6 @@
 com\ebench\entity\JobWorkOrder.class
 com\ebench\utils\Constant.class
+com\ebench\entity\Notification.class
 com\ebench\repository\InterviewRepository.class
 com\ebench\entity\MileStone.class
 com\ebench\repository\TaskRepository.class
@@ -16,8 +17,10 @@ com\ebench\Controller\InterviewController.class
 com\ebench\entity\AppliedJobs.class
 com\ebench\dto\jobResponseDto\AppliedJobResDto.class
 com\ebench\Controller\LoginController.class
+com\ebench\Controller\CompanyController.class
 com\ebench\Enums\InteviewMode.class
 com\ebench\dto\loginDto\LoginResponseDto.class
+com\ebench\repository\CompanyRepository.class
 com\ebench\Apimessage\ApiMessage.class
 com\ebench\Controller\JwtAuthenticationController.class
 com\ebench\service\ProjectService.class
@@ -27,15 +30,19 @@ com\ebench\dto\InterviewResDto.class
 com\ebench\dto\jobResponseDto\MileStoneResDto.class
 com\ebench\dto\jobResponseDto\JobResponseDto.class
 com\ebench\exception\FileStorageException.class
+com\ebench\Enums\RequestType.class
 com\ebench\exception\BadReqException.class
 com\ebench\entity\Project.class
 com\ebench\utils\Common.class
 com\ebench\service\AppliedJobsService.class
 com\ebench\utils\GlobalResources.class
+com\ebench\service\CompanyService.class
+com\ebench\dto\loginDto\LoginRequestDto.class
 com\ebench\entity\Interview.class
 com\ebench\Constants\AvailabilityType.class
 com\ebench\repository\JobWorkOrderRepository.class
 com\ebench\entity\Task.class
+com\ebench\repository\NotificationRepository.class
 com\ebench\dto\loginDto\TaskResponse.class
 com\ebench\exception\ResourceAlreadyExists.class
 com\ebench\entity\Candidate.class
@@ -73,6 +80,7 @@ com\ebench\Enums\UserType.class
 com\ebench\entity\Vendor.class
 com\ebench\entity\CandidateSkills.class
 com\ebench\EbenchApplication.class
+com\ebench\entity\Company.class
 com\ebench\repository\JobsRepository.class
 com\ebench\dto\CandidateReqDto.class
 com\ebench\repository\CandidateRepository.class
